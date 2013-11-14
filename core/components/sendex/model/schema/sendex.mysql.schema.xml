@@ -1,13 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model package="sendex" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" phpdoc-package="sendex" version="1.1">
 
-	<object class="SendexItem" table="sendex_items" extends="xPDOSimpleObject">
+	<object class="sxNewsletter" table="sendex_newsletters" extends="xPDOSimpleObject">
 		<field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default="" />
 		<field key="description" dbtype="text" phptype="text" null="true" default="" />
+		<field key="active" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="true" default="1" />
+
+		<field key="template" dbtype="integer" precision="10" attributes="unsigned" phptype="integer" null="true" default="0" />
+		<field key="snippet" dbtype="integer" precision="10" attributes="unsigned" phptype="integer" null="true" default="0" />
+		<field key="image" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+
+		<field key="email_subject" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_from" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_from_name" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_reply" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
 
 		<index alias="name" name="name" primary="false" unique="false" type="BTREE">
 			<column key="name" length="" collation="A" null="false" />
 		</index>
+		<index alias="active" name="active" primary="false" unique="false" type="BTREE">
+			<column key="active" length="" collation="A" null="false" />
+		</index>
+
+		<composite alias="Subscribers" class="sxSubscriber" local="id" foreign="newsletter_id" cardinality="many" owner="local" />
+		<aggregate alias="Template" class="modTemplate" local="template" foreign="id" cardinality="one" owner="foreign" />
+		<aggregate alias="Snippet" class="modSnippet" local="snippet" foreign="id" cardinality="one" owner="foreign" />
+	</object>
+
+
+	<object class="sxSubscriber" table="sendex_subscribers" extends="xPDOSimpleObject">
+		<field key="newsletter_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" default="0" />
+		<field key="user_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" default="0" />
+		<field key="email" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+
+		<index alias="key" name="key" primary="false" unique="true" type="BTREE">
+			<column key="newsletter_id" length="" collation="A" null="false" />
+			<column key="user_id" length="" collation="A" null="false" />
+			<column key="email" length="" collation="A" null="false" />
+		</index>
+
+		<aggregate alias="Newsletter" class="sxNewsletter" local="newsletter_id" foreign="id" cardinality="one" owner="foreign" />
+		<aggregate alias="User" class="modUser" local="user_id" foreign="id" cardinality="one" owner="foreign" />
+	</object>
+
+
+	<object class="sxQueue" table="sendex_queue" extends="xPDOSimpleObject">
+		<field key="newsletter_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" default="0" />
+		<field key="subscriber_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" default="0" />
+		<field key="timestamp" dbtype="timestamp" phptype="timestamp" null="false" default="CURRENT_TIMESTAMP" />
+
+		<field key="email_to" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_subject" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_body" dbtype="text" phptype="string" null="true" default="" />
+		<field key="email_from" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_from_name" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_reply" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+
+		<index alias="newsletter_id" name="newsletter_id" primary="false" unique="false" type="BTREE">
+			<column key="newsletter_id" length="" collation="A" null="false" />
+		</index>
+		<index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
+			<column key="user_id" length="" collation="A" null="false" />
+		</index>
+		<index alias="timestamp" name="timestamp" primary="false" unique="false" type="BTREE">
+			<column key="timestamp" length="" collation="A" null="false" />
+		</index>
+
+		<aggregate alias="Newsletter" class="sxNewsletter" local="newsletter_id" foreign="id" cardinality="one" owner="foreign" />
+		<aggregate alias="Subscriber" class="sxSubscriber" local="subscriber_id" foreign="id" cardinality="one" owner="foreign" />
 	</object>
 
 </model>

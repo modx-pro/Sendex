@@ -11,7 +11,9 @@ if ($object->xpdo) {
 
 			$manager = $modx->getManager();
 			$objects = array(
-				'SendexItem',
+				'sxNewsletter',
+				'sxSubscriber',
+				'sxQueue',
 			);
 			foreach ($objects as $object) {
 				$manager->createObjectContainer($object);
