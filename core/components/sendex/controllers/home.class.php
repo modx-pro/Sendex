@@ -27,9 +27,14 @@ class SendexHomeManagerController extends SendexMainController {
 	 * @return void
 	 */
 	public function loadCustomCssJs() {
-		$this->modx->regClientStartupScript($this->Sendex->config['jsUrl'] . 'mgr/widgets/items.grid.js');
-		$this->modx->regClientStartupScript($this->Sendex->config['jsUrl'] . 'mgr/widgets/home.panel.js');
-		$this->modx->regClientStartupScript($this->Sendex->config['jsUrl'] . 'mgr/sections/home.js');
+		$this->addJavascript($this->Sendex->config['jsUrl'] . 'mgr/widgets/items.grid.js');
+		$this->addJavascript($this->Sendex->config['jsUrl'] . 'mgr/widgets/home.panel.js');
+		$this->addJavascript($this->Sendex->config['jsUrl'] . 'mgr/sections/home.js');
+		$this->addHtml('<script type="text/javascript">
+		Ext.onReady(function() {
+			MODx.load({ xtype: "sendex-page-home"});
+		});
+		</script>');
 	}
 
 

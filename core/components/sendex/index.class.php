@@ -17,9 +17,9 @@ abstract class SendexMainController extends modExtraManagerController {
 
 		$this->Sendex = new Sendex($this->modx);
 
-		$this->modx->regClientCSS($this->Sendex->config['cssUrl'] . 'mgr/main.css');
-		$this->modx->regClientStartupScript($this->Sendex->config['jsUrl'] . 'mgr/sendex.js');
-		$this->modx->regClientStartupHTMLBlock('<script type="text/javascript">
+		$this->addCss($this->Sendex->config['cssUrl'] . 'mgr/main.css');
+		$this->addJavascript($this->Sendex->config['jsUrl'] . 'mgr/sendex.js');
+		$this->addHtml('<script type="text/javascript">
 		Ext.onReady(function() {
 			Sendex.config = ' . $this->modx->toJSON($this->Sendex->config) . ';
 			Sendex.config.connector_url = "' . $this->Sendex->config['connectorUrl'] . '";
