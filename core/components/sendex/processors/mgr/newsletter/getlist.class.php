@@ -2,9 +2,9 @@
 /**
  * Get a list of Items
  */
-class SendexItemGetListProcessor extends modObjectGetListProcessor {
-	public $objectType = 'SendexItem';
-	public $classKey = 'SendexItem';
+class sxNewsletterGetListProcessor extends modObjectGetListProcessor {
+	public $objectType = 'sxNewsletter';
+	public $classKey = 'sxNewsletter';
 	public $defaultSortField = 'id';
 	public $defaultSortDirection = 'DESC';
 	public $renderers = '';
@@ -33,4 +33,4 @@ class SendexItemGetListProcessor extends modObjectGetListProcessor {
 
 }
 
-return 'SendexItemGetListProcessor';
+return 'sxNewsletterGetListProcessor';

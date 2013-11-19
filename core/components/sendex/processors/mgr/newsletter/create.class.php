@@ -2,9 +2,9 @@
 /**
  * Create an Item
  */
-class SendexItemCreateProcessor extends modObjectCreateProcessor {
-	public $objectType = 'SendexItem';
-	public $classKey = 'SendexItem';
+class sxNewsletterItemCreateProcessor extends modObjectCreateProcessor {
+	public $objectType = 'sxNewsletter';
+	public $classKey = 'sxNewsletter';
 	public $languageTopics = array('sendex');
 	public $permission = 'new_document';
 
@@ -13,7 +13,7 @@ class SendexItemCreateProcessor extends modObjectCreateProcessor {
 	 * @return bool
 	 */
 	public function beforeSet() {
-		$alreadyExists = $this->modx->getObject('SendexItem', array(
+		$alreadyExists = $this->modx->getObject('sxNewsletter', array(
 			'name' => $this->getProperty('name'),
 		));
 		if ($alreadyExists) {
@@ -25,4 +25,4 @@ class SendexItemCreateProcessor extends modObjectCreateProcessor {
 
 }
 
-return 'SendexItemCreateProcessor';
+return 'sxNewsletterItemCreateProcessor';
