@@ -15,14 +15,14 @@ Sendex.panel.Home = function(config) {
 			,activeItem: 0
 			,hideMode: 'offsets'
 			,items: [{
-				title: _('sendex_items')
+				title: _('sendex_newsletters')
 				,items: [{
-					html: _('sendex_intro_msg')
+					html: _('sendex_newsletters_intro')
 					,border: false
 					,bodyCssClass: 'panel-desc'
 					,bodyStyle: 'margin-bottom: 10px'
 				},{
-					xtype: 'sendex-grid-items'
+					xtype: 'sendex-grid-newsletters'
 					,preventRender: true
 				}]
 			}]
