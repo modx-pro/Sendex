@@ -17,7 +17,7 @@ Sendex.grid.Newsletters = function(config) {
 			,{header: _('sendex_newsletter_active'),dataIndex: 'active',width: 75,renderer: this.renderBoolean}
 			,{header: _('sendex_newsletter_template'),dataIndex: 'template',width: 75}
 			,{header: _('sendex_newsletter_snippet'),dataIndex: 'snippet',width: 75}
-			,{header: _('sendex_newsletter_email_subject'),dataIndex: 'description',width: 100}
+			,{header: _('sendex_newsletter_email_subject'),dataIndex: 'email_subject',width: 100}
 			,{header: _('sendex_newsletter_email_from'),dataIndex: 'email_from',width: 100}
 			//,{header: _('sendex_newsletter_email_from_name'),dataIndex: 'email_from_name',width: 100}
 			//,{header: _('sendex_newsletter_email_reply'),dataIndex: 'email_reply',width: 100}
@@ -25,13 +25,13 @@ Sendex.grid.Newsletters = function(config) {
 		]
 		,tbar: [{
 			text: _('sendex_btn_create')
-			,handler: this.createItem
+			,handler: this.createNewsletter
 			,scope: this
 		}]
 		,listeners: {
 			rowDblClick: function(grid, rowIndex, e) {
 				var row = grid.store.getAt(rowIndex);
-				this.updateItem(grid, e, row);
+				this.updateNewsletter(grid, e, row);
 			}
 		}
 	});
@@ -44,12 +44,12 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 		var m = [];
 		m.push({
 			text: _('sendex_newsletter_update')
-			,handler: this.updateItem
+			,handler: this.updateNewsletter
 		});
 		m.push('-');
 		m.push({
 			text: _('sendex_newsletter_remove')
-			,handler: this.removeItem
+			,handler: this.removeNewsletter
 		});
 		this.addContextMenuItem(m);
 	}
@@ -66,20 +66,20 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 			: '';
 	}
 
-	,createItem: function(btn,e) {
-		if (!this.windows.createItem) {
-			this.windows.createItem = MODx.load({
+	,createNewsletter: function(btn,e) {
+		if (!this.windows.createNewsletter) {
+			this.windows.createNewsletter = MODx.load({
 				xtype: 'sendex-window-newsletter-create'
 				,listeners: {
 					'success': {fn:function() { this.refresh(); },scope:this}
 				}
 			});
 		}
-		this.windows.createItem.fp.getForm().reset();
-		this.windows.createItem.show(e.target);
+		this.windows.createNewsletter.fp.getForm().reset();
+		this.windows.createNewsletter.show(e.target);
 	}
 
-	,updateItem: function(btn,e,row) {
+	,updateNewsletter: function(btn,e,row) {
 		if (typeof(row) != 'undefined') {this.menu.record = row.data;}
 		var id = this.menu.record.id;
 
@@ -91,8 +91,8 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 			}
 			,listeners: {
 				success: {fn:function(r) {
-					if (!this.windows.updateItem) {
-						this.windows.updateItem = MODx.load({
+					if (!this.windows.updateNewsletter) {
+						this.windows.updateNewsletter = MODx.load({
 							xtype: 'sendex-window-newsletter-update'
 							,record: r
 							,listeners: {
@@ -100,15 +100,15 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 							}
 						});
 					}
-					this.windows.updateItem.fp.getForm().reset();
-					this.windows.updateItem.fp.getForm().setValues(r.object);
-					this.windows.updateItem.show(e.target);
+					this.windows.updateNewsletter.fp.getForm().reset();
+					this.windows.updateNewsletter.fp.getForm().setValues(r.object);
+					this.windows.updateNewsletter.show(e.target);
 				},scope:this}
 			}
 		});
 	}
 
-	,removeItem: function(btn,e) {
+	,removeNewsletter: function(btn,e) {
 		if (!this.menu.record) return false;
 		
 		MODx.msg.confirm({
@@ -130,29 +130,57 @@ Ext.reg('sendex-grid-newsletters',Sendex.grid.Newsletters);
 
 
 
-Sendex.window.CreateItem = function(config) {
+Sendex.window.CreateNewsletter = function(config) {
 	config = config || {};
 	this.ident = config.ident || 'mecnewsletter'+Ext.id();
 	Ext.applyIf(config,{
 		title: _('sendex_newsletter_create')
 		,id: this.ident
-		,height: 200
-		,width: 475
+		,height: 350
+		,width: 600
 		,url: Sendex.config.connector_url
 		,action: 'mgr/newsletter/create'
 		,fields: [
 			{xtype: 'textfield',fieldLabel: _('name'),name: 'name',id: 'sendex-'+this.ident+'-name',anchor: '99%'}
-			,{xtype: 'textarea',fieldLabel: _('description'),name: 'description',id: 'sendex-'+this.ident+'-description',height: 150,anchor: '99%'}
+			,{
+				layout:'column'
+				,border: false
+				,anchor: '100%'
+				,items: [{
+					columnWidth: .5
+					,layout: 'form'
+					,defaults: { msgTarget: 'under' }
+					,border:false
+					,items: [
+						{xtype: 'modx-combo-template',fieldLabel: _('sendex_newsletter_template'),name: 'template',id: 'sendex-'+this.ident+'-template',anchor: '99%'}
+						,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_subject'),name: 'email_subject',id: 'sendex-'+this.ident+'-email_subject',anchor: '99%'}
+						,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_reply'),name: 'email_reply',id: 'sendex-'+this.ident+'-email_reply',anchor: '99%'}
+						,{xtype: 'combo-boolean',fieldLabel: _('sendex_newsletter_active'),name: 'active',hiddenName: 'active',id: 'sendex-'+this.ident+'-active',anchor: '50%'}
+					]
+				},{
+					columnWidth: .5
+					,layout: 'form'
+					,defaults: { msgTarget: 'under' }
+					,border:false
+					,items: [
+						{xtype: 'sendex-combo-snippet',fieldLabel: _('sendex_newsletter_snippet'),name: 'snippet',id: 'sendex-'+this.ident+'-snippet',anchor: '99%'}
+						,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_from'),name: 'email_from',id: 'sendex-'+this.ident+'-email_from',anchor: '99%'}
+						,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_from_name'),name: 'email_from_name',id: 'sendex-'+this.ident+'-email_from_name',anchor: '99%'}
+						,{xtype: 'modx-combo-browser',fieldLabel: _('sendex_newsletter_image'),name: 'image',id: 'sendex-'+this.ident+'-image',anchor: '99%'}
+					]
+				}]
+			}
+			,{xtype: 'textarea',fieldLabel: _('description'),name: 'description',id: 'sendex-'+this.ident+'-description',height: 75,anchor: '99%'}
 		]
 		,keys: [{key: Ext.EventObject.ENTER,shift: true,fn: function() {this.submit() },scope: this}]
 	});
-	Sendex.window.CreateItem.superclass.constructor.call(this,config);
+	Sendex.window.CreateNewsletter.superclass.constructor.call(this,config);
 };
-Ext.extend(Sendex.window.CreateItem,MODx.Window);
-Ext.reg('sendex-window-newsletter-create',Sendex.window.CreateItem);
+Ext.extend(Sendex.window.CreateNewsletter,MODx.Window);
+Ext.reg('sendex-window-newsletter-create',Sendex.window.CreateNewsletter);
 
 
-Sendex.window.UpdateItem = function(config) {
+Sendex.window.UpdateNewsletter = function(config) {
 	config = config || {};
 	this.ident = config.ident || 'meunewsletter'+Ext.id();
 	Ext.applyIf(config,{
@@ -169,7 +197,7 @@ Sendex.window.UpdateItem = function(config) {
 		]
 		,keys: [{key: Ext.EventObject.ENTER,shift: true,fn: function() {this.submit() },scope: this}]
 	});
-	Sendex.window.UpdateItem.superclass.constructor.call(this,config);
+	Sendex.window.UpdateNewsletter.superclass.constructor.call(this,config);
 };
-Ext.extend(Sendex.window.UpdateItem,MODx.Window);
-Ext.reg('sendex-window-newsletter-update',Sendex.window.UpdateItem);
+Ext.extend(Sendex.window.UpdateNewsletter,MODx.Window);
+Ext.reg('sendex-window-newsletter-update',Sendex.window.UpdateNewsletter);

@@ -12,11 +12,13 @@ $_lang['sendex_btn_create'] = 'Создать';
 
 $_lang['sendex_newsletter_err_ae'] = 'Подписка с таким именем уже существует.';
 $_lang['sendex_newsletter_err_nf'] = 'Подписка не найдена.';
-$_lang['sendex_newsletter_err_ns'] = 'Подписка не указан.';
+$_lang['sendex_newsletter_err_ns'] = 'Подписка не указана.';
 $_lang['sendex_newsletter_err_remove'] = 'Ошибка при удалении подписки.';
 $_lang['sendex_newsletter_err_save'] = 'Ошибка при сохранении подписки.';
+
 $_lang['sendex_newsletter_remove'] = 'Удалить подписку';
 $_lang['sendex_newsletter_remove_confirm'] = 'Вы уверены, что хотите удалить эту подписку?';
+$_lang['sendex_newsletter_create'] = 'Создать подписку';
 $_lang['sendex_newsletter_update'] = 'Изменить подписку';
 
 $_lang['sendex_newsletter_id'] = 'id';

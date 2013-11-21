@@ -13,12 +13,27 @@ class sxNewsletterItemCreateProcessor extends modObjectCreateProcessor {
 	 * @return bool
 	 */
 	public function beforeSet() {
-		$alreadyExists = $this->modx->getObject('sxNewsletter', array(
-			'name' => $this->getProperty('name'),
-		));
-		if ($alreadyExists) {
-			$this->modx->error->addField('name', $this->modx->lexicon('sendex_item_err_ae'));
+
+		$required = array('name', 'template');
+		foreach ($required as $tmp) {
+			if (!$this->getProperty($tmp)) {
+				$this->addFieldError($tmp, $this->modx->lexicon('field_required'));
+			}
 		}
+
+		if ($this->hasErrors()) {
+			return false;
+		}
+
+		$unique = array('name');
+		foreach ($unique as $tmp) {
+			if ($this->modx->getCount($this->classKey, array('name' => $this->getProperty($tmp)))) {
+				$this->addFieldError($tmp, $this->modx->lexicon('sendex_newsletter_err_ae'));
+			}
+		}
+
+		$active = $this->getProperty('active');
+		$this->setProperty('active', !empty($active));
 
 		return !$this->hasErrors();
 	}
