@@ -18,3 +18,15 @@ $_lang['sendex_newsletter_err_save'] = 'Ошибка при сохранении
 $_lang['sendex_newsletter_remove'] = 'Удалить подписку';
 $_lang['sendex_newsletter_remove_confirm'] = 'Вы уверены, что хотите удалить эту подписку?';
 $_lang['sendex_newsletter_update'] = 'Изменить подписку';
+
+$_lang['sendex_newsletter_id'] = 'id';
+$_lang['sendex_newsletter_name'] = 'Название';
+$_lang['sendex_newsletter_description'] = 'Описание';
+$_lang['sendex_newsletter_active'] = 'Включено';
+$_lang['sendex_newsletter_template'] = 'Шаблон';
+$_lang['sendex_newsletter_snippet'] = 'Сниппет';
+$_lang['sendex_newsletter_email_subject'] = 'Тема письма';
+$_lang['sendex_newsletter_email_from'] = 'Исходящий email';
+$_lang['sendex_newsletter_email_from_name'] = 'Отправитель';
+$_lang['sendex_newsletter_email_reply'] = 'Ответный email';
+$_lang['sendex_newsletter_image'] = 'Изображение';

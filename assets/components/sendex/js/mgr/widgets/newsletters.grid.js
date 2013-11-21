@@ -6,14 +6,22 @@ Sendex.grid.Newsletters = function(config) {
 		,baseParams: {
 			action: 'mgr/newsletter/getlist'
 		}
-		,fields: ['id','name','description']
+		,fields: ['id','name','description','active','template','snippet','image','email_subject','email_from','email_from_name','email_reply']
 		,autoHeight: true
 		,paging: true
 		,remoteSort: true
 		,columns: [
-			{header: _('id'),dataIndex: 'id',width: 70}
-			,{header: _('name'),dataIndex: 'name',width: 200}
-			,{header: _('description'),dataIndex: 'description',width: 250}
+			{header: _('sendex_newsletter_id'),dataIndex: 'id',width: 50}
+			,{header: _('sendex_newsletter_name'),dataIndex: 'name',width: 100}
+			//,{header: _('sendex_newsletter_description'),dataIndex: 'description',width: 250}
+			,{header: _('sendex_newsletter_active'),dataIndex: 'active',width: 75,renderer: this.renderBoolean}
+			,{header: _('sendex_newsletter_template'),dataIndex: 'template',width: 75}
+			,{header: _('sendex_newsletter_snippet'),dataIndex: 'snippet',width: 75}
+			,{header: _('sendex_newsletter_email_subject'),dataIndex: 'description',width: 100}
+			,{header: _('sendex_newsletter_email_from'),dataIndex: 'email_from',width: 100}
+			//,{header: _('sendex_newsletter_email_from_name'),dataIndex: 'email_from_name',width: 100}
+			//,{header: _('sendex_newsletter_email_reply'),dataIndex: 'email_reply',width: 100}
+			,{header: _('sendex_newsletter_image'),dataIndex: 'image',width: 75,renderer: this.renderImage}
 		]
 		,tbar: [{
 			text: _('sendex_btn_create')
@@ -45,7 +53,19 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 		});
 		this.addContextMenuItem(m);
 	}
-	
+
+	,renderBoolean: function(val,cell,row) {
+		return val == '' || val == 0
+			? '<span style="color:red">' + _('no') + '<span>'
+			: '<span style="color:green">' + _('yes') + '<span>';
+	}
+
+	,renderImage: function(val,cell,row) {
+		return val != ''
+			? '<img src="' + val + '" alt="" height="50" />'
+			: '';
+	}
+
 	,createItem: function(btn,e) {
 		if (!this.windows.createItem) {
 			this.windows.createItem = MODx.load({
