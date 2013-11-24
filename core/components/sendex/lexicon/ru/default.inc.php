@@ -6,9 +6,11 @@ $_lang['sendex'] = 'Sendex';
 $_lang['sendex_menu_desc'] = 'Управление подписками';
 
 $_lang['sendex_newsletters'] = 'Подписки';
+$_lang['sendex_newsletter'] = 'Подписка';
 $_lang['sendex_newsletters_intro'] = 'На этой странице вы создаёте и редактируете ваши подписки.';
 
 $_lang['sendex_btn_create'] = 'Создать';
+$_lang['sendex_select_user'] = 'Выберите пользователя';
 
 $_lang['sendex_newsletter_err_ae'] = 'Подписка с таким именем уже существует.';
 $_lang['sendex_newsletter_err_nf'] = 'Подписка не найдена.';
@@ -32,3 +34,20 @@ $_lang['sendex_newsletter_email_from'] = 'Исходящий email';
 $_lang['sendex_newsletter_email_from_name'] = 'Отправитель';
 $_lang['sendex_newsletter_email_reply'] = 'Ответный email';
 $_lang['sendex_newsletter_image'] = 'Изображение';
+
+$_lang['sendex_subscribers'] = 'Подписчики';
+$_lang['sendex_subscriber'] = 'Подписчик';
+
+$_lang['sendex_subscriber_err_ae'] = 'Этот пользователь уже подписан.';
+$_lang['sendex_subscriber_err_nf'] = 'Подписчик не найден.';
+$_lang['sendex_subscriber_err_ns'] = 'Подписчик не указан.';
+$_lang['sendex_subscriber_err_remove'] = 'Ошибка при удалении подписчика.';
+$_lang['sendex_subscriber_err_save'] = 'Ошибка при сохранении подписчика.';
+$_lang['sendex_subscriber_err_email'] = 'Не указан email пописчика.';
+
+$_lang['sendex_subscriber_id'] = 'id';
+$_lang['sendex_subscriber_username'] = 'Псевдоним';
+$_lang['sendex_subscriber_fullname'] = 'Полное имя';
+$_lang['sendex_subscriber_email'] = 'Email';
+$_lang['sendex_subscriber_remove'] = 'Удалить подписчика';
+$_lang['sendex_subscriber_remove_confirm'] = 'Вы действительно хотите отписать пользователя от этой подписки?';

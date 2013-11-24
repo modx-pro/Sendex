@@ -141,7 +141,7 @@ Sendex.window.CreateNewsletter = function(config) {
 		,url: Sendex.config.connector_url
 		,action: 'mgr/newsletter/create'
 		,fields: [
-			{xtype: 'textfield',fieldLabel: _('name'),name: 'name',id: 'sendex-'+this.ident+'-name',anchor: '99%'}
+			{xtype: 'textfield',fieldLabel: _('sendex_newsletter_name'),name: 'name',id: 'sendex-'+this.ident+'-name',anchor: '99%'}
 			,{
 				layout:'column'
 				,border: false
@@ -170,7 +170,7 @@ Sendex.window.CreateNewsletter = function(config) {
 					]
 				}]
 			}
-			,{xtype: 'textarea',fieldLabel: _('description'),name: 'description',id: 'sendex-'+this.ident+'-description',height: 75,anchor: '99%'}
+			,{xtype: 'textarea',fieldLabel: _('sendex_sendmail_description'),name: 'description',id: 'sendex-'+this.ident+'-description',height: 75,anchor: '99%'}
 		]
 		,keys: [{key: Ext.EventObject.ENTER,shift: true,fn: function() {this.submit() },scope: this}]
 	});
@@ -186,18 +186,140 @@ Sendex.window.UpdateNewsletter = function(config) {
 	Ext.applyIf(config,{
 		title: _('sendex_newsletter_update')
 		,id: this.ident
-		,height: 200
-		,width: 475
+		,height: 350
+		,width: 600
 		,url: Sendex.config.connector_url
 		,action: 'mgr/newsletter/update'
-		,fields: [
-			{xtype: 'hidden',name: 'id',id: 'sendex-'+this.ident+'-id'}
-			,{xtype: 'textfield',fieldLabel: _('name'),name: 'name',id: 'sendex-'+this.ident+'-name',anchor: '99%'}
-			,{xtype: 'textarea',fieldLabel: _('description'),name: 'description',id: 'sendex-'+this.ident+'-description',height: 150,anchor: '99%'}
-		]
+		,fields: {
+			xtype: 'modx-tabs'
+			,deferredRender: false
+			,border: true
+			,bodyStyle: 'padding:5px;'
+			,items: [{
+				title: _('sendex_newsletter')
+				,hideMode: 'offsets'
+				,layout: 'form'
+				,border:false
+				,items: [
+					{xtype: 'hidden',name: 'id',id: 'sendex-'+this.ident+'-id'}
+					,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_name'),name: 'name',id: 'sendex-'+this.ident+'-name',anchor: '99%'}
+					,{
+						layout:'column'
+						,border: false
+						,anchor: '100%'
+						,items: [{
+							columnWidth: .5
+							,layout: 'form'
+							,defaults: { msgTarget: 'under' }
+							,border:false
+							,items: [
+								{xtype: 'modx-combo-template',fieldLabel: _('sendex_newsletter_template'),name: 'template',id: 'sendex-'+this.ident+'-template',anchor: '99%'}
+								,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_subject'),name: 'email_subject',id: 'sendex-'+this.ident+'-email_subject',anchor: '99%'}
+								,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_reply'),name: 'email_reply',id: 'sendex-'+this.ident+'-email_reply',anchor: '99%'}
+								,{xtype: 'combo-boolean',fieldLabel: _('sendex_newsletter_active'),name: 'active',hiddenName: 'active',id: 'sendex-'+this.ident+'-active',anchor: '50%'}
+							]
+						},{
+							columnWidth: .5
+							,layout: 'form'
+							,defaults: { msgTarget: 'under' }
+							,border:false
+							,items: [
+								{xtype: 'sendex-combo-snippet',fieldLabel: _('sendex_newsletter_snippet'),name: 'snippet',id: 'sendex-'+this.ident+'-snippet',anchor: '99%'}
+								,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_from'),name: 'email_from',id: 'sendex-'+this.ident+'-email_from',anchor: '99%'}
+								,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_from_name'),name: 'email_from_name',id: 'sendex-'+this.ident+'-email_from_name',anchor: '99%'}
+								,{xtype: 'modx-combo-browser',fieldLabel: _('sendex_newsletter_image'),name: 'image',id: 'sendex-'+this.ident+'-image',anchor: '99%'}
+							]
+						}]
+					}
+					,{xtype: 'textarea',fieldLabel: _('sendex_sendmail_description'),name: 'description',id: 'sendex-'+this.ident+'-description',height: 75,anchor: '99%'}
+				]
+			},{
+				title: _('sendex_subscribers')
+				,xtype: 'sendex-grid-newsletter-subscribers'
+				,record: config.record.object
+			}]
+		}
 		,keys: [{key: Ext.EventObject.ENTER,shift: true,fn: function() {this.submit() },scope: this}]
 	});
 	Sendex.window.UpdateNewsletter.superclass.constructor.call(this,config);
 };
 Ext.extend(Sendex.window.UpdateNewsletter,MODx.Window);
 Ext.reg('sendex-window-newsletter-update',Sendex.window.UpdateNewsletter);
+
+
+
+Sendex.grid.NewsletterSubscribers = function(config) {
+	config = config || {};
+	Ext.applyIf(config,{
+		id: 'sendex-grid-newsletter-subscribers'
+		,url: Sendex.config.connector_url
+		,baseParams: {
+			action: 'mgr/newsletter/subscriber/getlist'
+			,newsletter_id: config.record.id
+		}
+		,fields: ['id','username','fullname','email']
+		,autoHeight: true
+		,paging: true
+		,remoteSort: true
+		,columns: [
+			{header: _('sendex_subscriber_id'),dataIndex: 'id',width: 50}
+			,{header: _('sendex_subscriber_username'),dataIndex: 'username',width: 100}
+			,{header: _('sendex_subscriber_fullname'),dataIndex: 'fullname',width: 100}
+			,{header: _('sendex_subscriber_email'),dataIndex: 'email',width: 100}
+		]
+		,tbar: [{
+			xtype: 'sendex-combo-user'
+			,name: 'user_id'
+			,hiddenName: 'user_id'
+			,width: '50%'
+			,listeners: {
+				select: {fn: this.addSubscriber, scope: this}
+			}
+		}]
+	});
+	Sendex.grid.NewsletterSubscribers.superclass.constructor.call(this,config);
+};
+Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
+
+	getMenu: function() {
+		var m = [];
+		m.push({
+			text: _('sendex_subscriber_remove')
+			,handler: this.removeSubscriber
+		});
+		this.addContextMenuItem(m);
+	}
+
+	,addSubscriber: function(combo, user, e) {
+		combo.reset();
+
+		MODx.Ajax.request({
+			url: Sendex.config.connector_url
+			,params: {
+				action: 'mgr/newsletter/subscriber/create'
+				,user_id: user.id
+				,newsletter_id: this.config.record.id
+			}
+			,listeners: {
+				success: {fn:function(r) {this.refresh();},scope:this}
+			}
+		});
+	}
+
+	,removeSubscriber:function(btn,e) {
+		MODx.msg.confirm({
+			title: _('sendex_subscriber_remove')
+			,text: _('sendex_subscriber_remove_confirm')
+			,url: Sendex.config.connector_url
+			,params: {
+				action: 'mgr/newsletter/subscriber/remove'
+				,id: this.menu.record.id
+			}
+			,listeners: {
+				success: {fn:function(r) {this.refresh();},scope:this}
+			}
+		});
+	}
+
+});
+Ext.reg('sendex-grid-newsletter-subscribers',Sendex.grid.NewsletterSubscribers);
