@@ -1,6 +1,6 @@
 <?php
 /**
- * Remove an Item
+ * Remove an Newsletter
  */
 class sxNewsletterRemoveProcessor extends modObjectRemoveProcessor {
 	public $checkRemovePermission = true;

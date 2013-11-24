@@ -2,7 +2,7 @@
 /**
  * Create an Item
  */
-class sxNewsletterItemCreateProcessor extends modObjectCreateProcessor {
+class sxSubscriberCreateProcessor extends modObjectCreateProcessor {
 	public $objectType = 'sxNewsletter';
 	public $classKey = 'sxNewsletter';
 	public $languageTopics = array('sendex');
@@ -40,4 +40,4 @@ class sxNewsletterItemCreateProcessor extends modObjectCreateProcessor {
 
 }
 
-return 'sxNewsletterItemCreateProcessor';
+return 'sxSubscriberCreateProcessor';

@@ -1,13 +1,12 @@
 <?php
 /**
- * Get a list of Items
+ * Get a list of Newsletters
  */
 class sxNewsletterGetListProcessor extends modObjectGetListProcessor {
 	public $objectType = 'sxNewsletter';
 	public $classKey = 'sxNewsletter';
 	public $defaultSortField = 'id';
 	public $defaultSortDirection = 'DESC';
-	public $renderers = '';
 
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Get an Item
+ * Get an Newsletter
  */
 class sxNewsletterGetProcessor extends modObjectGetProcessor {
 	public $objectType = 'sxNewsletter';
