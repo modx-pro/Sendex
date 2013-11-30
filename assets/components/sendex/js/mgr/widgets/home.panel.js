@@ -25,6 +25,17 @@ Sendex.panel.Home = function(config) {
 					xtype: 'sendex-grid-newsletters'
 					,preventRender: true
 				}]
+			},{
+				title: _('sendex_queues')
+				,items: [{
+					html: _('sendex_queue_intro')
+					,border: false
+					,bodyCssClass: 'panel-desc'
+					,bodyStyle: 'margin-bottom: 10px'
+				},{
+					xtype: 'sendex-grid-queues'
+					,preventRender: true
+				}]
 			}]
 		}]
 	});
