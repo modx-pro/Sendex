@@ -18,6 +18,14 @@ if ($object->xpdo) {
 			foreach ($objects as $object) {
 				$manager->createObjectContainer($object);
 			}
+
+			$level = $modx->getLogLevel();
+			$modx->setLogLevel(xPDO::LOG_LEVEL_FATAL);
+
+			$manager->addField('sxQueue', 'hash');
+			$manager->addIndex('sxQueue', 'hash');
+
+			$modx->setLogLevel($level);
 			break;
 
 		case xPDOTransport::ACTION_UPGRADE:

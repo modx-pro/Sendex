@@ -15,6 +15,7 @@ $xpdo_meta_map['sxQueue']= array (
     'email_from' => '',
     'email_from_name' => '',
     'email_reply' => '',
+    'hash' => '',
   ),
   'fieldMeta' => 
   array (
@@ -90,6 +91,14 @@ $xpdo_meta_map['sxQueue']= array (
       'null' => true,
       'default' => '',
     ),
+    'hash' => 
+    array (
+      'dbtype' => 'char',
+      'precision' => '40',
+      'phptype' => 'string',
+      'null' => true,
+      'default' => '',
+    ),
   ),
   'indexes' => 
   array (
@@ -111,13 +120,13 @@ $xpdo_meta_map['sxQueue']= array (
     ),
     'user_id' => 
     array (
-      'alias' => 'user_id',
+      'alias' => 'subscriber_id',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
       'columns' => 
       array (
-        'user_id' => 
+        'subscriber_id' => 
         array (
           'length' => '',
           'collation' => 'A',
@@ -134,6 +143,22 @@ $xpdo_meta_map['sxQueue']= array (
       'columns' => 
       array (
         'timestamp' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
+    ),
+    'hash' => 
+    array (
+      'alias' => 'hash',
+      'primary' => false,
+      'unique' => true,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'hash' => 
         array (
           'length' => '',
           'collation' => 'A',

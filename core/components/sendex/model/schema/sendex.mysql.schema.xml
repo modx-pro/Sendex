@@ -56,14 +56,19 @@
 		<field key="email_from_name" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
 		<field key="email_reply" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
 
+		<field key="hash" dbtype="char" precision="40" phptype="string" null="true" default="" />
+
 		<index alias="newsletter_id" name="newsletter_id" primary="false" unique="false" type="BTREE">
 			<column key="newsletter_id" length="" collation="A" null="false" />
 		</index>
-		<index alias="user_id" name="user_id" primary="false" unique="false" type="BTREE">
-			<column key="user_id" length="" collation="A" null="false" />
+		<index alias="subscriber_id" name="user_id" primary="false" unique="false" type="BTREE">
+			<column key="subscriber_id" length="" collation="A" null="false" />
 		</index>
 		<index alias="timestamp" name="timestamp" primary="false" unique="false" type="BTREE">
 			<column key="timestamp" length="" collation="A" null="false" />
+		</index>
+		<index alias="hash" name="hash" primary="false" unique="true" type="BTREE">
+			<column key="hash" length="" collation="A" null="false" />
 		</index>
 
 		<aggregate alias="Newsletter" class="sxNewsletter" local="newsletter_id" foreign="id" cardinality="one" owner="foreign" />
