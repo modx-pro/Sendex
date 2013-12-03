@@ -91,15 +91,17 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 			}
 			,listeners: {
 				success: {fn:function(r) {
-					if (!this.windows.updateNewsletter) {
-						this.windows.updateNewsletter = MODx.load({
-							xtype: 'sendex-window-newsletter-update'
-							,record: r
-							,listeners: {
-								'success': {fn:function() { this.refresh(); },scope:this}
-							}
-						});
+					if (this.windows.updateNewsletter) {
+						this.windows.updateNewsletter.close();
+						this.windows.updateNewsletter.destroy();
 					}
+					this.windows.updateNewsletter = MODx.load({
+						xtype: 'sendex-window-newsletter-update'
+						,record: r
+						,listeners: {
+							success: {fn:function() { this.refresh(); },scope:this}
+						}
+					});
 					this.windows.updateNewsletter.fp.getForm().reset();
 					this.windows.updateNewsletter.fp.getForm().setValues(r.object);
 					this.windows.updateNewsletter.show(e.target);
