@@ -88,7 +88,28 @@ class sxNewsletter extends xPDOSimpleObject {
 
 
 		return true;
+	}
 
+
+	/**
+	 * Returns status of user for this newsletter
+	 *
+	 * @param int $user_id
+	 * @param string $email
+	 *
+	 * @return bool
+	 */
+	public function isSubscribed($user_id = 0, $email = '') {
+		$q = $this->xpdo->newQuery('sxSubscriber', array('newsletter_id' => $this->get('id')));
+
+		if (!empty($id)) {
+			$q->where(array('user_id' => $user_id));
+		}
+		if (!empty($email)) {
+			$q->where(array('email' => $email));
+		}
+
+		return (bool) $this->xpdo->getCount('sxSubscriber', $q);
 	}
 
 }
