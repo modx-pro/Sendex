@@ -3,33 +3,21 @@
 $properties = array();
 
 $tmp = array(
-	'tpl' => array(
-		'type' => 'textfield',
-		'value' => 'tpl.Sendex.item',
-	),
-	'sortBy' => array(
-		'type' => 'textfield',
-		'value' => 'name',
-	),
-	'sortDir' => array(
-		'type' => 'list',
-		'options' => array(
-			array('text' => 'ASC', 'value' => 'ASC'),
-			array('text' => 'DESC', 'value' => 'DESC'),
-		),
-		'value' => 'ASC'
-	),
-	'limit' => array(
+	'id' => array(
 		'type' => 'numberfield',
-		'value' => 5,
+		'value' => '',
 	),
-	'outputSeparator' => array(
-		'type' => 'textfield',
-		'value' => "\n",
-	),
-	'toPlaceholder' => array(
+	'showInactive' => array(
 		'type' => 'combo-boolean',
 		'value' => false,
+	),
+	'tplSubscribeForm' => array(
+		'type' => 'textfield',
+		'value' => 'tpl.Sendex.subscribe.form',
+	),
+	'tplUnsubscribeForm' => array(
+		'type' => 'textfield',
+		'value' => 'tpl.Sendex.unsubscribe.form',
 	),
 );
 
