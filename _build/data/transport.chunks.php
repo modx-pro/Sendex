@@ -3,8 +3,12 @@
 $chunks = array();
 
 $tmp = array(
-	'tpl.Sendex.item' => array(
-		'file' => 'item',
+	'tpl.Sendex.subscribe.form' => array(
+		'file' => 'subscribe.form',
+		'description' => '',
+	),
+	'tpl.Sendex.unsubscribe.form' => array(
+		'file' => 'unsubscribe.form',
 		'description' => '',
 	),
 );
