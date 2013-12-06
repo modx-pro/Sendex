@@ -15,8 +15,8 @@ if ($object->xpdo) {
 				'sxSubscriber',
 				'sxQueue',
 			);
-			foreach ($objects as $object) {
-				$manager->createObjectContainer($object);
+			foreach ($objects as $tmp) {
+				$manager->createObjectContainer($tmp);
 			}
 
 			$level = $modx->getLogLevel();
