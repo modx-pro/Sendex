@@ -10,17 +10,20 @@ $_lang['sendex_newsletter'] = 'Подписка';
 $_lang['sendex_newsletters_intro'] = 'На этой странице вы создаёте и редактируете ваши подписки.';
 
 $_lang['sendex_btn_create'] = 'Создать';
+$_lang['sendex_btn_subscribe'] = 'Подписаться!';
+$_lang['sendex_btn_unsubscribe'] = 'Отписаться';
 $_lang['sendex_select_user'] = 'Выберите пользователя';
 $_lang['sendex_select_newsletter'] = 'Добавить письма рассылки в очередь';
 
 $_lang['sendex_newsletter_err_ae'] = 'Подписка с таким именем уже существует.';
 $_lang['sendex_newsletter_err_nf'] = 'Подписка не найдена.';
 $_lang['sendex_newsletter_err_ns'] = 'Подписка не указана.';
+$_lang['sendex_newsletter_err_disabled'] = 'Эта подписка неактивна.';
+$_lang['sendex_newsletter_err_remove'] = 'Ошибка при удалении подписки.';
+$_lang['sendex_newsletter_err_save'] = 'Ошибка при сохранении подписки.';
 $_lang['sendex_newsletter_err_no_subscribers'] = 'У этой рассылки нет подписчиков.';
 $_lang['sendex_newsletter_err_template'] = 'Вы должны выбрать шаблон или сниппет.';
 $_lang['sendex_newsletter_err_snippet'] = 'Вы должны выбрать сниппет или шаблон.';
-$_lang['sendex_newsletter_err_remove'] = 'Ошибка при удалении подписки.';
-$_lang['sendex_newsletter_err_save'] = 'Ошибка при сохранении подписки.';
 
 $_lang['sendex_newsletter_remove'] = 'Удалить подписку';
 $_lang['sendex_newsletter_remove_confirm'] = 'Вы уверены, что хотите удалить эту подписку?';
@@ -78,3 +81,8 @@ $_lang['sendex_queue_update'] = 'Изменить письмо';
 $_lang['sendex_queue_send'] = 'Отправить письмо';
 $_lang['sendex_queue_remove'] = 'Удалить письмо';
 $_lang['sendex_queue_remove_confirm'] = 'Вы действительно хотите удалить это письмо?';
+
+$_lang['sendex_err_auth_req'] = 'Вы должны быть авторизованы для работы с подписками.';
+
+$_lang['sendex_subscribe_intro'] = 'Вы можете подписаться на рассылку "[[+name]]"!';
+$_lang['sendex_unsubscribe_intro'] = 'Вы уже подписаны на рассылку "[[+name]]". Хотите отписаться?';

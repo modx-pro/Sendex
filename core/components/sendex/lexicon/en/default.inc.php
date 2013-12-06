@@ -10,17 +10,21 @@ $_lang['sendex_newsletter'] = 'Newsletter';
 $_lang['sendex_newsletters_intro'] = 'On this page you create and edit your subscription.';
 
 $_lang['sendex_btn_create'] = 'Create';
+$_lang['sendex_btn_subscribe'] = 'Subscribe!';
+$_lang['sendex_btn_unsubscribe'] = 'Unsubscribe';
 $_lang['sendex_select_user'] = 'Select user';
 $_lang['sendex_select_newsletter'] = 'Add letters in the queue';
 
 $_lang['sendex_newsletter_err_ae'] = 'An newsletter already exists with that name.';
 $_lang['sendex_newsletter_err_nf'] = 'Newsletter not found.';
 $_lang['sendex_newsletter_err_ns'] = 'Newsletter not specified.';
+$_lang['sendex_newsletter_err_disabled'] = 'This newsletter is inactive.';
 $_lang['sendex_newsletter_err_remove'] = 'An error occurred while trying to remove the newsletter.';
 $_lang['sendex_newsletter_err_save'] = 'An error occurred while trying to save the newsletter.';
 $_lang['sendex_newsletter_err_no_subscribers'] = 'This newsletter has no subscribers.';
 $_lang['sendex_newsletter_err_template'] = 'You must select template or template.';
 $_lang['sendex_newsletter_err_snippet'] = 'You must select template or snippet.';
+
 $_lang['sendex_newsletter_remove'] = 'Remove newsletter';
 $_lang['sendex_newsletter_remove_confirm'] = 'Are you sure you want to remove this newsletter?';
 $_lang['sendex_newsletter_create'] = 'Create newsletter';
@@ -77,3 +81,8 @@ $_lang['sendex_queue_update'] = 'Update letter';
 $_lang['sendex_queue_send'] = 'Send letter';
 $_lang['sendex_queue_remove'] = 'Remove letter';
 $_lang['sendex_queue_remove_confirm'] = 'Are you sure you want to remove this letter?';
+
+$_lang['sendex_err_auth_req'] = 'You must be authorized for work with newsletters.';
+
+$_lang['sendex_subscribe_intro'] = 'You can subscribe to newsletter "[[+name]]"!';
+$_lang['sendex_unsubscribe_intro'] = 'You already subscribed to newsletter "[[+name]]". Do you want to unsubscribe?';
