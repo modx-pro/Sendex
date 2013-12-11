@@ -32,11 +32,15 @@
 		<field key="newsletter_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" default="0" />
 		<field key="user_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" default="0" />
 		<field key="email" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="code" dbtype="char" precision="40" phptype="string" null="true" default="" />
 
 		<index alias="key" name="key" primary="false" unique="true" type="BTREE">
 			<column key="newsletter_id" length="" collation="A" null="false" />
 			<column key="user_id" length="" collation="A" null="false" />
 			<column key="email" length="" collation="A" null="false" />
+		</index>
+		<index alias="code" name="code" primary="false" unique="true" type="BTREE">
+			<column key="code" length="" collation="A" null="false" />
 		</index>
 
 		<aggregate alias="Newsletter" class="sxNewsletter" local="newsletter_id" foreign="id" cardinality="one" owner="foreign" />

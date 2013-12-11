@@ -25,6 +25,9 @@ if ($object->xpdo) {
 			$manager->addField('sxQueue', 'hash');
 			$manager->addIndex('sxQueue', 'hash');
 
+			$manager->addField('sxSubscriber', 'code');
+			$manager->addIndex('sxSubscriber', 'code');
+
 			$modx->setLogLevel($level);
 			break;
 
