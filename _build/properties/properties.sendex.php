@@ -19,6 +19,10 @@ $tmp = array(
 		'type' => 'textfield',
 		'value' => 'tpl.Sendex.unsubscribe.form',
 	),
+	'tplActivate' => array(
+		'type' => 'textfield',
+		'value' => 'tpl.Sendex.subscribe.activate',
+	),
 );
 
 foreach ($tmp as $k => $v) {

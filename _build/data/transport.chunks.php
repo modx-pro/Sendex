@@ -11,6 +11,10 @@ $tmp = array(
 		'file' => 'unsubscribe.form',
 		'description' => '',
 	),
+	'tpl.Sendex.subscribe.activate' => array(
+		'file' => 'subscribe.activate',
+		'description' => '',
+	),
 );
 
 foreach ($tmp as $k => $v) {
