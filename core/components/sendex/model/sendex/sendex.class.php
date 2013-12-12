@@ -45,94 +45,32 @@ class Sendex {
 
 
 	/**
-	 * Initializes Sendex into different contexts.
+	 * Sends email with activation link
 	 *
-	 * @access public
+	 * @param $email
+	 * @param array $options
 	 *
-	 * @param string $ctx The context to load. Defaults to web.
+	 * @return string|bool
 	 */
-	public function initialize($ctx = 'web') {
-		switch ($ctx) {
-			case 'mgr':
-				if (!$this->modx->loadClass('sendex.request.SendexControllerRequest', $this->config['modelPath'], true, true)) {
-					return 'Could not load controller request handler.';
-				}
-				$this->request = new SendexControllerRequest($this);
+	public function sendEmail($email, array $options = array()) {
+		/** @var modPHPMailer $mail */
+		$mail = $this->modx->getService('mail', 'mail.modPHPMailer');
 
-				return $this->request->handleRequest();
-				break;
-			case 'web':
+		$mail->set(modMail::MAIL_BODY, $this->modx->getOption('email_body', $options, ''));
+		$mail->set(modMail::MAIL_FROM, $this->modx->getOption('email_from', $options, $this->modx->getOption('emailsender'), true));
+		$mail->set(modMail::MAIL_FROM_NAME, $this->modx->getOption('email_from_name', $options, $this->modx->getOption('site_name'), true));
+		$mail->set(modMail::MAIL_SUBJECT, $this->modx->getOption('email_subject', $options, $this->modx->lexicon('sendex_subscribe_activate_subject'), true));
 
-				break;
-			default:
-				/* if you wanted to do any generic frontend stuff here.
-				 * For example, if you have a lot of snippets but common code
-				 * in them all at the beginning, you could put it here and just
-				 * call $sendex->initialize($modx->context->get('key'));
-				 * which would run this.
-				 */
-				break;
-		}
-		return true;
-	}
+		$mail->address('to', $email);
+		$mail->address('reply-to', $this->modx->getOption('email_from', $options, $this->modx->getOption('emailsender'), true));
+		$mail->setHTML(true);
 
+		$response = !$mail->send()
+			? $mail->mailer->errorInfo
+			: true;
+		$mail->reset();
 
-	/**
-	 * Gets a Chunk and caches it; also falls back to file-based templates
-	 * for easier debugging.
-	 *
-	 * @access public
-	 *
-	 * @param string $name The name of the Chunk
-	 * @param array $properties The properties for the Chunk
-	 *
-	 * @return string The processed content of the Chunk
-	 */
-	public function getChunk($name, array $properties = array()) {
-		$chunk = null;
-		if (!isset($this->chunks[$name])) {
-			$chunk = $this->modx->getObject('modChunk', array('name' => $name), true);
-			if (empty($chunk)) {
-				$chunk = $this->_getTplChunk($name, $this->config['chunkSuffix']);
-				if ($chunk == false) {
-					return false;
-				}
-			}
-			$this->chunks[$name] = $chunk->getContent();
-		}
-		else {
-			$o = $this->chunks[$name];
-			$chunk = $this->modx->newObject('modChunk');
-			$chunk->setContent($o);
-		}
-		$chunk->setCacheable(false);
-
-		return $chunk->process($properties);
-	}
-
-
-	/**
-	 * Returns a modChunk object from a template file.
-	 *
-	 * @access private
-	 *
-	 * @param string $name The name of the Chunk. Will parse to name.chunk.tpl by default.
-	 * @param string $suffix The suffix to add to the chunk filename.
-	 *
-	 * @return modChunk/boolean Returns the modChunk object if found, otherwise
-	 * false.
-	 */
-	private function _getTplChunk($name, $suffix = '.chunk.tpl') {
-		$chunk = false;
-		$f = $this->config['chunksPath'] . strtolower($name) . $suffix;
-		if (file_exists($f)) {
-			$o = file_get_contents($f);
-			$chunk = $this->modx->newObject('modChunk');
-			$chunk->set('name', $name);
-			$chunk->setContent($o);
-		}
-
-		return $chunk;
+		return $response;
 	}
 
 }
