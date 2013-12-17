@@ -19,6 +19,7 @@ if ($object->xpdo) {
 				$manager->createObjectContainer($tmp);
 			}
 
+			/*
 			$level = $modx->getLogLevel();
 			$modx->setLogLevel(xPDO::LOG_LEVEL_FATAL);
 
@@ -29,6 +30,7 @@ if ($object->xpdo) {
 			$manager->addIndex('sxSubscriber', 'code');
 
 			$modx->setLogLevel($level);
+			*/
 			break;
 
 		case xPDOTransport::ACTION_UPGRADE:
