@@ -2,10 +2,7 @@
 /** @var array $scriptProperties */
 /** @var Sendex $Sendex */
 $Sendex = $modx->getService('sendex','Sendex',$modx->getOption('sendex_core_path',null,$modx->getOption('core_path').'components/sendex/').'model/sendex/',$scriptProperties);
-/** @var pdoTools $pdoTools */
-$pdoTools = $modx->getService('pdoTools');
-
-if (!($Sendex instanceof Sendex) || !($pdoTools instanceof pdoTools)) return '';
+if (!($Sendex instanceof Sendex)) return '';
 
 if (empty($tplActivate)) {$tplActivate = '@INLINE [[+link]]';}
 if (empty($linkTTL)) {$linkTTL = 1800;}
@@ -55,7 +52,7 @@ if (!empty($_REQUEST['sx_action'])) {
 					$params['hash'] = $response;
 					$params['sx_action'] = 'confirm';
 					$placeholders['link'] = $modx->makeUrl($modx->resource->id, $modx->context->key, $params, 'full');
-					$placeholders['email_body'] = $pdoTools->getChunk($tplActivate, $placeholders);
+					$placeholders['email_body'] = $modx->getChunk($tplActivate, $placeholders);
 					$Sendex->sendEmail($email, $placeholders);
 				}
 			}
@@ -91,11 +88,11 @@ if ($id = $newsletter->isSubscribed($modx->user->id)) {
 		$placeholders = array_merge($subscriber->toArray(), $placeholders);
 	}
 	return !empty($tplUnsubscribeForm)
-		? $pdoTools->getChunk($tplUnsubscribeForm, $placeholders)
+		? $modx->getChunk($tplUnsubscribeForm, $placeholders)
 		: 'Parameter "tplUnsubscribeForm" is empty';
 }
 else {
 	return !empty($tplSubscribeForm)
-		? $pdoTools->getChunk($tplSubscribeForm, $placeholders)
+		? $modx->getChunk($tplSubscribeForm, $placeholders)
 		: 'Parameter "tplSubscribeForm" is empty';
 }
