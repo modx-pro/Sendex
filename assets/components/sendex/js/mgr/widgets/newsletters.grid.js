@@ -6,7 +6,7 @@ Sendex.grid.Newsletters = function(config) {
 		,baseParams: {
 			action: 'mgr/newsletter/getlist'
 		}
-		,fields: ['id','name','description','active','template','snippet','image','email_subject','email_from','email_from_name','email_reply']
+		,fields: ['id','name','description','active','template','image','email_subject','email_from','email_from_name','email_reply']
 		,autoHeight: true
 		,paging: true
 		,remoteSort: true
@@ -16,7 +16,6 @@ Sendex.grid.Newsletters = function(config) {
 			//,{header: _('sendex_newsletter_description'),dataIndex: 'description',width: 250}
 			,{header: _('sendex_newsletter_active'),dataIndex: 'active',width: 75,renderer: this.renderBoolean}
 			,{header: _('sendex_newsletter_template'),dataIndex: 'template',width: 75}
-			,{header: _('sendex_newsletter_snippet'),dataIndex: 'snippet',width: 75}
 			,{header: _('sendex_newsletter_email_subject'),dataIndex: 'email_subject',width: 100}
 			,{header: _('sendex_newsletter_email_from'),dataIndex: 'email_from',width: 100}
 			//,{header: _('sendex_newsletter_email_from_name'),dataIndex: 'email_from_name',width: 100}
@@ -144,6 +143,7 @@ Sendex.window.CreateNewsletter = function(config) {
 		,action: 'mgr/newsletter/create'
 		,fields: [
 			{xtype: 'textfield',fieldLabel: _('sendex_newsletter_name'),name: 'name',id: 'sendex-'+this.ident+'-name',anchor: '99%'}
+			,{xtype: 'modx-combo-template',fieldLabel: _('sendex_newsletter_template'),name: 'template',id: 'sendex-'+this.ident+'-template',anchor: '99%'}
 			,{
 				layout:'column'
 				,border: false
@@ -154,8 +154,7 @@ Sendex.window.CreateNewsletter = function(config) {
 					,defaults: { msgTarget: 'under' }
 					,border:false
 					,items: [
-						{xtype: 'modx-combo-template',fieldLabel: _('sendex_newsletter_template'),name: 'template',id: 'sendex-'+this.ident+'-template',anchor: '99%'}
-						,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_subject'),name: 'email_subject',id: 'sendex-'+this.ident+'-email_subject',anchor: '99%'}
+						{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_subject'),name: 'email_subject',id: 'sendex-'+this.ident+'-email_subject',anchor: '99%'}
 						,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_reply'),name: 'email_reply',id: 'sendex-'+this.ident+'-email_reply',anchor: '99%'}
 						,{xtype: 'combo-boolean',fieldLabel: _('sendex_newsletter_active'),name: 'active',hiddenName: 'active',id: 'sendex-'+this.ident+'-active',anchor: '50%'}
 					]
@@ -165,14 +164,13 @@ Sendex.window.CreateNewsletter = function(config) {
 					,defaults: { msgTarget: 'under' }
 					,border:false
 					,items: [
-						{xtype: 'sendex-combo-snippet',fieldLabel: _('sendex_newsletter_snippet'),name: 'snippet',id: 'sendex-'+this.ident+'-snippet',anchor: '99%'}
-						,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_from'),name: 'email_from',id: 'sendex-'+this.ident+'-email_from',anchor: '99%'}
+						{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_from'),name: 'email_from',id: 'sendex-'+this.ident+'-email_from',anchor: '99%'}
 						,{xtype: 'textfield',fieldLabel: _('sendex_newsletter_email_from_name'),name: 'email_from_name',id: 'sendex-'+this.ident+'-email_from_name',anchor: '99%'}
 						,{xtype: 'modx-combo-browser',fieldLabel: _('sendex_newsletter_image'),name: 'image',id: 'sendex-'+this.ident+'-image',anchor: '99%'}
 					]
 				}]
 			}
-			,{xtype: 'textarea',fieldLabel: _('sendex_sendmail_description'),name: 'description',id: 'sendex-'+this.ident+'-description',height: 75,anchor: '99%'}
+			,{xtype: 'textarea',fieldLabel: _('sendex_newsletter_description'),name: 'description',id: 'sendex-'+this.ident+'-description',height: 75,anchor: '99%'}
 		]
 		,keys: [{key: Ext.EventObject.ENTER,shift: true,fn: function() {this.submit() },scope: this}]
 	});

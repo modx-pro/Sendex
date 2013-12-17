@@ -10,7 +10,6 @@ $xpdo_meta_map['sxNewsletter']= array (
     'description' => '',
     'active' => 1,
     'template' => 0,
-    'snippet' => 0,
     'image' => '',
     'email_subject' => '',
     'email_from' => '',
@@ -44,15 +43,6 @@ $xpdo_meta_map['sxNewsletter']= array (
       'default' => 1,
     ),
     'template' => 
-    array (
-      'dbtype' => 'integer',
-      'precision' => '10',
-      'attributes' => 'unsigned',
-      'phptype' => 'integer',
-      'null' => true,
-      'default' => 0,
-    ),
-    'snippet' => 
     array (
       'dbtype' => 'integer',
       'precision' => '10',

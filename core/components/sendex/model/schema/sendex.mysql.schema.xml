@@ -7,7 +7,6 @@
 		<field key="active" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="true" default="1" />
 
 		<field key="template" dbtype="integer" precision="10" attributes="unsigned" phptype="integer" null="true" default="0" />
-		<field key="snippet" dbtype="integer" precision="10" attributes="unsigned" phptype="integer" null="true" default="0" />
 		<field key="image" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
 
 		<field key="email_subject" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
