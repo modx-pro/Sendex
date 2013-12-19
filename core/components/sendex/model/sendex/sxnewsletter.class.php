@@ -22,7 +22,7 @@ class sxNewsletter extends xPDOSimpleObject {
 		}
 
 		if (!$template || !($template instanceof modTemplate)) {
-			return 'Could not prepare email body without template!';
+			return $this->xpdo->lexicon('sendex_newsletter_err_no_template');
 		}
 
 		/** @var sxSubscriber $subscriber */
