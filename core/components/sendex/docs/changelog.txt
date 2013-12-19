@@ -1,5 +1,5 @@
 Changelog for Sendex.
 
-Sendex 0.0.1
+Sendex 1.0.0-beta
 ==============
 - Initial release.

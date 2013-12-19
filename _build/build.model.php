@@ -1,5 +1,8 @@
 <?php
-require 'build.config.php';
+
+if (!defined('PKG_NAME')) {
+	require 'build.config.php';
+}
 
 /* define sources */
 $root = dirname(dirname(__FILE__)).'/';
