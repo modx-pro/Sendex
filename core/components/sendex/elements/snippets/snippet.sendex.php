@@ -4,13 +4,13 @@
 $Sendex = $modx->getService('sendex','Sendex',$modx->getOption('sendex_core_path',null,$modx->getOption('core_path').'components/sendex/').'model/sendex/',$scriptProperties);
 if (!($Sendex instanceof Sendex)) return '';
 
-if (empty($tplActivate)) {$tplActivate = '@INLINE [[+link]]';}
+if (empty($tplSubscribeAuth)) {$tplSubscribeAuth = 'tpl.Sendex.subscribe.auth';}
+if (empty($tplSubscribeGuest)) {$tplSubscribeGuest = 'tpl.Sendex.subscribe.guest';}
+if (empty($tplUnsubscribe)) {$tplUnsubscribe = 'tpl.Sendex.unsubscribe';}
+if (empty($tplActivate)) {$tplActivate = 'tpl.Sendex.activate';}
 if (empty($linkTTL)) {$linkTTL = 1800;}
 
-if (!$modx->user->isAuthenticated($modx->context->key)) {
-	return $modx->lexicon('sendex_err_auth_req');
-}
-elseif (empty($id) || !$newsletter = $modx->getObject('sxNewsletter', $id)) {
+if (empty($id) || !$newsletter = $modx->getObject('sxNewsletter', $id)) {
 	return $modx->lexicon('sendex_newsletter_err_ns');
 }
 
@@ -30,15 +30,24 @@ if ($modx->user->isAuthenticated($modx->context->key)) {
 	);
 }
 
+$isAuthenticated = $modx->user->isAuthenticated($modx->context->key);
 
 if (!empty($_REQUEST['sx_action'])) {
+	$isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+
 	$params = $_GET;
 	unset($params[$modx->getOption('request_param_alias')]);
 	unset($params[$modx->getOption('request_param_id')]);
 
 	switch ($_REQUEST['sx_action']) {
 		case 'subscribe':
-			if (!empty($_REQUEST['email'])) {
+			if ($isAuthenticated && $modx->user->id) {
+				if (!$response = $newsletter->Subscribe($modx->user->id)) {
+					$placeholders['message'] = $modx->lexicon('sendex_subscribe_err_email_wrong');
+					$placeholders['error'] = 1;
+				}
+			}
+			elseif (!empty($_REQUEST['email'])) {
 				$email = htmlentities(strip_tags(urldecode($_REQUEST['email'])));
 				$response = $newsletter->checkEmail($email, $modx->user->id, $linkTTL);
 				if ($response === true) {
@@ -53,7 +62,11 @@ if (!empty($_REQUEST['sx_action'])) {
 					$params['sx_action'] = 'confirm';
 					$placeholders['link'] = $modx->makeUrl($modx->resource->id, $modx->context->key, $params, 'full');
 					$placeholders['email_body'] = $modx->getChunk($tplActivate, $placeholders);
-					$Sendex->sendEmail($email, $placeholders);
+					$response = $Sendex->sendEmail($email, $placeholders);
+					if ($response !== true) {
+						$placeholders['message'] = $modx->lexicon('sendex_subscribe_err_email_send');
+						$placeholders['error'] = 1;
+					}
 				}
 			}
 			else {
@@ -77,22 +90,27 @@ if (!empty($_REQUEST['sx_action'])) {
 	}
 
 	unset($params['sx_action']);
-	if (empty($placeholders['message'])) {
+	if (!$isAjax && empty($placeholders['message'])) {
 		$modx->sendRedirect($modx->makeUrl($modx->resource->id, $modx->context->key, $params, 'full'));
 	}
 }
 
-
-if ($id = $newsletter->isSubscribed($modx->user->id)) {
+if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {
 	if ($subscriber = $modx->getObject('sxSubscriber', $id)) {
 		$placeholders = array_merge($subscriber->toArray(), $placeholders);
 	}
-	return !empty($tplUnsubscribeForm)
-		? $modx->getChunk($tplUnsubscribeForm, $placeholders)
-		: 'Parameter "tplUnsubscribeForm" is empty';
+	$output = $modx->getChunk($tplUnsubscribe, $placeholders);
 }
 else {
-	return !empty($tplSubscribeForm)
-		? $modx->getChunk($tplSubscribeForm, $placeholders)
-		: 'Parameter "tplSubscribeForm" is empty';
+	$output = $isAuthenticated
+		? $modx->getChunk($tplSubscribeAuth, $placeholders)
+		: $modx->getChunk($tplSubscribeGuest, $placeholders);
+}
+
+if (!empty($isAjax)) {
+	@session_write_close();
+	exit($output);
+}
+else {
+	return $output;
 }

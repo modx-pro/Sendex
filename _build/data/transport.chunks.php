@@ -3,16 +3,20 @@
 $chunks = array();
 
 $tmp = array(
-	'tpl.Sendex.subscribe.form' => array(
-		'file' => 'subscribe.form',
+	'tpl.Sendex.subscribe.auth' => array(
+		'file' => 'subscribe.auth',
 		'description' => '',
 	),
-	'tpl.Sendex.unsubscribe.form' => array(
-		'file' => 'unsubscribe.form',
+	'tpl.Sendex.subscribe.guest' => array(
+		'file' => 'subscribe.guest',
 		'description' => '',
 	),
-	'tpl.Sendex.subscribe.activate' => array(
-		'file' => 'subscribe.activate',
+	'tpl.Sendex.unsubscribe' => array(
+		'file' => 'unsubscribe',
+		'description' => '',
+	),
+	'tpl.Sendex.activate' => array(
+		'file' => 'activate',
 		'description' => '',
 	),
 );

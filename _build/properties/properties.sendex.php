@@ -11,17 +11,21 @@ $tmp = array(
 		'type' => 'combo-boolean',
 		'value' => false,
 	),
-	'tplSubscribeForm' => array(
+	'tplSubscribeAuth' => array(
 		'type' => 'textfield',
-		'value' => 'tpl.Sendex.subscribe.form',
+		'value' => 'tpl.Sendex.subscribe.auth',
 	),
-	'tplUnsubscribeForm' => array(
+	'tplSubscribeGuest' => array(
 		'type' => 'textfield',
-		'value' => 'tpl.Sendex.unsubscribe.form',
+		'value' => 'tpl.Sendex.subscribe.guest',
+	),
+	'tplUnsubscribe' => array(
+		'type' => 'textfield',
+		'value' => 'tpl.Sendex.unsubscribe',
 	),
 	'tplActivate' => array(
 		'type' => 'textfield',
-		'value' => 'tpl.Sendex.subscribe.activate',
+		'value' => 'tpl.Sendex.activate',
 	),
 );
 
