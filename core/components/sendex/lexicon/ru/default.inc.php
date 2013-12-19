@@ -22,8 +22,8 @@ $_lang['sendex_newsletter_err_disabled'] = 'Эта подписка неакти
 $_lang['sendex_newsletter_err_remove'] = 'Ошибка при удалении подписки.';
 $_lang['sendex_newsletter_err_save'] = 'Ошибка при сохранении подписки.';
 $_lang['sendex_newsletter_err_no_subscribers'] = 'У этой рассылки нет подписчиков.';
-$_lang['sendex_newsletter_err_template'] = 'Вы должны выбрать шаблон или сниппет.';
-$_lang['sendex_newsletter_err_snippet'] = 'Вы должны выбрать сниппет или шаблон.';
+$_lang['sendex_newsletter_err_no_template'] = 'У этой рассылки нет шаблона.';
+$_lang['sendex_newsletter_err_template'] = 'Вы должны выбрать шаблон.';
 
 $_lang['sendex_newsletter_remove'] = 'Удалить подписку';
 $_lang['sendex_newsletter_remove_confirm'] = 'Вы уверены, что хотите удалить эту подписку?';
@@ -91,3 +91,4 @@ $_lang['sendex_subscribe_activate_subject'] = 'Подтвердите ваш ema
 $_lang['sendex_subscribe_err_already'] = 'Этот email уже подписан на рассылку.';
 $_lang['sendex_subscribe_err_email_wrong'] = 'Неверный email.';
 $_lang['sendex_subscribe_err_email_ns'] = 'Нужно указать email.';
+$_lang['sendex_subscribe_err_email_send'] = 'Не могу отправить email.';

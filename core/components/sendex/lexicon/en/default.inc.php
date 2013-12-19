@@ -22,8 +22,8 @@ $_lang['sendex_newsletter_err_disabled'] = 'This newsletter is inactive.';
 $_lang['sendex_newsletter_err_remove'] = 'An error occurred while trying to remove the newsletter.';
 $_lang['sendex_newsletter_err_save'] = 'An error occurred while trying to save the newsletter.';
 $_lang['sendex_newsletter_err_no_subscribers'] = 'This newsletter has no subscribers.';
-$_lang['sendex_newsletter_err_template'] = 'You must select template or template.';
-$_lang['sendex_newsletter_err_snippet'] = 'You must select template or snippet.';
+$_lang['sendex_newsletter_err_no_template'] = 'This newsletter has no template.';
+$_lang['sendex_newsletter_err_template'] = 'You must select template.';
 
 $_lang['sendex_newsletter_remove'] = 'Remove newsletter';
 $_lang['sendex_newsletter_remove_confirm'] = 'Are you sure you want to remove this newsletter?';
@@ -91,3 +91,4 @@ $_lang['sendex_subscribe_activate_subject'] = 'Confirm your email!';
 $_lang['sendex_subscribe_err_already'] = 'This email is already subscribed to newsletter.';
 $_lang['sendex_subscribe_err_email_wrong'] = 'Wrong email.';
 $_lang['sendex_subscribe_err_email_ns'] = 'You need to specify email.';
+$_lang['sendex_subscribe_err_email_send'] = 'Could not send email.';
