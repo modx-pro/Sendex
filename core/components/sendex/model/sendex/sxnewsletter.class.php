@@ -52,7 +52,9 @@ class sxNewsletter extends xPDOSimpleObject {
 			$email_reply = !empty($this->email_reply) ? $this->email_reply : $from;
 
 			// Process email body
-			$template->setCacheable(false);
+			$template->_cacheable = false;
+			$template->_processed = false;
+			$template->_output = '';
 			$body = $template->process($scriptProperties);
 
 			if ($parser && $parser instanceof modParser) {

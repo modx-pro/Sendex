@@ -1,5 +1,9 @@
 Changelog for Sendex.
 
-Sendex 1.0.0-beta
+1.0.0-rc
+==============
+- Fixed caching of template.
+
+1.0.0-beta
 ==============
 - Initial release.
