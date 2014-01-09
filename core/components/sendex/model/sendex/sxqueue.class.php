@@ -42,7 +42,7 @@ class sxQueue extends xPDOSimpleObject {
 		$mail->set(modMail::MAIL_FROM_NAME, $this->email_from_name);
 		$mail->set(modMail::MAIL_SUBJECT, $this->email_subject);
 		$mail->address('to', $this->email_to);
-		$mail->address('reply-to', $this->reply_to);
+		$mail->address('reply-to', $this->email_reply);
 		$mail->setHTML(true);
 		if (!$mail->send()) {
 			$this->xpdo->log(xPDO::LOG_LEVEL_ERROR, 'An error occurred while trying to send the email: '.$mail->mailer->ErrorInfo);
