@@ -20,7 +20,7 @@ Sendex.grid.Newsletters = function(config) {
 			,{header: _('sendex_newsletter_email_from'),dataIndex: 'email_from',width: 100}
 			//,{header: _('sendex_newsletter_email_from_name'),dataIndex: 'email_from_name',width: 100}
 			//,{header: _('sendex_newsletter_email_reply'),dataIndex: 'email_reply',width: 100}
-			,{header: _('sendex_newsletter_image'),dataIndex: 'image',width: 75,renderer: this.renderImage}
+			,{header: _('sendex_newsletter_image'),dataIndex: 'image',width: 75,renderer: {fn:function(img) {return renderGridImage(img,30)}}}
 		]
 		,tbar: [{
 			text: _('sendex_btn_create')
