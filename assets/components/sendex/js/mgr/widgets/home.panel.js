@@ -43,3 +43,15 @@ Sendex.panel.Home = function(config) {
 };
 Ext.extend(Sendex.panel.Home,MODx.Panel);
 Ext.reg('sendex-panel-home',Sendex.panel.Home);
+
+// Functions
+/******************************************************/
+function renderGridImage(img, height) {
+	if (height == '') {height = 50;}
+	if (img.length > 0) {
+		if (!/(jpg|jpeg|png|gif|bmp)$/.test(img)) {return img;}
+		else if (/^(http|https)/.test(img)) {return '<img src="'+img+'" alt="" style="display:block;margin:auto;height:'+height+'px;" />'}
+		else {return '<img src="'+MODx.config.connectors_url+'system/phpthumb.php?&src='+img+'&wctx=web&h='+height+'&zc=0&source=0" alt="" style="display:block;margin:auto;height:'+height+'px;" />'}
+	}
+	else {return '';}
+}
