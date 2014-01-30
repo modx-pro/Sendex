@@ -232,7 +232,7 @@ class sxNewsletter extends xPDOSimpleObject {
 	 * @return bool
 	 */
 	public function unSubscribe($code) {
-		if ($subscriber = $this->xpdo->getObject('sxSubscriber', array('code' => $code))) {
+		if ($subscriber = $this->xpdo->getObject('sxSubscriber', array('code' => $code)) && $this->xpdo->user->id == $subscriber->user_id) {
 			return $subscriber->remove();
 		}
 
