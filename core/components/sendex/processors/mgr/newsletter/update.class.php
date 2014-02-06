@@ -6,7 +6,7 @@ class sxNewsletterUpdateProcessor extends modObjectUpdateProcessor {
 	public $objectType = 'sxNewsletter';
 	public $classKey = 'sxNewsletter';
 	public $languageTopics = array('sendex');
-	public $permission = 'update_document';
+	public $permission = 'edit_document';
 
 
 	/**
