@@ -9,7 +9,7 @@ $modx->addPackage('sendex', MODX_CORE_PATH . 'components/sendex/model/');
 $q = $modx->newQuery('sxQueue');
 $q->limit($modx->getOption('sendex_queue_limit', null, 100, true));
 
-$queue = $modx->getCollection('sxQueue');
+$queue = $modx->getCollection('sxQueue', $q);
 /** @var sxQueue $email */
 foreach ($queue as $email) {
 	$email->send();
