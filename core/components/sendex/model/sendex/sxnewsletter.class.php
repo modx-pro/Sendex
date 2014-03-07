@@ -92,7 +92,7 @@ class sxNewsletter extends xPDOSimpleObject {
 	public function isSubscribed($user_id = 0, $email = '') {
 		$q = $this->xpdo->newQuery('sxSubscriber', array('newsletter_id' => $this->get('id')));
 
-		if (!empty($id)) {
+		if (!empty($user_id)) {
 			$q->where(array('user_id' => $user_id));
 		}
 		if (!empty($email)) {
