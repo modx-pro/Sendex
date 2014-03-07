@@ -1,6 +1,9 @@
 Changelog for Sendex.
 
-1.0.0-rc
+1.0.0-rc2
+==============
+- Various small fixes.
+
 ==============
 - Fixed caching of template.
 
