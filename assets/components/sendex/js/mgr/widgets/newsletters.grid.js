@@ -60,6 +60,9 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 	}
 
 	,renderImage: function(val,cell,row) {
+		if (val.substr(0,1) != '/') {
+			val = '/' + val;
+		}
 		return val != ''
 			? '<img src="' + val + '" alt="" height="50" />'
 			: '';
