@@ -79,7 +79,7 @@ $_lang['sendex_queue_email_reply'] = 'Reply to';
 
 $_lang['sendex_queue_update'] = 'Update letter';
 $_lang['sendex_queue_send'] = 'Send letter';
-$_lang['sendex_queues_send'] = 'Send letter';
+$_lang['sendex_queues_send'] = 'Send letters';
 $_lang['sendex_queues_send_confirm'] = 'Are you sure you want to send this letters?';
 $_lang['sendex_queue_remove'] = 'Remove letter';
 $_lang['sendex_queues_remove'] = 'Remove letters';
