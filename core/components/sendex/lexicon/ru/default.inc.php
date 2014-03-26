@@ -79,8 +79,12 @@ $_lang['sendex_queue_email_reply'] = 'Ответить';
 
 $_lang['sendex_queue_update'] = 'Изменить письмо';
 $_lang['sendex_queue_send'] = 'Отправить письмо';
+$_lang['sendex_queues_send'] = 'Отправить письма';
+$_lang['sendex_queues_send_confirm'] = 'Вы действительно хотите отправить эти письма?';
 $_lang['sendex_queue_remove'] = 'Удалить письмо';
+$_lang['sendex_queues_remove'] = 'Удалить письма';
 $_lang['sendex_queue_remove_confirm'] = 'Вы действительно хотите удалить это письмо?';
+$_lang['sendex_queues_remove_confirm'] = 'Вы действительно хотите удалить эти письма?';
 
 $_lang['sendex_err_auth_req'] = 'Вы должны быть авторизованы для работы с подписками.';
 
