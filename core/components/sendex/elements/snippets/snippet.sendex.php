@@ -66,6 +66,8 @@ if (!empty($_REQUEST['sx_action'])) {
 					if ($response !== true) {
 						$placeholders['message'] = $modx->lexicon('sendex_subscribe_err_email_send');
 						$placeholders['error'] = 1;
+					} else {
+					    $params['sx_subscribed'] = 1;
 					}
 				}
 			}
@@ -78,12 +80,14 @@ if (!empty($_REQUEST['sx_action'])) {
 		case 'confirm':
 			if (!empty($_REQUEST['hash'])) {
 				$response = $newsletter->confirmEmail($_REQUEST['hash']);
+				$params['sx_confirmed'] = 1;
 				unset($params['hash']);
 			}
 			break;
 		case 'unsubscribe':
 			if (!empty($_REQUEST['code'])) {
 				$response = $newsletter->unSubscribe($_REQUEST['code']);
+				$params['sx_unsubscribed'] = 1;
 			}
 			unset($params['code']);
 			break;
