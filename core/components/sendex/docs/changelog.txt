@@ -1,5 +1,11 @@
 Changelog for Sendex.
 
+1.0.0-pl
+==============
+- Added multiremoving and multisending
+- [#11]Added $_GET's subscribed, unsubscribed, confirmed
+- [#1] Fixed urls of images
+
 1.0.0-rc2
 ==============
 - Various small fixes.
