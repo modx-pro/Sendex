@@ -4,6 +4,7 @@ Changelog for Sendex.
 ==============
 - Compatibility with MODX 2.3.
 - UI improvements.
+- [#20] Added "send all" button to queues grid.
 
 1.0.0-pl
 ==============

@@ -12,6 +12,7 @@ $_lang['sendex_newsletters_intro'] = 'На этой странице вы соз
 $_lang['sendex_btn_create'] = 'Создать';
 $_lang['sendex_btn_subscribe'] = 'Подписаться!';
 $_lang['sendex_btn_unsubscribe'] = 'Отписаться';
+$_lang['sendex_btn_send_all'] = 'Отправить все';
 $_lang['sendex_select_user'] = 'Выберите пользователя';
 $_lang['sendex_select_newsletter'] = 'Добавить письма рассылки в очередь';
 

@@ -12,6 +12,7 @@ $_lang['sendex_newsletters_intro'] = 'On this page you create and edit your subs
 $_lang['sendex_btn_create'] = 'Create';
 $_lang['sendex_btn_subscribe'] = 'Subscribe!';
 $_lang['sendex_btn_unsubscribe'] = 'Unsubscribe';
+$_lang['sendex_btn_send_all'] = 'Send all';
 $_lang['sendex_select_user'] = 'Select user';
 $_lang['sendex_select_newsletter'] = 'Add letters in the queue';
 

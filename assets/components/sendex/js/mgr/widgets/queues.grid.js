@@ -30,6 +30,11 @@ Sendex.grid.Queues = function(config) {
 			,listeners: {
 				select: {fn:this.createQueues, scope:this}
 			}
+		}, '->' ,{
+			xtype: 'button'
+			,text: _('sendex_btn_send_all')
+			,handler: this.sendAll
+			,scope: this
 		}]
 		,listeners: {
 			rowDblClick: function(grid, rowIndex, e) {
@@ -97,6 +102,21 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
 
 		MODx.Ajax.request({
 			url: Sendex.config.connector_url
+			,params: {
+				action: 'mgr/queue/send'
+				,id: this.menu.record.id
+			}
+			,listeners: {
+				success: {fn:function(r) {this.refresh();},scope:this}
+			}
+		});
+	}
+
+	,sendAll: function() {
+		MODx.msg.confirm({
+			title: ''
+			,text: ''
+			,url: Sendex.config.connector_url
 			,params: {
 				action: 'mgr/queue/send'
 				,id: this.menu.record.id
