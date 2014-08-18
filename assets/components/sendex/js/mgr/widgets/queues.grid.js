@@ -14,15 +14,14 @@ Sendex.grid.Queues = function(config) {
 		,remoteSort: true
 		,sm: this.sm
 		,columns: [
-			{header: _('sendex_queue_id'),dataIndex: 'id',width: 50}
-			,{header: _('sendex_newsletter'),dataIndex: 'newsletter',width: 100}
-			,{header: _('sendex_queue_email_to'),dataIndex: 'email_to',width: 75}
-			//,{header: _('sendex_queue_email_body'),dataIndex: 'email_body',width: 100}
-			,{header: _('sendex_queue_email_subject'),dataIndex: 'email_subject',width: 100}
-			//,{header: _('sendex_queue_email_from_name'),dataIndex: 'email_from_name',width: 100}
-			//,{header: _('sendex_queue_email_reply'),dataIndex: 'email_reply',width: 100}
-			,{header: _('sendex_queue_email_from'),dataIndex: 'email_from',width: 100}
-			,{header: _('sendex_queue_timestamp'),dataIndex: 'timestamp',width: 75}
+			{header: _('sendex_queue_id'), sortable: true, dataIndex: 'id',width: 50}
+			,{header: _('sendex_newsletter'), sortable: true, dataIndex: 'newsletter',width: 100}
+			,{header: _('sendex_queue_email_to'), sortable: true, dataIndex: 'email_to',width: 75}
+			,{header: _('sendex_queue_email_subject'), sortable: true, dataIndex: 'email_subject',width: 100}
+			,{header: _('sendex_queue_email_from_name'), sortable: true, dataIndex: 'email_from_name',width: 100}
+			,{header: _('sendex_queue_email_reply'), sortable: true, dataIndex: 'email_reply',width: 100, hidden: true}
+			,{header: _('sendex_queue_email_from'), sortable: true, dataIndex: 'email_from',width: 100, hidden: true}
+			,{header: _('sendex_queue_timestamp'), sortable: true, dataIndex: 'timestamp',width: 75}
 		]
 		,tbar: [{
 			xtype: 'sendex-combo-newsletter'
