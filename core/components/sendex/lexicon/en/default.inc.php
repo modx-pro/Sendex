@@ -13,7 +13,8 @@ $_lang['sendex_btn_create'] = 'Create';
 $_lang['sendex_btn_subscribe'] = 'Subscribe!';
 $_lang['sendex_btn_unsubscribe'] = 'Unsubscribe';
 $_lang['sendex_btn_send_all'] = 'Send all';
-$_lang['sendex_select_user'] = 'Select user';
+$_lang['sendex_select_user'] = 'Add user';
+$_lang['sendex_select_group'] = 'Add group';
 $_lang['sendex_select_newsletter'] = 'Add letters in the queue';
 
 $_lang['sendex_newsletter_err_ae'] = 'An newsletter already exists with that name.';
@@ -52,6 +53,7 @@ $_lang['sendex_subscriber_err_ns'] = 'Subscriber not set.';
 $_lang['sendex_subscriber_err_remove'] = 'Error when remove subscriber.';
 $_lang['sendex_subscriber_err_save'] = 'Error when save subscriber.';
 $_lang['sendex_subscriber_err_email'] = 'Email of subscriber is not set.';
+$_lang['sendex_subscriber_err_group'] = 'You must specify the group for add of subscribers.';
 
 $_lang['sendex_subscriber_id'] = 'id';
 $_lang['sendex_subscriber_username'] = 'Username';

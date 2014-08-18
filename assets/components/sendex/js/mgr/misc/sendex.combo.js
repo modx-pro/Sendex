@@ -16,7 +16,9 @@ Sendex.combo.User = function(config) {
 		,allowBlank: true
 		,emptyText: _('sendex_select_user')
 		,baseParams: {
-			action: MODx.modx23  ? 'security/user/getlist' : 'getlist'
+			action: MODx.modx23
+				? 'security/user/getlist'
+				: 'getlist'
 			,combo: 1
 		}
 		,tpl: new Ext.XTemplate(
@@ -32,6 +34,45 @@ Sendex.combo.User = function(config) {
 };
 Ext.extend(Sendex.combo.User,MODx.combo.ComboBox);
 Ext.reg('sendex-combo-user',Sendex.combo.User);
+
+
+Sendex.combo.UserGroup = function(config) {
+	config = config || {};
+	Ext.applyIf(config,{
+		name: 'group_id'
+		,fieldLabel: _('sendex_subscribers')
+		,hiddenName: config.name || 'group_id'
+		,displayField: 'name'
+		,valueField: 'id'
+		,anchor: '99%'
+		,fields: ['name','id','description']
+		,pageSize: 20
+		,url: MODx.modx23
+			? MODx.config.connector_url
+			: MODx.config.connectors_url + 'security/group.php'
+		,editable: true
+		,allowBlank: true
+		,emptyText: _('sendex_select_group')
+		,baseParams: {
+			action: MODx.modx23
+				? 'security/group/getlist'
+				: 'getlist'
+			,combo: 0
+		}
+		,tpl: new Ext.XTemplate(
+			'<tpl for=".">\
+				<div class="x-combo-list-item">\
+					<tpl if="id"><sup>({id})</sup></tpl>\
+					<strong>{name}</strong><br/>{description}\
+				</div>\
+			</tpl>'
+			,{compiled: true}
+		)
+	});
+	Sendex.combo.UserGroup.superclass.constructor.call(this,config);
+};
+Ext.extend(Sendex.combo.UserGroup,MODx.combo.ComboBox);
+Ext.reg('sendex-combo-group',Sendex.combo.UserGroup);
 
 
 Sendex.combo.Newsletter = function(config) {

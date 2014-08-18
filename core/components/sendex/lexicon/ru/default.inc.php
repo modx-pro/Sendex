@@ -13,7 +13,8 @@ $_lang['sendex_btn_create'] = 'Создать';
 $_lang['sendex_btn_subscribe'] = 'Подписаться!';
 $_lang['sendex_btn_unsubscribe'] = 'Отписаться';
 $_lang['sendex_btn_send_all'] = 'Отправить все';
-$_lang['sendex_select_user'] = 'Выберите пользователя';
+$_lang['sendex_select_user'] = 'Добавить пользователя';
+$_lang['sendex_select_group'] = 'Добавить группу';
 $_lang['sendex_select_newsletter'] = 'Добавить письма рассылки в очередь';
 
 $_lang['sendex_newsletter_err_ae'] = 'Подписка с таким именем уже существует.';
@@ -52,6 +53,7 @@ $_lang['sendex_subscriber_err_ns'] = 'Подписчик не указан.';
 $_lang['sendex_subscriber_err_remove'] = 'Ошибка при удалении подписчика.';
 $_lang['sendex_subscriber_err_save'] = 'Ошибка при сохранении подписчика.';
 $_lang['sendex_subscriber_err_email'] = 'Не указан email пописчика.';
+$_lang['sendex_subscriber_err_group'] = 'Вы должны указать группу для добавления подписчиков.';
 
 $_lang['sendex_subscriber_id'] = 'id';
 $_lang['sendex_subscriber_username'] = 'Псевдоним';

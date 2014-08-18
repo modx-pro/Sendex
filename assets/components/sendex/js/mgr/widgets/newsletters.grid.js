@@ -281,18 +281,26 @@ Sendex.grid.NewsletterSubscribers = function(config) {
 		,paging: true
 		,remoteSort: true
 		,columns: [
-			{header: _('sendex_subscriber_id'),dataIndex: 'id',width: 50}
-			,{header: _('sendex_subscriber_username'),dataIndex: 'username',width: 100}
-			,{header: _('sendex_subscriber_fullname'),dataIndex: 'fullname',width: 100}
-			,{header: _('sendex_subscriber_email'),dataIndex: 'email',width: 100}
+			{header: _('sendex_subscriber_id'), sortable: true, dataIndex: 'id',width: 50}
+			,{header: _('sendex_subscriber_username'), sortable: true, dataIndex: 'username',width: 100}
+			,{header: _('sendex_subscriber_fullname'), sortable: true, dataIndex: 'fullname',width: 100}
+			,{header: _('sendex_subscriber_email'), sortable: true, dataIndex: 'email',width: 100}
 		]
 		,tbar: [{
 			xtype: 'sendex-combo-user'
 			,name: 'user_id'
 			,hiddenName: 'user_id'
-			,width: '50%'
+			,width: 200
 			,listeners: {
 				select: {fn: this.addSubscriber, scope: this}
+			}
+		}, '->', {
+			xtype: 'sendex-combo-group'
+			,name: 'group_id'
+			,hiddenName: 'group_id'
+			,width: 200
+			,listeners: {
+				select: {fn: this.addSubscribers, scope: this}
 			}
 		}]
 	});
@@ -317,6 +325,22 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
 			,params: {
 				action: 'mgr/newsletter/subscriber/create'
 				,user_id: user.id
+				,newsletter_id: this.config.record.id
+			}
+			,listeners: {
+				success: {fn:function(r) {this.refresh();},scope:this}
+			}
+		});
+	}
+
+	,addSubscribers: function(combo, group, e) {
+		combo.reset();
+
+		MODx.Ajax.request({
+			url: Sendex.config.connector_url
+			,params: {
+				action: 'mgr/newsletter/subscriber/add_group'
+				,group_id: group.id
 				,newsletter_id: this.config.record.id
 			}
 			,listeners: {

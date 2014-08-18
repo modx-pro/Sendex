@@ -3,6 +3,7 @@ Changelog for Sendex.
 1.1.0-pl
 ==============
 - UI improvements.
+- Ability to add all users of the group to the newsletter.
 - [#21] Compatibility with MODX 2.3.
 - [#20] Added "send all" button to queues grid.
 
