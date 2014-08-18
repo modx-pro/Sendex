@@ -86,6 +86,8 @@ $_lang['sendex_queue_remove'] = 'Remove letter';
 $_lang['sendex_queues_remove'] = 'Remove letters';
 $_lang['sendex_queue_remove_confirm'] = 'Are you sure you want to remove this letter?';
 $_lang['sendex_queues_remove_confirm'] = 'Are you sure you want to remove this letters?';
+$_lang['sendex_queues_send_all'] = 'Send all emails';
+$_lang['sendex_queues_send_all_confirm'] = 'Are you sure you want to send all emails?';
 
 $_lang['sendex_err_auth_req'] = 'You must be authorized for work with newsletters.';
 

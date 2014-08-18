@@ -112,13 +112,14 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
 	}
 
 	,sendAll: function() {
+		Sendex.utils.onAjax(this.getEl());
+
 		MODx.msg.confirm({
-			title: ''
-			,text: ''
+			title: _('sendex_queues_send_all')
+			,text: _('sendex_queues_send_all_confirm')
 			,url: Sendex.config.connector_url
 			,params: {
-				action: 'mgr/queue/send'
-				,id: this.menu.record.id
+				action: 'mgr/queue/send_all'
 			}
 			,listeners: {
 				success: {fn:function(r) {this.refresh();},scope:this}

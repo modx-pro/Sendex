@@ -3,7 +3,7 @@ var Sendex = function(config) {
 	Sendex.superclass.constructor.call(this,config);
 };
 Ext.extend(Sendex,Ext.Component,{
-	page:{},window:{},grid:{},tree:{},panel:{},combo:{},config: {},view: {}
+	page:{},window:{},grid:{},tree:{},panel:{},combo:{},config: {},view: {}, utils: {}
 });
 Ext.reg('sendex',Sendex);
 

@@ -86,6 +86,8 @@ $_lang['sendex_queue_remove'] = 'Удалить письмо';
 $_lang['sendex_queues_remove'] = 'Удалить письма';
 $_lang['sendex_queue_remove_confirm'] = 'Вы действительно хотите удалить это письмо?';
 $_lang['sendex_queues_remove_confirm'] = 'Вы действительно хотите удалить эти письма?';
+$_lang['sendex_queues_send_all'] = 'Отправить все письма';
+$_lang['sendex_queues_send_all_confirm'] = 'Вы действительно хотите отправить все письма?';
 
 $_lang['sendex_err_auth_req'] = 'Вы должны быть авторизованы для работы с подписками.';
 
