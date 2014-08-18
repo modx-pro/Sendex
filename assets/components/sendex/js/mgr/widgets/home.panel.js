@@ -12,26 +12,31 @@ Sendex.panel.Home = function(config) {
 			xtype: 'modx-tabs'
 			,defaults: { border: false ,autoHeight: true }
 			,border: true
-			,activeItem: 0
+			,stateful: true
+			,stateId: 'sendex-panel-home'
+			,stateEvents: ['tabchange']
+			,getState:function() {return {activeTab:this.items.indexOf(this.getActiveTab())};}
 			,hideMode: 'offsets'
 			,items: [{
 				title: _('sendex_newsletters')
 				,items: [{
 					html: _('sendex_newsletters_intro')
+					,border: false
 					,bodyCssClass: 'panel-desc'
 				},{
 					xtype: 'sendex-grid-newsletters'
-					,cls: 'container'
+					,cls: 'main-wrapper'
 					,preventRender: true
 				}]
 			},{
 				title: _('sendex_queues')
 				,items: [{
 					html: _('sendex_queue_intro')
+					,border: false
 					,bodyCssClass: 'panel-desc'
 				},{
 					xtype: 'sendex-grid-queues'
-					,cls: 'container'
+					,cls: 'main-wrapper'
 					,preventRender: true
 				}]
 			}]
