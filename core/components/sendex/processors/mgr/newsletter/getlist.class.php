@@ -15,6 +15,10 @@ class sxNewsletterGetListProcessor extends modObjectGetListProcessor {
 	 * @return xPDOQuery
 	 */
 	public function prepareQueryBeforeCount(xPDOQuery $c) {
+		$c->leftJoin('modTemplate', 'Template');
+		$c->select($this->modx->getSelectColumns($this->classKey, $this->classKey));
+		$c->select($this->modx->getSelectColumns('modTemplate', 'Template', '', array('templatename')));
+
 		if ($query = $this->getProperty('query')) {
 			$c->where(array(
 				'name:LIKE' => "%$query%",

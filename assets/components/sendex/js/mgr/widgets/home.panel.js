@@ -3,13 +3,13 @@ Sendex.panel.Home = function(config) {
 	Ext.apply(config,{
 		border: false
 		,baseCls: 'modx-formpanel'
+		,layout: 'anchor'
 		,items: [{
 			html: '<h2>'+_('sendex')+'</h2>'
 			,border: false
 			,cls: 'modx-page-header container'
 		},{
 			xtype: 'modx-tabs'
-			,bodyStyle: 'padding: 10px'
 			,defaults: { border: false ,autoHeight: true }
 			,border: true
 			,activeItem: 0
@@ -18,22 +18,20 @@ Sendex.panel.Home = function(config) {
 				title: _('sendex_newsletters')
 				,items: [{
 					html: _('sendex_newsletters_intro')
-					,border: false
 					,bodyCssClass: 'panel-desc'
-					,bodyStyle: 'margin-bottom: 10px'
 				},{
 					xtype: 'sendex-grid-newsletters'
+					,cls: 'container'
 					,preventRender: true
 				}]
 			},{
 				title: _('sendex_queues')
 				,items: [{
 					html: _('sendex_queue_intro')
-					,border: false
 					,bodyCssClass: 'panel-desc'
-					,bodyStyle: 'margin-bottom: 10px'
 				},{
 					xtype: 'sendex-grid-queues'
+					,cls: 'container'
 					,preventRender: true
 				}]
 			}]
