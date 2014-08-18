@@ -48,36 +48,26 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
 	windows: {}
 
 	,getMenu: function() {
-		var cs = this.getSelectedAsList();
 		var m = [];
-		if (cs.split(',').length > 1) {
-			m.push({
-				text: _('sendex_queues_send')
-				,handler: this.sendSelected
-			});
-			m.push('-');
-			m.push({
-				text: _('sendex_queues_remove')
-				,handler: this.removeSelected
-			});
+		/*
+		 var ids = this._getSelectedIds();
+		if (ids.length == 1) {
+			 m.push({
+			 text: _('sendex_queue_update')
+			 ,handler: this.updateQueue
+			 });
 		}
-		else {
-			/*
-			m.push({
-				text: _('sendex_queue_update')
-				,handler: this.updateQueue
-			});
-			*/
-			m.push({
-				text: _('sendex_queue_send')
-				,handler: this.sendQueue
-			});
-			m.push('-');
-			m.push({
-				text: _('sendex_queue_remove')
-				,handler: this.removeQueue
-			});
-		}
+		*/
+		m.push({
+			text: _('sendex_queues_send')
+			,handler: this.sendQueue
+		});
+		m.push('-');
+		m.push({
+			text: _('sendex_queues_remove')
+			,handler: this.removeQueue
+		});
+
 		this.addContextMenuItem(m);
 	}
 
@@ -96,14 +86,38 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
 		});
 	}
 
+	,updateQueue: function(btn,e,row) {
+		return true;
+	}
+
 	,sendQueue: function(btn,e,row) {
-		if (!this.menu.record) return;
+		var ids = this._getSelectedIds();
+		if (!ids) {return;}
+		Sendex.utils.onAjax(this.getEl());
 
 		MODx.Ajax.request({
 			url: Sendex.config.connector_url
 			,params: {
 				action: 'mgr/queue/send'
-				,id: this.menu.record.id
+				,ids: ids.join(',')
+			}
+			,listeners: {
+				success: {fn:function(r) {this.refresh();},scope:this}
+			}
+		});
+	}
+
+	,removeQueue: function(btn,e,row) {
+		var ids = this._getSelectedIds();
+		if (!ids) {return;}
+
+		MODx.msg.confirm({
+			title: _('sendex_queues_remove')
+			,text: _('sendex_queues_remove_confirm')
+			,url: Sendex.config.connector_url
+			,params: {
+				action: 'mgr/queue/remove'
+				,ids: ids.join(',')
 			}
 			,listeners: {
 				success: {fn:function(r) {this.refresh();},scope:this}
@@ -127,85 +141,16 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
 		});
 	}
 
-	,updateQueue: function(btn,e,row) {
-		return true;
-	}
+	,_getSelectedIds: function() {
+		var ids = [];
+		var selected = this.getSelectionModel().getSelections();
 
-	,removeQueue: function(btn,e,row) {
-		if (!this.menu.record) return;
-
-		MODx.msg.confirm({
-			title: _('sendex_queue_remove')
-			,text: _('sendex_queue_remove_confirm')
-			,url: Sendex.config.connector_url
-			,params: {
-				action: 'mgr/queue/remove'
-				,id: this.menu.record.id
-			}
-			,listeners: {
-				success: {fn:function(r) {this.refresh();},scope:this}
-			}
-		});
-	}
-
-	,getSelectedAsList: function() {
-		var sels = this.getSelectionModel().getSelections();
-		if (sels.length <= 0) return false;
-
-		var cs = '';
-		for (var i=0;i<sels.length;i++) {
-			cs += ','+sels[i].data.id;
+		for (var i in selected) {
+			if (!selected.hasOwnProperty(i)) {continue;}
+			ids.push(selected[i]['id']);
 		}
-		cs = cs.substr(1);
-		return cs;
-	}
 
-	,removeSelected: function(act,btn,e) {
-		var cs = this.getSelectedAsList();
-		if (cs === false) return false;
-
-		MODx.msg.confirm({
-			title: _('sendex_queues_remove')
-			,text: _('sendex_queues_remove_confirm')
-			,url: this.config.url
-			,params: {
-				action: 'mgr/queue/multiremove'
-				,queues: cs
-			}
-			,listeners: {
-				'success': {fn:function(r) {
-					this.getSelectionModel().clearSelections(true);
-					this.refresh();
-					   var t = Ext.getCmp('modx-resource-tree');
-					   if (t) { t.refresh(); }
-				},scope:this}
-			}
-		});
-		return true;
-	}
-
-	,sendSelected: function(act,btn,e) {
-		var cs = this.getSelectedAsList();
-		if (cs === false) return false;
-
-		MODx.msg.confirm({
-			title: _('sendex_queues_send')
-			,text: _('sendex_queues_send_confirm')
-			,url: this.config.url
-			,params: {
-				action: 'mgr/queue/multisend'
-				,queues: cs
-			}
-			,listeners: {
-				'success': {fn:function(r) {
-					this.getSelectionModel().clearSelections(true);
-					this.refresh();
-					   var t = Ext.getCmp('modx-resource-tree');
-					   if (t) { t.refresh(); }
-				},scope:this}
-			}
-		});
-		return true;
+		return ids;
 	}
 
 });

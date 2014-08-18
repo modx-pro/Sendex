@@ -1,5 +1,7 @@
 Sendex.grid.Newsletters = function(config) {
 	config = config || {};
+	this.sm = new Ext.grid.CheckboxSelectionModel();
+
 	Ext.applyIf(config,{
 		id: 'sendex-grid-newsletters'
 		,url: Sendex.config.connector_url
@@ -10,6 +12,7 @@ Sendex.grid.Newsletters = function(config) {
 		,autoHeight: true
 		,paging: true
 		,remoteSort: true
+		,sm: this.sm
 		,columns: [
 			{header: _('sendex_newsletter_id'), sortable: true, dataIndex: 'id',width: 50}
 			,{header: _('sendex_newsletter_name'), sortable: true, dataIndex: 'name',width: 100}
@@ -39,14 +42,17 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 	windows: {}
 
 	,getMenu: function() {
+		var ids = this._getSelectedIds();
 		var m = [];
+		if (ids.length == 1) {
+			m.push({
+				text: _('sendex_newsletter_update')
+				,handler: this.updateNewsletter
+			});
+			m.push('-');
+		}
 		m.push({
-			text: _('sendex_newsletter_update')
-			,handler: this.updateNewsletter
-		});
-		m.push('-');
-		m.push({
-			text: _('sendex_newsletter_remove')
+			text: _('sendex_newsletters_remove')
 			,handler: this.removeNewsletter
 		});
 		this.addContextMenuItem(m);
@@ -120,20 +126,34 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 	}
 
 	,removeNewsletter: function(btn,e) {
-		if (!this.menu.record) return;
+		var ids = this._getSelectedIds();
+		if (!ids) {return;}
+		Sendex.utils.onAjax(this.getEl());
 		
 		MODx.msg.confirm({
-			title: _('sendex_newsletter_remove')
-			,text: _('sendex_newsletter_remove_confirm')
+			title: _('sendex_newsletters_remove')
+			,text: _('sendex_newsletters_remove_confirm')
 			,url: this.config.url
 			,params: {
 				action: 'mgr/newsletter/remove'
-				,id: this.menu.record.id
+				,ids: ids.join(',')
 			}
 			,listeners: {
 				'success': {fn:function(r) { this.refresh(); },scope:this}
 			}
 		});
+	}
+
+	,_getSelectedIds: function() {
+		var ids = [];
+		var selected = this.getSelectionModel().getSelections();
+
+		for (var i in selected) {
+			if (!selected.hasOwnProperty(i)) {continue;}
+			ids.push(selected[i]['id']);
+		}
+
+		return ids;
 	}
 });
 Ext.reg('sendex-grid-newsletters',Sendex.grid.Newsletters);
@@ -253,6 +273,7 @@ Sendex.window.UpdateNewsletter = function(config) {
 			},{
 				title: _('sendex_subscribers')
 				,xtype: 'sendex-grid-newsletter-subscribers'
+				,layout: 'anchor'
 				,cls: MODx.modx23 ? '' : 'main-wrapper'
 				,record: config.record.object
 				,pageSize: 5
@@ -269,6 +290,8 @@ Ext.reg('sendex-window-newsletter-update',Sendex.window.UpdateNewsletter);
 
 Sendex.grid.NewsletterSubscribers = function(config) {
 	config = config || {};
+	this.sm = new Ext.grid.CheckboxSelectionModel();
+
 	Ext.applyIf(config,{
 		id: 'sendex-grid-newsletter-subscribers'
 		,url: Sendex.config.connector_url
@@ -280,6 +303,7 @@ Sendex.grid.NewsletterSubscribers = function(config) {
 		,autoHeight: true
 		,paging: true
 		,remoteSort: true
+		,sm: this.sm
 		,columns: [
 			{header: _('sendex_subscriber_id'), sortable: true, dataIndex: 'id',width: 50}
 			,{header: _('sendex_subscriber_username'), sortable: true, dataIndex: 'username',width: 100}
@@ -311,7 +335,7 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
 	getMenu: function() {
 		var m = [];
 		m.push({
-			text: _('sendex_subscriber_remove')
+			text: _('sendex_subscribers_remove')
 			,handler: this.removeSubscriber
 		});
 		this.addContextMenuItem(m);
@@ -319,6 +343,7 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
 
 	,addSubscriber: function(combo, user, e) {
 		combo.reset();
+		Sendex.utils.onAjax(this.getEl());
 
 		MODx.Ajax.request({
 			url: Sendex.config.connector_url
@@ -335,6 +360,7 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
 
 	,addSubscribers: function(combo, group, e) {
 		combo.reset();
+		Sendex.utils.onAjax(this.getEl());
 
 		MODx.Ajax.request({
 			url: Sendex.config.connector_url
@@ -350,18 +376,34 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
 	}
 
 	,removeSubscriber:function(btn,e) {
+		var ids = this._getSelectedIds();
+		if (!ids) {return;}
+		Sendex.utils.onAjax(this.getEl());
+
 		MODx.msg.confirm({
-			title: _('sendex_subscriber_remove')
-			,text: _('sendex_subscriber_remove_confirm')
+			title: _('sendex_subscribers_remove')
+			,text: _('sendex_subscribers_remove_confirm')
 			,url: Sendex.config.connector_url
 			,params: {
 				action: 'mgr/newsletter/subscriber/remove'
-				,id: this.menu.record.id
+				,ids: ids.join(',')
 			}
 			,listeners: {
 				success: {fn:function(r) {this.refresh();},scope:this}
 			}
 		});
+	}
+
+	,_getSelectedIds: function() {
+		var ids = [];
+		var selected = this.getSelectionModel().getSelections();
+
+		for (var i in selected) {
+			if (!selected.hasOwnProperty(i)) {continue;}
+			ids.push(selected[i]['id']);
+		}
+
+		return ids;
 	}
 
 });

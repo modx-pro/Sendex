@@ -20,6 +20,7 @@ $_lang['sendex_select_newsletter'] = 'Добавить письма рассыл
 $_lang['sendex_newsletter_err_ae'] = 'Подписка с таким именем уже существует.';
 $_lang['sendex_newsletter_err_nf'] = 'Подписка не найдена.';
 $_lang['sendex_newsletter_err_ns'] = 'Подписка не указана.';
+$_lang['sendex_newsletters_err_ns'] = 'Подписки не указаны.';
 $_lang['sendex_newsletter_err_disabled'] = 'Эта подписка неактивна.';
 $_lang['sendex_newsletter_err_remove'] = 'Ошибка при удалении подписки.';
 $_lang['sendex_newsletter_err_save'] = 'Ошибка при сохранении подписки.';
@@ -27,8 +28,8 @@ $_lang['sendex_newsletter_err_no_subscribers'] = 'У этой рассылки �
 $_lang['sendex_newsletter_err_no_template'] = 'У этой рассылки нет шаблона.';
 $_lang['sendex_newsletter_err_template'] = 'Вы должны выбрать шаблон.';
 
-$_lang['sendex_newsletter_remove'] = 'Удалить подписку';
-$_lang['sendex_newsletter_remove_confirm'] = 'Вы уверены, что хотите удалить эту подписку?';
+$_lang['sendex_newsletters_remove'] = 'Удалить подписки';
+$_lang['sendex_newsletters_remove_confirm'] = 'Вы уверены, что хотите удалить выбранные подписки?';
 $_lang['sendex_newsletter_create'] = 'Создать подписку';
 $_lang['sendex_newsletter_update'] = 'Изменить подписку';
 
@@ -50,6 +51,7 @@ $_lang['sendex_subscriber'] = 'Подписчик';
 $_lang['sendex_subscriber_err_ae'] = 'Этот пользователь уже подписан.';
 $_lang['sendex_subscriber_err_nf'] = 'Подписчик не найден.';
 $_lang['sendex_subscriber_err_ns'] = 'Подписчик не указан.';
+$_lang['sendex_subscribers_err_ns'] = 'Подписчики не указаны.';
 $_lang['sendex_subscriber_err_remove'] = 'Ошибка при удалении подписчика.';
 $_lang['sendex_subscriber_err_save'] = 'Ошибка при сохранении подписчика.';
 $_lang['sendex_subscriber_err_email'] = 'Не указан email пописчика.';
@@ -59,15 +61,15 @@ $_lang['sendex_subscriber_id'] = 'id';
 $_lang['sendex_subscriber_username'] = 'Псевдоним';
 $_lang['sendex_subscriber_fullname'] = 'Полное имя';
 $_lang['sendex_subscriber_email'] = 'Email';
-$_lang['sendex_subscriber_remove'] = 'Удалить подписчика';
-$_lang['sendex_subscriber_remove_confirm'] = 'Вы действительно хотите отписать пользователя от этой подписки?';
+$_lang['sendex_subscribers_remove'] = 'Удалить подписчиков';
+$_lang['sendex_subscribers_remove_confirm'] = 'Вы действительно хотите отписать выбранных пользователей от этой подписки?';
 
 $_lang['sendex_queues'] = 'Очередь писем';
 $_lang['sendex_queue'] = 'Письмо';
 $_lang['sendex_queue_intro'] = 'Здесь вы управляете очередью рассылки. Вы можете добавлять, удалять и отправлять письма.';
 
 $_lang['sendex_queue_err_nf'] = 'Письмо не найдено.';
-$_lang['sendex_queue_err_ns'] = 'Письмо не указано.';
+$_lang['sendex_queue_err_ns'] = 'Не указаны идентификаторы писем.';
 
 $_lang['sendex_queue_id'] = 'id';
 $_lang['sendex_queue_newsletter_id'] = 'id подписки';
@@ -84,9 +86,7 @@ $_lang['sendex_queue_update'] = 'Изменить письмо';
 $_lang['sendex_queue_send'] = 'Отправить письмо';
 $_lang['sendex_queues_send'] = 'Отправить письма';
 $_lang['sendex_queues_send_confirm'] = 'Вы действительно хотите отправить эти письма?';
-$_lang['sendex_queue_remove'] = 'Удалить письмо';
 $_lang['sendex_queues_remove'] = 'Удалить письма';
-$_lang['sendex_queue_remove_confirm'] = 'Вы действительно хотите удалить это письмо?';
 $_lang['sendex_queues_remove_confirm'] = 'Вы действительно хотите удалить эти письма?';
 $_lang['sendex_queues_send_all'] = 'Отправить все письма';
 $_lang['sendex_queues_send_all_confirm'] = 'Вы действительно хотите отправить все письма?';
