@@ -8,7 +8,8 @@ Sendex.grid.Newsletters = function(config) {
 		,baseParams: {
 			action: 'mgr/newsletter/getlist'
 		}
-		,fields: ['id','name','description','active','template','templatename','image','email_subject','email_from','email_from_name','email_reply']
+		,fields: ['id','name','description','active','template','templatename'
+			,'image','email_subject','email_from','email_from_name','email_reply','subscribers']
 		,autoHeight: true
 		,paging: true
 		,remoteSort: true
@@ -18,6 +19,7 @@ Sendex.grid.Newsletters = function(config) {
 			,{header: _('sendex_newsletter_name'), sortable: true, dataIndex: 'name',width: 100}
 			,{header: _('sendex_newsletter_active'), sortable: true, dataIndex: 'active',width: 75,renderer: this._renderBoolean}
 			,{header: _('sendex_newsletter_template'), sortable: true, dataIndex: 'template',width: 75,renderer: this._renderTemplate}
+			,{header: _('sendex_subscribers'), sortable: true, dataIndex: 'subscribers',width: 75}
 			,{header: _('sendex_newsletter_email_subject'), sortable: true, dataIndex: 'email_subject',width: 100}
 			,{header: _('sendex_newsletter_email_from'), sortable: true, dataIndex: 'email_from',width: 100}
 			,{header: _('sendex_newsletter_email_from_name'), sortable: true, dataIndex: 'email_from_name',width: 100, hidden: true}
