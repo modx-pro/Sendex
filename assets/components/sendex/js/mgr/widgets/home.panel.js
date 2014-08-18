@@ -19,6 +19,7 @@ Sendex.panel.Home = function(config) {
 			,hideMode: 'offsets'
 			,items: [{
 				title: _('sendex_newsletters')
+				,layout: 'anchor'
 				,items: [{
 					html: _('sendex_newsletters_intro')
 					,border: false
@@ -30,6 +31,7 @@ Sendex.panel.Home = function(config) {
 				}]
 			},{
 				title: _('sendex_queues')
+				,layout: 'anchor'
 				,items: [{
 					html: _('sendex_queue_intro')
 					,border: false
