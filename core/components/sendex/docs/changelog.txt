@@ -1,5 +1,10 @@
 Changelog for Sendex.
 
+1.1.0-pl
+==============
+- Compatibility with MODX 2.3.
+- UI improvements.
+
 1.0.0-pl
 ==============
 - Added multiremoving and multisending

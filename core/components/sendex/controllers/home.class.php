@@ -34,7 +34,7 @@ class SendexHomeManagerController extends SendexMainController {
 		$this->addJavascript($this->Sendex->config['jsUrl'] . 'mgr/sections/home.js');
 		$this->addHtml('<script type="text/javascript">
 		Ext.onReady(function() {
-			MODx.load({ xtype: "sendex-page-home"});
+			MODx.load({xtype: "sendex-page-home"});
 		});
 		</script>');
 	}
