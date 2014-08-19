@@ -8,7 +8,8 @@ Sendex.grid.Queues = function(config) {
 		,baseParams: {
 			action: 'mgr/queue/getlist'
 		}
-		,fields: ['id','newsletter_id','subscriber_id','timestamp','email_to','email_subject','email_body','email_from','email_from_name','email_reply','newsletter']
+		,fields: ['id','newsletter_id','subscriber_id','timestamp','email_to','email_subject'
+			,'email_body','email_from','email_from_name','email_reply','newsletter','actions']
 		,autoHeight: true
 		,paging: true
 		,remoteSort: true
@@ -21,7 +22,8 @@ Sendex.grid.Queues = function(config) {
 			,{header: _('sendex_queue_email_from_name'), sortable: true, dataIndex: 'email_from_name',width: 100}
 			,{header: _('sendex_queue_email_reply'), sortable: true, dataIndex: 'email_reply',width: 100, hidden: true}
 			,{header: _('sendex_queue_email_from'), sortable: true, dataIndex: 'email_from',width: 100, hidden: true}
-			,{header: _('sendex_queue_timestamp'), sortable: true, dataIndex: 'timestamp',width: 75}
+			,{header: _('sendex_queue_timestamp'), sortable: true, dataIndex: 'timestamp',width: 100}
+			,{header: '', dataIndex: 'actions',width: 75,renderer: Sendex.utils.renderActions, id: 'actions'}
 		]
 		,tbar: [{
 			xtype: 'sendex-combo-newsletter'
@@ -31,44 +33,47 @@ Sendex.grid.Queues = function(config) {
 			}
 		}, '->' ,{
 			xtype: 'button'
-			,text: _('sendex_btn_send_all')
+			,text: '<i class="' + (MODx.modx23 ? 'icon icon-send' : 'fa fa-send') + '"></i> ' + _('sendex_btn_send_all')
 			,handler: this.sendAll
 			,scope: this
 		}]
+		/*
 		,listeners: {
 			rowDblClick: function(grid, rowIndex, e) {
 				var row = grid.store.getAt(rowIndex);
-				this.updateQueue(grid, e, row);
+				this.update(grid, e, row);
 			}
 		}
+		*/
 	});
 	Sendex.grid.Queues.superclass.constructor.call(this,config);
 };
 Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
 	windows: {}
 
-	,getMenu: function() {
-		var m = [];
-		/*
-		 var ids = this._getSelectedIds();
-		if (ids.length == 1) {
-			 m.push({
-			 text: _('sendex_queue_update')
-			 ,handler: this.updateQueue
-			 });
-		}
-		*/
-		m.push({
-			text: _('sendex_queues_send')
-			,handler: this.sendQueue
-		});
-		m.push('-');
-		m.push({
-			text: _('sendex_queues_remove')
-			,handler: this.removeQueue
-		});
+	,getMenu: function(grid, rowIndex) {
+		var row = grid.getStore().getAt(rowIndex);
+		var menu = Sendex.utils.getMenu(row.data.actions, this);
+		this.addContextMenuItem(menu);
+	}
 
-		this.addContextMenuItem(m);
+	,onClick: function(e) {
+		var elem = e.getTarget();
+		if (elem.nodeName == 'BUTTON') {
+			var row = this.getSelectionModel().getSelected();
+			if (typeof(row) != 'undefined') {
+				var type = elem.getAttribute('type');
+				if (type == 'menu') {
+					var ri = this.getStore().find('id', row.id);
+					return this._showMenu(this, ri, e);
+				}
+				else {
+					this.menu.record = row.data;
+					return this[type](this, e);
+				}
+			}
+		}
+		return this.processEvent('click', e);
 	}
 
 	,createQueues: function(combo, newsletter, e) {

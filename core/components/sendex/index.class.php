@@ -15,8 +15,9 @@ abstract class SendexMainController extends modExtraManagerController {
 		$version = $this->modx->getVersionData();
 		$modx23 = !empty($version) && version_compare($version['full_version'], '2.3.0', '>=');
 		if (!$modx23) {
-			//$this->addCss(MODX_ASSETS_URL . 'components/sendex/css/mgr/font-awesome.min.css');
+			$this->addCss(MODX_ASSETS_URL . 'components/sendex/css/mgr/font-awesome.min.css');
 		}
+		$this->addCss(MODX_ASSETS_URL . 'components/sendex/css/mgr/bootstrap.buttons.min.css');
 
 		$corePath = $this->modx->getOption('sendex_core_path', null, $this->modx->getOption('core_path') . 'components/sendex/');
 		require_once $corePath . 'model/sendex/sendex.class.php';

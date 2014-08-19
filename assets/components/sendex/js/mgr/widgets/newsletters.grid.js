@@ -9,7 +9,7 @@ Sendex.grid.Newsletters = function(config) {
 			action: 'mgr/newsletter/getlist'
 		}
 		,fields: ['id','name','description','active','template','templatename'
-			,'image','email_subject','email_from','email_from_name','email_reply','subscribers']
+			,'image','email_subject','email_from','email_from_name','email_reply','subscribers','actions']
 		,autoHeight: true
 		,paging: true
 		,remoteSort: true
@@ -17,7 +17,7 @@ Sendex.grid.Newsletters = function(config) {
 		,columns: [
 			{header: _('sendex_newsletter_id'), sortable: true, dataIndex: 'id',width: 50}
 			,{header: _('sendex_newsletter_name'), sortable: true, dataIndex: 'name',width: 100}
-			,{header: _('sendex_newsletter_active'), sortable: true, dataIndex: 'active',width: 75,renderer: this._renderBoolean}
+			//,{header: _('sendex_newsletter_active'), sortable: true, dataIndex: 'active',width: 75,renderer: this._renderBoolean}
 			,{header: _('sendex_newsletter_template'), sortable: true, dataIndex: 'template',width: 75,renderer: this._renderTemplate}
 			,{header: _('sendex_subscribers'), sortable: true, dataIndex: 'subscribers',width: 75}
 			,{header: _('sendex_newsletter_email_subject'), sortable: true, dataIndex: 'email_subject',width: 100}
@@ -25,12 +25,26 @@ Sendex.grid.Newsletters = function(config) {
 			,{header: _('sendex_newsletter_email_from_name'), sortable: true, dataIndex: 'email_from_name',width: 100, hidden: true}
 			,{header: _('sendex_newsletter_email_reply'), sortable: true, dataIndex: 'email_reply',width: 100, hidden: true}
 			,{header: _('sendex_newsletter_image'), dataIndex: 'image',width: 75,renderer: this._renderImage, id: 'image'}
+			,{header: '', dataIndex: 'actions',width: 75,renderer: Sendex.utils.renderActions, id: 'actions'}
 		]
 		,tbar: [{
-			text: _('sendex_btn_create')
+			text: '<i class="' + (MODx.modx23 ? 'icon icon-plus' : 'fa fa-plus') + '"></i> ' + _('sendex_btn_create')
 			,handler: this.createNewsletter
 			,scope: this
 		}]
+		,viewConfig: {
+			forceFit: true
+			,enableRowBody: true
+			,autoFill: true
+			,showPreview: true
+			,scrollOffset: 0
+			,getRowClass : function(rec, ri, p) {
+				if (!rec.data.active) {
+					return 'sendex-row-disabled';
+				}
+				return '';
+			}
+		}
 		,listeners: {
 			rowDblClick: function(grid, rowIndex, e) {
 				var row = grid.store.getAt(rowIndex);
@@ -43,21 +57,29 @@ Sendex.grid.Newsletters = function(config) {
 Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 	windows: {}
 
-	,getMenu: function() {
-		var ids = this._getSelectedIds();
-		var m = [];
-		if (ids.length == 1) {
-			m.push({
-				text: _('sendex_newsletter_update')
-				,handler: this.updateNewsletter
-			});
-			m.push('-');
+	,getMenu: function(grid, rowIndex) {
+		var row = grid.getStore().getAt(rowIndex);
+		var menu = Sendex.utils.getMenu(row.data.actions, this);
+		this.addContextMenuItem(menu);
+	}
+
+	,onClick: function(e) {
+		var elem = e.getTarget();
+		if (elem.nodeName == 'BUTTON') {
+			var row = this.getSelectionModel().getSelected();
+			if (typeof(row) != 'undefined') {
+				var type = elem.getAttribute('type');
+				if (type == 'menu') {
+					var ri = this.getStore().find('id', row.id);
+					return this._showMenu(this, ri, e);
+				}
+				else {
+					this.menu.record = row.data;
+					return this[type](this, e);
+				}
+			}
 		}
-		m.push({
-			text: _('sendex_newsletters_remove')
-			,handler: this.removeNewsletter
-		});
-		this.addContextMenuItem(m);
+		return this.processEvent('click', e);
 	}
 
 	,_renderBoolean: function(val,cell,row) {
@@ -96,7 +118,7 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 		this.windows.createNewsletter.show(e.target);
 	}
 
-	,updateNewsletter: function(btn,e,row) {
+	,updateNewsletter: function(grid, e, row) {
 		if (typeof(row) != 'undefined') {this.menu.record = row.data;}
 		var id = this.menu.record.id;
 
@@ -127,7 +149,7 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 		});
 	}
 
-	,removeNewsletter: function(btn,e) {
+	,removeNewsletter: function(grid, e) {
 		var ids = this._getSelectedIds();
 		if (!ids) {return;}
 		Sendex.utils.onAjax(this.getEl());
@@ -141,7 +163,41 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
 				,ids: ids.join(',')
 			}
 			,listeners: {
-				'success': {fn:function(r) { this.refresh(); },scope:this}
+				success: {fn:function(r) { this.refresh(); },scope:this}
+			}
+		});
+	}
+
+	,disableNewsletter: function(grid, e) {
+		var ids = this._getSelectedIds();
+		if (!ids) {return;}
+		Sendex.utils.onAjax(this.getEl());
+
+		MODx.Ajax.request({
+			url: this.config.url
+			,params: {
+				action: 'mgr/newsletter/disable'
+				,ids: ids.join(',')
+			}
+			,listeners: {
+				success: {fn:function(r) { this.refresh(); },scope:this}
+			}
+		});
+	}
+
+	,enableNewsletter: function(grid, e) {
+		var ids = this._getSelectedIds();
+		if (!ids) {return;}
+		Sendex.utils.onAjax(this.getEl());
+
+		MODx.Ajax.request({
+			url: this.config.url
+			,params: {
+				action: 'mgr/newsletter/enable'
+				,ids: ids.join(',')
+			}
+			,listeners: {
+				success: {fn:function(r) { this.refresh(); },scope:this}
 			}
 		});
 	}
@@ -301,7 +357,7 @@ Sendex.grid.NewsletterSubscribers = function(config) {
 			action: 'mgr/newsletter/subscriber/getlist'
 			,newsletter_id: config.record.id
 		}
-		,fields: ['id','username','fullname','email']
+		,fields: ['id','username','fullname','email','actions']
 		,autoHeight: true
 		,paging: true
 		,remoteSort: true
@@ -311,6 +367,7 @@ Sendex.grid.NewsletterSubscribers = function(config) {
 			,{header: _('sendex_subscriber_username'), sortable: true, dataIndex: 'username',width: 100}
 			,{header: _('sendex_subscriber_fullname'), sortable: true, dataIndex: 'fullname',width: 100}
 			,{header: _('sendex_subscriber_email'), sortable: true, dataIndex: 'email',width: 100}
+			,{header: '', dataIndex: 'actions',width: 50,renderer: Sendex.utils.renderActions, id: 'actions'}
 		]
 		,tbar: [{
 			xtype: 'sendex-combo-user'
@@ -334,13 +391,29 @@ Sendex.grid.NewsletterSubscribers = function(config) {
 };
 Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
 
-	getMenu: function() {
-		var m = [];
-		m.push({
-			text: _('sendex_subscribers_remove')
-			,handler: this.removeSubscriber
-		});
-		this.addContextMenuItem(m);
+	getMenu: function(grid, rowIndex) {
+		var row = grid.getStore().getAt(rowIndex);
+		var menu = Sendex.utils.getMenu(row.data.actions, this);
+		this.addContextMenuItem(menu);
+	}
+
+	,onClick: function(e) {
+		var elem = e.getTarget();
+		if (elem.nodeName == 'BUTTON') {
+			var row = this.getSelectionModel().getSelected();
+			if (typeof(row) != 'undefined') {
+				var type = elem.getAttribute('type');
+				if (type == 'menu') {
+					var ri = this.getStore().find('id', row.id);
+					return this._showMenu(this, ri, e);
+				}
+				else {
+					this.menu.record = row.data;
+					return this[type](this, e);
+				}
+			}
+		}
+		return this.processEvent('click', e);
 	}
 
 	,addSubscriber: function(combo, user, e) {

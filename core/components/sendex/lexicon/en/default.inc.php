@@ -7,7 +7,7 @@ $_lang['sendex_menu_desc'] = 'Newsletters management';
 
 $_lang['sendex_newsletters'] = 'Newsletters';
 $_lang['sendex_newsletter'] = 'Newsletter';
-$_lang['sendex_newsletters_intro'] = 'On this page you create and edit your subscription.';
+$_lang['sendex_newsletters_intro'] = 'On this page you create and edit your newsletters.';
 
 $_lang['sendex_btn_create'] = 'Create';
 $_lang['sendex_btn_subscribe'] = 'Subscribe!';
@@ -100,3 +100,11 @@ $_lang['sendex_subscribe_err_already'] = 'This email is already subscribed to ne
 $_lang['sendex_subscribe_err_email_wrong'] = 'Wrong email.';
 $_lang['sendex_subscribe_err_email_ns'] = 'You need to specify email.';
 $_lang['sendex_subscribe_err_email_send'] = 'Could not send email.';
+
+$_lang['sendex_action_updateNewsletter'] = 'Update newsletter';
+$_lang['sendex_action_disableNewsletter'] = 'Disable newsletter';
+$_lang['sendex_action_enableNewsletter'] = 'Enable newsletter';
+$_lang['sendex_action_removeNewsletter'] = 'Remove newsletter';
+$_lang['sendex_action_removeSubscriber'] = 'Unsubscribe user';
+$_lang['sendex_action_removeQueue'] = 'Remove email';
+$_lang['sendex_action_sendQueue'] = 'Send email';

@@ -7,7 +7,7 @@ $_lang['sendex_menu_desc'] = 'Управление подписками';
 
 $_lang['sendex_newsletters'] = 'Подписки';
 $_lang['sendex_newsletter'] = 'Подписка';
-$_lang['sendex_newsletters_intro'] = 'На этой странице вы создаёте и редактируете ваши подписки.';
+$_lang['sendex_newsletters_intro'] = 'На этой странице вы создаёте и редактируете ваши рассылки.';
 
 $_lang['sendex_btn_create'] = 'Создать';
 $_lang['sendex_btn_subscribe'] = 'Подписаться!';
@@ -101,3 +101,11 @@ $_lang['sendex_subscribe_err_already'] = 'Этот email уже подписан
 $_lang['sendex_subscribe_err_email_wrong'] = 'Неверный email.';
 $_lang['sendex_subscribe_err_email_ns'] = 'Нужно указать email.';
 $_lang['sendex_subscribe_err_email_send'] = 'Не могу отправить email.';
+
+$_lang['sendex_action_updateNewsletter'] = 'Изменить рассылку';
+$_lang['sendex_action_disableNewsletter'] = 'Отключить рассылку';
+$_lang['sendex_action_enableNewsletter'] = 'Включить рассылку';
+$_lang['sendex_action_removeNewsletter'] = 'Удалить рассылку';
+$_lang['sendex_action_removeSubscriber'] = 'Отписать пользователя';
+$_lang['sendex_action_removeQueue'] = 'Удалить письмо';
+$_lang['sendex_action_sendQueue'] = 'Отправить письмо';

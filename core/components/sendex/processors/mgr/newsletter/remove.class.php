@@ -12,11 +12,10 @@ class sxNewsletterRemoveProcessor extends modProcessor {
 			return $this->failure($this->modx->lexicon('sendex_newsletters_err_ns'));
 		}
 
-		$subscribers = $this->modx->getIterator($this->classKey, array('id:IN' => $ids));
-		/** @var sxSubscriber $subscriber */
-		foreach ($subscribers as $subscriber) {
-			sleep(1);
-			$subscriber->remove();
+		$newsletters = $this->modx->getIterator($this->classKey, array('id:IN' => $ids));
+		/** @var sxNewsletter $newsletter */
+		foreach ($newsletters as $newsletter) {
+			$newsletter->remove();
 		}
 
 		return $this->success();

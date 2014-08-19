@@ -29,13 +29,24 @@ class sxSubscriberGetListProcessor extends modObjectGetListProcessor {
 	/** {@inheritDoc} */
 	public function prepareRow(xPDOObject $object) {
 		$array = $object->toArray();
+
 		if (empty($array['username'])) {
 			$array['username'] = 'Guest';
 		}
 		if (empty($array['fullname'])) {
 			$array['fullname'] = 'Anonymous';
 		}
-		
+
+		$array['actions'] = array();
+		// Remove
+		$array['actions'][] = array(
+			'class' => '',
+			'button' => true,
+			'menu' => true,
+			'icon' => 'trash-o',
+			'type' => 'removeSubscriber',
+		);
+
 		return $array;
 	}
 

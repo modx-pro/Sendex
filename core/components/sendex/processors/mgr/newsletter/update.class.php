@@ -1,6 +1,6 @@
 <?php
 /**
- * Update an Item
+ * Update an Newsletter
  */
 class sxNewsletterUpdateProcessor extends modObjectUpdateProcessor {
 	public $objectType = 'sxNewsletter';

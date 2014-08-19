@@ -42,6 +42,44 @@ class sxNewsletterGetListProcessor extends modObjectGetListProcessor {
 	 */
 	public function prepareRow(xPDOObject $object) {
 		$array = $object->toArray();
+		$array['actions'] = array();
+
+		// Update
+		$array['actions'][] = array(
+			'class' => '',
+			'button' => true,
+			'menu' => true,
+			'icon' => 'edit',
+			'type' => 'updateNewsletter',
+		);
+		// Disable
+		if (empty($array['active'])) {
+			$array['actions'][] = array(
+				'class' => '',
+				'button' => true,
+				'menu' => true,
+				'icon' => 'check',
+				'type' => 'enableNewsletter',
+			);
+		}
+		// or Enable
+		else {
+			$array['actions'][] = array(
+				'class' => '',
+				'button' => true,
+				'menu' => true,
+				'icon' => 'power-off',
+				'type' => 'disableNewsletter',
+			);
+		}
+		// Remove
+		$array['actions'][] = array(
+			'class' => '',
+			'button' => true,
+			'menu' => true,
+			'icon' => 'trash-o',
+			'type' => 'removeNewsletter',
+		);
 
 		return $array;
 	}

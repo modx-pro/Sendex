@@ -30,6 +30,25 @@ class sxQueueGetListProcessor extends modObjectGetListProcessor {
 	 */
 	public function prepareRow(xPDOObject $object) {
 		$array = $object->toArray();
+		$array['actions'] = array();
+
+		// Send
+		$array['actions'][] = array(
+			'class' => '',
+			'button' => true,
+			'menu' => true,
+			'icon' => 'send',
+			'type' => 'sendQueue',
+		);
+
+		// Remove
+		$array['actions'][] = array(
+			'class' => '',
+			'button' => true,
+			'menu' => true,
+			'icon' => 'trash-o',
+			'type' => 'removeQueue',
+		);
 
 		return $array;
 	}

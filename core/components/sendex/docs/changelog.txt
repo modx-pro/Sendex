@@ -1,11 +1,13 @@
 Changelog for Sendex.
 
-1.1.0-pl
+1.1.0-rc
 ==============
 - UI improvements.
 - Ability to add all users of the group to the newsletter.
 - Added multiselect in all grids.
 - Added subscribers count in newsletters grid.
+- Added buttons to grids for touch devices.
+- Added Font Awesome icons for MODX < 2.3.
 - [#21] Compatibility with MODX 2.3.
 - [#20] Added "send all" button to queues grid.
 
