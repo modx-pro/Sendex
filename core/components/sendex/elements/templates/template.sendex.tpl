@@ -51,7 +51,7 @@
 
 <h1>Link for unsubscribe</h1>
 Link must lead to page with Sendex call and contain right sx_action and user code:<br/>
-<pre>&#91;&#91;~id_of_resource?schema=`full`&action=`sx_unsubscribe`&code=`&#91;&#91;+subscriber.code&#93;&#93;`&#93;&#93;</pre>
+<pre>&#91;&#91;~id_of_resource?scheme=`full`&action=`sx_unsubscribe`&code=`&#91;&#91;+subscriber.code&#93;&#93;`&#93;&#93;</pre>
 
 <br/><br/>
 For example:<br/>
