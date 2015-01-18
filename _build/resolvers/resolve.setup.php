@@ -92,7 +92,7 @@ function installPackage($packageName) {
 					'workspace' => 1,
 					'provider' => $provider->id,
 					'source' => $foundPackage->signature.'.transport.zip',
-					'package_name' => $sig[0],
+					'package_name' => $packageName,
 					'version_major' => $versionSignature[0],
 					'version_minor' => !empty($versionSignature[1]) ? $versionSignature[1] : 0,
 					'version_patch' => !empty($versionSignature[2]) ? $versionSignature[2] : 0,
