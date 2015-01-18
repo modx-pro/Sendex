@@ -52,7 +52,7 @@ function installPackage($packageName) {
 	global $modx;
 
 	/* @var modTransportProvider $provider */
-	if (!$provider = $modx->getObject('transport.modTransportProvider', array('service_url:LIKE' => '%simpledream%'))) {
+	if (!$provider = $modx->getObject('transport.modTransportProvider', array('service_url:LIKE' => '%simpledream.ru%', 'OR:service_url:LIKE' => '%modstore.pro%'))) {
 		$provider = $modx->getObject('transport.modTransportProvider', 1);
 	}
 
