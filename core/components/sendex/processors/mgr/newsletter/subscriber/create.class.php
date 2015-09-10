@@ -26,7 +26,7 @@ class sxSubscriberCreateProcessor extends modObjectCreateProcessor {
 		}
 
 		/** @var modUserProfile $profile */
-		if ($profile = $this->modx->getObject('modUserProfile', $this->getProperty('user_id'))) {
+		if ($profile = $this->modx->getObject('modUserProfile', array('internalKey' => $this->getProperty('user_id')))) {
 			$email = $profile->get('email');
 			if (empty($email) || strpos($email, '@') === false) {
 				return $this->modx->lexicon('sendex_subscriber_err_email');

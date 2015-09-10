@@ -1,5 +1,9 @@
 Changelog for Sendex.
 
+1.1.1-pl
+==============
+- Fixed modUserProfile getting on creating subscriber
+
 1.1.0-pl
 ==============
 - Improved installation script for MODX 2.4.
