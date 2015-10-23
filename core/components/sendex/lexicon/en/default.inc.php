@@ -13,6 +13,7 @@ $_lang['sendex_btn_create'] = 'Create';
 $_lang['sendex_btn_subscribe'] = 'Subscribe!';
 $_lang['sendex_btn_unsubscribe'] = 'Unsubscribe';
 $_lang['sendex_btn_send_all'] = 'Send all';
+$_lang['sendex_btn_remove_all'] = 'Remove all';
 $_lang['sendex_select_user'] = 'Add user';
 $_lang['sendex_select_group'] = 'Add group';
 $_lang['sendex_select_newsletter'] = 'Add letters in the queue';
@@ -89,6 +90,8 @@ $_lang['sendex_queues_remove'] = 'Remove letters';
 $_lang['sendex_queues_remove_confirm'] = 'Are you sure you want to remove this letters?';
 $_lang['sendex_queues_send_all'] = 'Send all emails';
 $_lang['sendex_queues_send_all_confirm'] = 'Are you sure you want to send all emails?';
+$_lang['sendex_queues_remove_all'] = 'Remove all letters';
+$_lang['sendex_queues_remove_all_confirm'] = 'Are you sure you want to remove all letters?';
 
 $_lang['sendex_err_auth_req'] = 'You must be authorized for work with newsletters.';
 
