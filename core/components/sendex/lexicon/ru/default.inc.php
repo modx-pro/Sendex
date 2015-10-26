@@ -13,6 +13,7 @@ $_lang['sendex_btn_create'] = 'Создать';
 $_lang['sendex_btn_subscribe'] = 'Подписаться!';
 $_lang['sendex_btn_unsubscribe'] = 'Отписаться';
 $_lang['sendex_btn_send_all'] = 'Отправить все';
+$_lang['sendex_btn_remove_all'] = 'Удалить все';
 $_lang['sendex_select_user'] = 'Добавить пользователя';
 $_lang['sendex_select_group'] = 'Добавить группу';
 $_lang['sendex_select_newsletter'] = 'Добавить письма рассылки в очередь';
@@ -90,6 +91,8 @@ $_lang['sendex_queues_remove'] = 'Удалить письма';
 $_lang['sendex_queues_remove_confirm'] = 'Вы действительно хотите удалить эти письма?';
 $_lang['sendex_queues_send_all'] = 'Отправить все письма';
 $_lang['sendex_queues_send_all_confirm'] = 'Вы действительно хотите отправить все письма?';
+$_lang['sendex_queues_remove_all'] = 'Удалить все письма';
+$_lang['sendex_queues_remove_all_confirm'] = 'Вы действительно хотите удалить все письма?';
 
 $_lang['sendex_err_auth_req'] = 'Вы должны быть авторизованы для работы с подписками.';
 

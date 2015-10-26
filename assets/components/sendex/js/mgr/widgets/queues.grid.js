@@ -24,29 +24,40 @@ Sendex.grid.Queues = function(config) {
 			,{header: _('sendex_queue_email_from'), sortable: true, dataIndex: 'email_from',width: 100, hidden: true}
 			,{header: _('sendex_queue_timestamp'), sortable: true, dataIndex: 'timestamp',width: 100}
 			,{header: '', dataIndex: 'actions',width: 75,renderer: Sendex.utils.renderActions, id: 'actions'}
+		],
+		tbar: [
+			{
+				xtype: 'sendex-combo-newsletter',
+				width: 300,
+				listeners: {
+					select: {fn: this.createQueues, scope: this}
+				}
+			},
+			'->',
+			{
+				xtype: 'button',
+				text: '<i class="' + (MODx.modx23 ? 'icon icon-trash-o' : 'fa fa-trash-o') + '"></i> ' + _('sendex_btn_remove_all'),
+				handler: this.removeAll,
+				scope: this
+			},
+			{
+				xtype: 'button',
+				text: '<i class="' + (MODx.modx23 ? 'icon icon-send' : 'fa fa-send') + '"></i> ' + _('sendex_btn_send_all'),
+				handler: this.sendAll,
+				scope: this
+			}
 		]
-		,tbar: [{
-			xtype: 'sendex-combo-newsletter'
-			,width: 300
-			,listeners: {
-				select: {fn:this.createQueues, scope:this}
-			}
-		}, '->' ,{
-			xtype: 'button'
-			,text: '<i class="' + (MODx.modx23 ? 'icon icon-send' : 'fa fa-send') + '"></i> ' + _('sendex_btn_send_all')
-			,handler: this.sendAll
-			,scope: this
-		}]
 		/*
-		,listeners: {
-			rowDblClick: function(grid, rowIndex, e) {
-				var row = grid.store.getAt(rowIndex);
-				this.update(grid, e, row);
-			}
-		}
-		*/
+		 listeners: {
+		 	rowDblClick: function(grid, rowIndex, e) {
+		 		var row = grid.store.getAt(rowIndex);
+		 		this.update(grid, e, row);
+		 	}
+		 }
+		 */
 	});
-	Sendex.grid.Queues.superclass.constructor.call(this,config);
+
+	Sendex.grid.Queues.superclass.constructor.call(this, config);
 };
 Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
 	windows: {}
@@ -139,9 +150,33 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
 			,url: Sendex.config.connector_url
 			,params: {
 				action: 'mgr/queue/send_all'
+			},
+			listeners: {
+				success: {
+					fn: function () {
+						this.refresh();
+					}, scope: this
+				}
 			}
-			,listeners: {
-				success: {fn:function(r) {this.refresh();},scope:this}
+		});
+	},
+
+	removeAll: function() {
+		Sendex.utils.onAjax(this.getEl());
+
+		MODx.msg.confirm({
+			title: _('sendex_queues_remove_all'),
+			text: _('sendex_queues_remove_all_confirm'),
+			url: Sendex.config.connector_url,
+			params: {
+				action: 'mgr/queue/remove_all'
+			},
+			listeners: {
+				success: {
+					fn: function () {
+						this.refresh();
+					}, scope: this
+				}
 			}
 		});
 	}
