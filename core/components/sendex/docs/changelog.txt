@@ -2,7 +2,7 @@ Changelog for Sendex.
 
 1.1.2-pl
 ==============
-- Added button for removing all letters from queue
+- [#23] Added button for removing all letters from queue
 
 1.1.1-pl
 ==============

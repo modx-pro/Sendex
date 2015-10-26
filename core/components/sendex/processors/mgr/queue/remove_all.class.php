@@ -1,22 +1,19 @@
 <?php
+
 /**
  * Remove an Queue
  */
 class sxQueueRemoveAllProcessor extends modProcessor {
+	public $objectType = 'sxQueue';
+	public $classKey = 'sxQueue';
 
-    public $objectType = 'sxQueue';
-    public $classKey = 'sxQueue';
 
-    /** {inheritDoc} */
-    public function process() {
-        $result = $this->modx->removeCollection($this->classKey);
+	/** {inheritDoc} */
+	public function process() {
+		$this->modx->removeCollection($this->classKey, array());
 
-        if (!$result) {
-            return $this->failure('Can not remove queue...');
-        }
-
-        return $this->success();
-    }
+		return $this->success();
+	}
 }
 
 return 'sxQueueRemoveAllProcessor';
