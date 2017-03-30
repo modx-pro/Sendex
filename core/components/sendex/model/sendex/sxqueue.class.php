@@ -41,6 +41,7 @@ class sxQueue extends xPDOSimpleObject {
 		$mail->set(modMail::MAIL_FROM, $this->email_from);
 		$mail->set(modMail::MAIL_FROM_NAME, $this->email_from_name);
 		$mail->set(modMail::MAIL_SUBJECT, $this->email_subject);
+		$mail->set(modMail::MAIL_ENCODING, 'base64');
 		$mail->address('to', $this->email_to);
 		$mail->address('reply-to', $this->email_reply);
 		$mail->setHTML(true);
