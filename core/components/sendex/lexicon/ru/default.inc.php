@@ -99,8 +99,8 @@ $_lang['sendex_err_auth_req'] = 'Вы должны быть авторизова
 $_lang['sendex_subscribe_intro'] = 'Вы можете подписаться на рассылку «[[+name]]»!';
 $_lang['sendex_unsubscribe_intro'] = 'Вы уже подписаны на рассылку «[[+name]]». Хотите отписаться?';
 
-$_lang['sendex_subscribe_email_subscribed'] = 'На указанный email отправлено письмо со ссылкой для его подтверждения.';
-$_lang['sendex_subscribe_email_confirmed'] = 'Ваш email успешно подписан рассылку.';
+$_lang['sendex_subscribe_email_subscribed'] = 'На указанный email отправлено письмо со ссылкой для подтверждения.';
+$_lang['sendex_subscribe_email_confirmed'] = 'Ваш email успешно подписан на рассылку.';
 $_lang['sendex_subscribe_email_unsubscribed'] = 'Ваш email успешно отписан от рассылки.';
 
 $_lang['sendex_subscribe_activate_subject'] = 'Подтвердите ваш email!';
