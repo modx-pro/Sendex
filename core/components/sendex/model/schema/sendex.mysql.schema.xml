@@ -3,7 +3,7 @@
 
 	<object class="sxNewsletter" table="sendex_newsletters" extends="xPDOSimpleObject">
 		<field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default="" />
-		<field key="description" dbtype="text" phptype="text" null="true" default="" />
+		<field key="description" dbtype="text" phptype="string" null="true" default="" />
 		<field key="active" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="true" default="1" />
 
 		<field key="template" dbtype="integer" precision="10" attributes="unsigned" phptype="integer" null="true" default="0" />
