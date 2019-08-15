@@ -98,6 +98,10 @@ $_lang['sendex_err_auth_req'] = 'You must be authorized for work with newsletter
 $_lang['sendex_subscribe_intro'] = 'You can subscribe to newsletter «[[+name]]»!';
 $_lang['sendex_unsubscribe_intro'] = 'You already subscribed to newsletter «[[+name]]». Do you want to unsubscribe?';
 
+$_lang['sendex_subscribe_email_subscribed'] = 'Letter was sent to the email with a confirmation link.';
+$_lang['sendex_subscribe_email_confirmed'] = 'Your email has been successfully subscribed.';
+$_lang['sendex_subscribe_email_unsubscribed'] = 'Your email has been successfully unsubscribed.';
+
 $_lang['sendex_subscribe_activate_subject'] = 'Confirm your email!';
 $_lang['sendex_subscribe_err_already'] = 'This email is already subscribed to newsletter.';
 $_lang['sendex_subscribe_err_email_wrong'] = 'Wrong email.';
