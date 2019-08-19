@@ -1,11 +1,12 @@
+<p>
+    [[%sendex_subscribe_intro?name=`[[+name]]`]]
+    <small>[[+description]]</small>
+</p>
+
+<p class="[[+class]]"><b>[[+message]]</b></p>
+
 <form action="" method="post">
-	<p>
-		[[%sendex_subscribe_intro?name=`[[+name]]`]]
-		<small>[[+description]]</small>
-	</p>
+    <input type="hidden" name="sx_action" value="subscribe">
 
-	<input type="hidden" name="sx_action" value="subscribe">
-	<button type="submit">[[%sendex_btn_subscribe]]</button>
-
-	[[+message]]
+    <button type="submit">[[%sendex_btn_subscribe]]</button>
 </form>
