@@ -1,10 +1,13 @@
 --------------------
 Sendex
 --------------------
-Author: John Doe <john@doe.com>
+Author: Vasily Naumkin <bezumkin@yandex.ru>
 --------------------
 
-A basic Extra for MODx Revolution.
+Sendex is a simple subscriptions component for MODX Revolution.
+
+Documentation:
+https://docs.modx.pro/komponentyi/sendex
 
 Feel free to suggest ideas/improvements/bugs on GitHub:
-http://github.com/username/Sendex/issues
+https://github.com/bezumkin/Sendex
