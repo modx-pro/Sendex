@@ -1,5 +1,11 @@
 Changelog for Sendex.
 
+1.1.3-pl
+==============
+- [#32, #33] Added parameter &msgClass for placeholder [[+class]]
+- [#31] Added messages for frontend
+- [#30] Change phptype text to string
+
 1.1.2-pl
 ==============
 - [#23] Added button for removing all letters from queue
