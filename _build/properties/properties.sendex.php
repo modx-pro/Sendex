@@ -11,6 +11,10 @@ $tmp = array(
 		'type' => 'combo-boolean',
 		'value' => false,
 	),
+	'msgClass' => array(
+		'type' => 'textfield',
+		'value' => 'active',
+	),
 	'tplSubscribeAuth' => array(
 		'type' => 'textfield',
 		'value' => 'tpl.Sendex.subscribe.auth',
