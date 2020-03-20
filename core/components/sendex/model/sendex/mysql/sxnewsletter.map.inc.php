@@ -54,7 +54,7 @@ $xpdo_meta_map['sxNewsletter']= array (
     'image' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
@@ -62,7 +62,7 @@ $xpdo_meta_map['sxNewsletter']= array (
     'email_subject' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
@@ -70,7 +70,7 @@ $xpdo_meta_map['sxNewsletter']= array (
     'email_from' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
@@ -78,7 +78,7 @@ $xpdo_meta_map['sxNewsletter']= array (
     'email_from_name' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
@@ -86,7 +86,7 @@ $xpdo_meta_map['sxNewsletter']= array (
     'email_reply' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
