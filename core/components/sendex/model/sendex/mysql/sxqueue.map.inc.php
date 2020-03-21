@@ -47,7 +47,7 @@ $xpdo_meta_map['sxQueue']= array (
     'email_to' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
@@ -55,7 +55,7 @@ $xpdo_meta_map['sxQueue']= array (
     'email_subject' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
@@ -70,7 +70,7 @@ $xpdo_meta_map['sxQueue']= array (
     'email_from' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
@@ -78,7 +78,7 @@ $xpdo_meta_map['sxQueue']= array (
     'email_from_name' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',
@@ -86,7 +86,7 @@ $xpdo_meta_map['sxQueue']= array (
     'email_reply' => 
     array (
       'dbtype' => 'varchar',
-      'precision' => '255',
+      'precision' => '191',
       'phptype' => 'string',
       'null' => true,
       'default' => '',

@@ -7,12 +7,12 @@
 		<field key="active" dbtype="tinyint" precision="1" phptype="boolean" attributes="unsigned" null="true" default="1" />
 
 		<field key="template" dbtype="integer" precision="10" attributes="unsigned" phptype="integer" null="true" default="0" />
-		<field key="image" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="image" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
 
-		<field key="email_subject" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
-		<field key="email_from" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
-		<field key="email_from_name" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
-		<field key="email_reply" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_subject" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
+		<field key="email_from" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
+		<field key="email_from_name" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
+		<field key="email_reply" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
 
 		<index alias="name" name="name" primary="false" unique="false" type="BTREE">
 			<column key="name" length="" collation="A" null="false" />
@@ -30,7 +30,7 @@
 	<object class="sxSubscriber" table="sendex_subscribers" extends="xPDOSimpleObject">
 		<field key="newsletter_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" default="0" />
 		<field key="user_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" default="0" />
-		<field key="email" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
 		<field key="code" dbtype="char" precision="40" phptype="string" null="true" default="" />
 
 		<index alias="key" name="key" primary="false" unique="true" type="BTREE">
@@ -52,12 +52,12 @@
 		<field key="subscriber_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" default="0" />
 		<field key="timestamp" dbtype="timestamp" phptype="timestamp" null="false" default="CURRENT_TIMESTAMP" />
 
-		<field key="email_to" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
-		<field key="email_subject" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_to" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
+		<field key="email_subject" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
 		<field key="email_body" dbtype="text" phptype="string" null="true" default="" />
-		<field key="email_from" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
-		<field key="email_from_name" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
-		<field key="email_reply" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+		<field key="email_from" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
+		<field key="email_from_name" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
+		<field key="email_reply" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
 
 		<field key="hash" dbtype="char" precision="40" phptype="string" null="true" default="" />
 
