@@ -2,5 +2,5 @@
 
 $_lang['area_sendex_main'] = 'Основные';
 
-$_lang['setting_sendex_some_setting'] = 'Какая-то настройка';
-$_lang['setting_sendex_some_setting_desc'] = 'Это описание для какой-то настройки';
+$_lang['setting_sendex_export_fields'] = 'Поля для экспорта';
+$_lang['setting_sendex_export_fields_desc'] = 'Введите данные через запятую. Доступные значения: id,user_id,email,username,fullname,phone,mobilephone';

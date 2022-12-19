@@ -377,7 +377,17 @@ Sendex.grid.NewsletterSubscribers = function(config) {
 			,listeners: {
 				select: {fn: this.addSubscriber, scope: this}
 			}
-		}, '->', {
+		},{
+            xtype: 'button',
+            text: '<i class="icon-arrow-circle-up icon"></i> ' + _('sendex_btn_subscrubers_export'),
+            id: 'sendex-export-form',
+            cls: 'x-btn-restore-all',
+            listeners: {
+                'click': {fn: this.exportSubscribers, scope: this}
+            }
+        }
+        ,'->'
+        , {
 			xtype: 'sendex-combo-group'
 			,name: 'group_id'
 			,hiddenName: 'group_id'
@@ -479,6 +489,38 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
 		}
 
 		return ids;
+	}
+
+	,exportSubscribers: function() {
+		MODx.msg.confirm({
+            title: _('sendex_subscribers_export_confirm_title')
+            ,text: _('sendex_subscribers_export_confirm_text')
+			,url: Sendex.config.connector_url
+			,params: {
+				action: 'mgr/newsletter/subscriber/export'
+				,newsletter_id: this.config.record.id
+			}
+            ,listeners: {
+                'success': {
+                    fn: function (data) {
+                        var date = new Date().format('Ymd-His'); 
+                        var newlink = document.createElement('a');
+                        newlink.setAttribute('target', '_blank');
+                        newlink.setAttribute('download', 'subscribers_' + date + '.csv');
+                        newlink.setAttribute('href',data.url);
+                        newlink.click()
+                    }, scope: this
+                },
+                'error': {
+                    fn: function (data) {
+                        MODx.msg.status({
+                            title: _('error'),
+                            message: _('sendex_subscribers_export_error')
+                        });
+                    }, scope: this
+                }
+            }
+        });
 	}
 
 });

@@ -1,24 +1,26 @@
 <?php
 
-$settings = array();
+$settings = [];
 
-$tmp = array(
-	/*'some_setting' => array(
-		'xtype' => 'combo-boolean',
-		'value' => true,
+$tmp = [
+	'export_fields' => [
+		'value' => 'email',
+		'xtype' => 'textfield',
 		'area' => 'sendex_main',
-	),*/
-);
+		'key' => 'sendex_export_fields',
+	],
+];
 
 foreach ($tmp as $k => $v) {
 	/* @var modSystemSetting $setting */
 	$setting = $modx->newObject('modSystemSetting');
 	$setting->fromArray(array_merge(
 		array(
-			'key' => 'sendex_'.$k,
+			'key' => 'sendex_' . $k,
 			'namespace' => PKG_NAME_LOWER,
-		), $v
-	),'',true,true);
+		),
+		$v
+	), '', true, true);
 
 	$settings[] = $setting;
 }
