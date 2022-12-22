@@ -4,11 +4,17 @@ $settings = [];
 
 $tmp = [
 	'export_fields' => [
-		'value' => 'email',
 		'xtype' => 'textfield',
-		'area' => 'sendex_main',
+		'value' => 'email',
 		'key' => 'sendex_export_fields',
+		'area' => 'sendex_main',
 	],
+	'hide_export_button' => array(
+		'xtype' => 'combo-boolean',
+		'value' => false,
+		'key' => 'sendex_hide_export_button',
+		'area' => 'sendex_main',
+	),
 ];
 
 foreach ($tmp as $k => $v) {

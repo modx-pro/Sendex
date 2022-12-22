@@ -378,7 +378,8 @@ Sendex.grid.NewsletterSubscribers = function(config) {
 				select: {fn: this.addSubscriber, scope: this}
 			}
 		},{
-            xtype: 'button',
+            xtype: 'button', 
+            hidden: Sendex.config.hideExportButton,
             text: '<i class="icon-arrow-circle-up icon"></i> ' + _('sendex_btn_subscrubers_export'),
             id: 'sendex-export-form',
             cls: 'x-btn-restore-all',

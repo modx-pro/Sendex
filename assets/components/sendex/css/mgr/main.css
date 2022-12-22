@@ -21,3 +21,5 @@ a.x-menu-item .x-menu-item-text .fa {line-height:16px; top:auto;}
 .fa.actions-menu:after {content: " \f107";}
 
 .sendex-row-disabled {font-style: italic; opacity: .6; color: #555;}
+
+#sendex-grid-newsletter-subscribers .x-toolbar-right-row .x-form-field-wrap{margin-right: 1px;}
