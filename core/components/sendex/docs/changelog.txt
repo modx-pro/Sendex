@@ -1,5 +1,10 @@
 Changelog for Sendex.
 
+1.1.4-pl
+==============
+- Fix css bug for usergroup combo
+- [#37] Added functionality to export email addresses
+
 1.1.3-pl
 ==============
 - [#32, #33] Added parameter &msgClass for placeholder [[+class]]
