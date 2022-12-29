@@ -14,6 +14,7 @@ $_lang['sendex_btn_subscribe'] = 'Subscribe!';
 $_lang['sendex_btn_unsubscribe'] = 'Unsubscribe';
 $_lang['sendex_btn_send_all'] = 'Send all';
 $_lang['sendex_btn_remove_all'] = 'Remove all';
+$_lang['sendex_btn_subscrubers_export'] = 'Export';
 $_lang['sendex_select_user'] = 'Add user';
 $_lang['sendex_select_group'] = 'Add group';
 $_lang['sendex_select_newsletter'] = 'Add letters in the queue';
@@ -115,3 +116,7 @@ $_lang['sendex_action_removeNewsletter'] = 'Remove newsletter';
 $_lang['sendex_action_removeSubscriber'] = 'Unsubscribe user';
 $_lang['sendex_action_removeQueue'] = 'Remove email';
 $_lang['sendex_action_sendQueue'] = 'Send email';
+
+$_lang['sendex_subscribers_export_confirm_title'] = 'Confirm export';
+$_lang['sendex_subscribers_export_confirm_text'] = 'Export email addresses?';
+$_lang['sendex_subscribers_export_error'] = 'Error while exporting subscribers!';

@@ -14,6 +14,7 @@ $_lang['sendex_btn_subscribe'] = 'Подписаться!';
 $_lang['sendex_btn_unsubscribe'] = 'Отписаться';
 $_lang['sendex_btn_send_all'] = 'Отправить все';
 $_lang['sendex_btn_remove_all'] = 'Удалить все';
+$_lang['sendex_btn_subscrubers_export'] = 'Экспорт';
 $_lang['sendex_select_user'] = 'Добавить пользователя';
 $_lang['sendex_select_group'] = 'Добавить группу';
 $_lang['sendex_select_newsletter'] = 'Добавить письма рассылки в очередь';
@@ -116,3 +117,7 @@ $_lang['sendex_action_removeNewsletter'] = 'Удалить рассылку';
 $_lang['sendex_action_removeSubscriber'] = 'Отписать пользователя';
 $_lang['sendex_action_removeQueue'] = 'Удалить письмо';
 $_lang['sendex_action_sendQueue'] = 'Отправить письмо';
+
+$_lang['sendex_subscribers_export_confirm_title'] = 'Подтвердите экспорт';
+$_lang['sendex_subscribers_export_confirm_text'] = 'Экспортировать email адреса?';
+$_lang['sendex_subscribers_export_error'] = 'Ошибка при экспорте подписчиков!';

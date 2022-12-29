@@ -1,9 +1,11 @@
 <?php
+
 /**
  * The base class for Sendex.
  */
 
-class Sendex {
+class Sendex
+{
 	/* @var modX $modx */
 	public $modx;
 	/* @var SendexControllerRequest $request */
@@ -16,8 +18,9 @@ class Sendex {
 	 * @param modX $modx
 	 * @param array $config
 	 */
-	function __construct(modX &$modx, array $config = array()) {
-		$this->modx =& $modx;
+	function __construct(modX &$modx, array $config = array())
+	{
+		$this->modx = &$modx;
 
 		$corePath = $this->modx->getOption('sendex_core_path', $config, $this->modx->getOption('core_path') . 'components/sendex/');
 		$assetsUrl = $this->modx->getOption('sendex_assets_url', $config, $this->modx->getOption('assets_url') . 'components/sendex/');
@@ -36,7 +39,8 @@ class Sendex {
 			'templatesPath' => $corePath . 'elements/templates/',
 			'chunkSuffix' => '.chunk.tpl',
 			'snippetsPath' => $corePath . 'elements/snippets/',
-			'processorsPath' => $corePath . 'processors/'
+			'processorsPath' => $corePath . 'processors/',
+			'hideExportButton' => (bool)$this->modx->getOption('sendex_hide_export_button', null, false)
 		), $config);
 
 		$this->modx->addPackage('sendex', $this->config['modelPath']);
@@ -52,7 +56,8 @@ class Sendex {
 	 *
 	 * @return string|bool
 	 */
-	public function sendEmail($email, array $options = array()) {
+	public function sendEmail($email, array $options = array())
+	{
 		/** @var modPHPMailer $mail */
 		$mail = $this->modx->getService('mail', 'mail.modPHPMailer');
 
@@ -72,5 +77,4 @@ class Sendex {
 
 		return $response;
 	}
-
 }
