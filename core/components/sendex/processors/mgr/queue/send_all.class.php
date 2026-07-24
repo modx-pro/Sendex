@@ -1,9 +1,11 @@
 <?php
 
-/**
- * Send an Queue
- */
+require_once dirname(dirname(dirname(dirname(__FILE__))))
+    . '/model/sendex/sxqueuesender.class.php';
 
+/**
+ * Send all queue rows (mgr).
+ */
 class sxQueueSendAllProcessor extends modProcessor
 {
     public $objectType = 'sxQueue';
@@ -13,13 +15,12 @@ class sxQueueSendAllProcessor extends modProcessor
     /** {inheritDoc} */
     public function process()
     {
-        $queues = $this->modx->getIterator($this->classKey);
-        /** @var sxQueue $queue */
-        foreach ($queues as $queue) {
-            $result = $queue->send();
-            if ($result !== true) {
-                return $this->failure($result);
-            }
+        $stats = sxQueueSender::flush($this->modx, array(
+            'stopOnError' => true,
+        ));
+
+        if ($stats['firstError'] !== null) {
+            return $this->failure($stats['firstError']);
         }
 
         return $this->success();

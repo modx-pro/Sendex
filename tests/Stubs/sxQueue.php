@@ -66,4 +66,12 @@ class sxQueue extends xPDOSimpleObject
 
         return true;
     }
+
+    /**
+     * @return true|false|string
+     */
+    public function send()
+    {
+        return sxQueueSender::sendOne($this);
+    }
 }

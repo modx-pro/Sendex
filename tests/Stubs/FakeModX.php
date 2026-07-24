@@ -117,6 +117,14 @@ class FakeModX extends modX
      */
     public function getService($name, $class = '', $path = '')
     {
+        if ($name === 'mail') {
+            if (!isset($this->services['mail'])) {
+                $this->services['mail'] = new FakeMail();
+            }
+
+            return $this->services['mail'];
+        }
+
         return isset($this->services[$name]) ? $this->services[$name] : null;
     }
 
@@ -280,6 +288,10 @@ class FakeModX extends modX
      */
     public function getCollection($class, $criteria = null)
     {
+        if ($class === 'sxQueue') {
+            return $this->queueCollection($criteria);
+        }
+
         if ($class !== 'sxSubscriber') {
             return array();
         }
@@ -296,6 +308,42 @@ class FakeModX extends modX
             if ($where === array() || sxSubscriberMatch::matchesWhere($where, $subscriber)) {
                 $out[] = $subscriber;
             }
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param FakeQuery|array|null $criteria
+     *
+     * @return sxQueue[]
+     */
+    protected function queueCollection($criteria)
+    {
+        $where = array();
+        $limit = null;
+        if ($criteria instanceof FakeQuery) {
+            $where = $criteria->where;
+            $limit = $criteria->limit;
+        } elseif (is_array($criteria)) {
+            $where = $criteria;
+        }
+
+        $ids = array();
+        if (isset($where['id:IN']) && is_array($where['id:IN'])) {
+            $ids = array_map('intval', $where['id:IN']);
+        }
+
+        $out = array();
+        foreach ($this->queues as $queue) {
+            if ($ids && !in_array((int) $queue->get('id'), $ids, true)) {
+                continue;
+            }
+            $out[] = $queue;
+        }
+
+        if ($limit !== null && $limit > 0) {
+            $out = array_slice($out, 0, $limit);
         }
 
         return $out;
