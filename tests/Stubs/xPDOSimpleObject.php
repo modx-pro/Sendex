@@ -68,6 +68,29 @@ class xPDOSimpleObject
     }
 
     /**
+     * @param array $ancestors
+     *
+     * @return bool
+     */
+    public function remove(array $ancestors = array())
+    {
+        if ($this->xpdo instanceof FakeModX && $this instanceof sxNewsletter) {
+            $id = (int) $this->get('id');
+            if ($id && isset($this->xpdo->newsletters[$id]) && $this->xpdo->newsletters[$id] === $this) {
+                unset($this->xpdo->newsletters[$id]);
+            }
+            foreach ($this->xpdo->subscribers as $index => $subscriber) {
+                if ((int) $subscriber->get('newsletter_id') === $id) {
+                    unset($this->xpdo->subscribers[$index]);
+                }
+            }
+            $this->xpdo->subscribers = array_values($this->xpdo->subscribers);
+        }
+
+        return true;
+    }
+
+    /**
      * @param string $alias
      *
      * @return array

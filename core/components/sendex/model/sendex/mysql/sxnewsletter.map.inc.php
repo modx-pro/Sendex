@@ -138,6 +138,14 @@ $xpdo_meta_map['sxNewsletter'] = array(
       'cardinality' => 'many',
       'owner'       => 'local',
     ),
+    'Queues' =>
+    array(
+      'class'       => 'sxQueue',
+      'local'       => 'id',
+      'foreign'     => 'newsletter_id',
+      'cardinality' => 'many',
+      'owner'       => 'local',
+    ),
   ),
   'aggregates' =>
   array(
