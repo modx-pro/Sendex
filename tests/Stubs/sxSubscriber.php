@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__DIR__, 2) . '/core/components/sendex/model/sendex/sxsubscribercode.class.php';
+
 class sxSubscriber extends xPDOSimpleObject
 {
     /** @var bool */
@@ -17,6 +19,17 @@ class sxSubscriber extends xPDOSimpleObject
     {
         if (!$this->saveResult) {
             return false;
+        }
+
+        if (sxSubscriberCode::needsNewCode($this->get('code'))) {
+            $this->set(
+                'code',
+                sxSubscriberCode::generate(
+                    $this->get('user_id'),
+                    $this->get('newsletter_id'),
+                    $this->get('email')
+                )
+            );
         }
 
         if ($this->get('id') === null && $this->xpdo instanceof FakeModX) {

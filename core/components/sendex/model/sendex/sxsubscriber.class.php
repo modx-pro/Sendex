@@ -1,12 +1,26 @@
 <?php
 
+require_once dirname(__FILE__) . '/sxsubscribercode.class.php';
+
 class sxSubscriber extends xPDOSimpleObject
 {
+    /**
+     * @param null $cacheFlag
+     * @return bool
+     */
     public function save($cacheFlag = null)
     {
-        $hash = sha1(uniqid(sha1($this->user_id . $this->newsletter_id . $this->email), true));
+        if (sxSubscriberCode::needsNewCode($this->get('code'))) {
+            $this->set(
+                'code',
+                sxSubscriberCode::generate(
+                    $this->get('user_id'),
+                    $this->get('newsletter_id'),
+                    $this->get('email')
+                )
+            );
+        }
 
-        $this->set('code', $hash);
         return parent::save($cacheFlag);
     }
 }

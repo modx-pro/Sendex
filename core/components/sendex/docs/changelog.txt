@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
 
 ### Fixed
-- [#53] Snippet: authenticated user without Profile no longer triggers TypeError on PHP 8 (`getOne('Profile')` before merge).
+- [#61] `sxSubscriber::save` keeps existing `code` (generate only when empty) so unsubscribe links stay valid.
+- [#53] Snippet: authenticated user without Profile no longer triggers TypeError on PHP 8; merge via `sxUserPlaceholders`.
 - [#47] Adding a user group to a newsletter subscribes only active and unblocked users.
 - `add_group`: cast `group_id` and `newsletter_id` to int; require user Profile (`innerJoin`).
 - `confirmEmail` returns the `subscribe()` result when confirming a hash for another newsletter.
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Newsletter create processor class renamed to `sxNewsletterCreateProcessor`.
 - `subscribe()` method name normalized to camelCase (PHP method names are case-insensitive; `Subscribe()` calls still work).
 - Declared PHP 7.4–8.4 support; CI lint matrix.
+- Track `composer.lock` in git (removed from `.gitignore`) for reproducible CI installs.
 
 ## [1.1.4-pl] - 2022-12-23
 

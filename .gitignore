@@ -1,5 +1,6 @@
 .idea
 .DS_Store
+.cursor/
 
 # VSCode
 .vscode
@@ -8,4 +9,3 @@
 /vendor/
 .phpunit.result.cache
 /coverage/
-composer.lock
