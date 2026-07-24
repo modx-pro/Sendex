@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__FILE__) . '/sxnewslettermailer.class.php';
+
 /**
  * The base class for Sendex.
  */
@@ -74,47 +76,10 @@ class Sendex
     {
         /** @var modPHPMailer $mail */
         $mail = $this->modx->getService('mail', 'mail.modPHPMailer');
-
-        $mail->set(modMail::MAIL_BODY, $this->modx->getOption('email_body', $options, ''));
-        $mail->set(
-            modMail::MAIL_FROM,
-            $this->modx->getOption(
-                'email_from',
-                $options,
-                $this->modx->getOption('emailsender'),
-                true
-            )
+        sxNewsletterMailer::configureMailer(
+            $mail,
+            sxNewsletterMailer::buildActivationMessage($this->modx, $email, $options)
         );
-        $mail->set(
-            modMail::MAIL_FROM_NAME,
-            $this->modx->getOption(
-                'email_from_name',
-                $options,
-                $this->modx->getOption('site_name'),
-                true
-            )
-        );
-        $mail->set(
-            modMail::MAIL_SUBJECT,
-            $this->modx->getOption(
-                'email_subject',
-                $options,
-                $this->modx->lexicon('sendex_subscribe_activate_subject'),
-                true
-            )
-        );
-
-        $mail->address('to', $email);
-        $mail->address(
-            'reply-to',
-            $this->modx->getOption(
-                'email_from',
-                $options,
-                $this->modx->getOption('emailsender'),
-                true
-            )
-        );
-        $mail->setHTML(true);
 
         $response = !$mail->send()
             ? $mail->mailer->ErrorInfo

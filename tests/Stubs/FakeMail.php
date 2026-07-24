@@ -11,6 +11,12 @@ class FakeMail
     /** @var stdClass */
     public $mailer;
 
+    /** @var array<string,mixed> */
+    public $sets = array();
+
+    /** @var array<string,string> */
+    public $addresses = array();
+
     public function __construct()
     {
         $this->mailer = new stdClass();
@@ -23,6 +29,7 @@ class FakeMail
      */
     public function set($key, $value)
     {
+        $this->sets[$key] = $value;
     }
 
     /**
@@ -31,6 +38,7 @@ class FakeMail
      */
     public function address($type, $address)
     {
+        $this->addresses[$type] = $address;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/sxqueuedeliver.class.php';
+require_once dirname(__FILE__) . '/sxnewslettermailer.class.php';
 
 /**
  * Single entry point for queue delivery (#65): cron and mgr processors call flush/sendOne.
@@ -97,13 +98,7 @@ class sxQueueSender
     {
         /** @var modPHPMailer $mail */
         $mail = $queue->xpdo->getService('mail', 'mail.modPHPMailer');
-        $mail->set(modMail::MAIL_BODY, $queue->email_body);
-        $mail->set(modMail::MAIL_FROM, $queue->email_from);
-        $mail->set(modMail::MAIL_FROM_NAME, $queue->email_from_name);
-        $mail->set(modMail::MAIL_SUBJECT, $queue->email_subject);
-        $mail->address('to', $queue->email_to);
-        $mail->address('reply-to', $queue->email_reply);
-        $mail->setHTML(true);
+        sxNewsletterMailer::configureMailer($mail, sxNewsletterMailer::messageFromQueue($queue));
         if (!$mail->send()) {
             $error = $mail->mailer->ErrorInfo;
             $queue->xpdo->log(
