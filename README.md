@@ -71,6 +71,18 @@ Policy: **merge**, not block.
 
 Logged-in `isSubscribed($userId)` also matches a still-guest row by profile email, so the form shows unsubscribe without waiting for merge.
 
+### Unsubscribe from email (#56)
+
+The page must call `[[!Sendex? &id=`…`]]` (any newsletter id is fine). Query params:
+
+| Param | Required | Meaning |
+| --- | --- | --- |
+| `sx_action` | yes | `unsubscribe` |
+| `code` | yes | `sxSubscriber.code` |
+| `newsletter_id` | no | Same as newsletter id; avoids confusion with MODX resource `id`. Snippet resolves the owner newsletter from `code` if the snippet `&id` differs. |
+
+Default letter template links to `site_start` with `sx_action`, `newsletter_id`, and `code`.
+
 ## Cron
 
 Process the queue from the site root (or adjust the path):

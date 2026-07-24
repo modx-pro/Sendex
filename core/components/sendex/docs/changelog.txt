@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phinx migrations: `core/components/sendex/phinx.php`, `migrations/`, install/upgrade resolver; metadata table `{prefix}sendex_migrations`.
 
 ### Fixed
+- [#56] Unsubscribe from email: snippet resolves newsletter by subscriber `code` when snippet `&id` differs; default letter link includes `newsletter_id` (not MODX resource `id`).
 - [#67] / [#52] Schema and upgrade: Sendex tables use InnoDB; queue index renamed `user_id` → `subscriber_id`; `addQueues` stores `sxSubscriber.id` (not `user_id`); Phinx backfill remaps legacy queue rows (by user_id, guests by email).
 - [#54] `isSubscribed` matches by `user_id` OR `email` within a newsletter; unique key is `(newsletter_id, email)`; guest rows attach `user_id` when the same email confirms as a user.
 - [#39] Guest rows merge onto `modUser` on `OnUserActivate` / `OnBeforeUserActivate` / `OnUserSave` (`sxSubscriberMerge`); registration does not create a second subscriber row for the same email.
