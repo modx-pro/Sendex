@@ -23,7 +23,7 @@
     "scripts": {
         "test": "phpunit",
         "test:coverage": "phpdbg -qrr vendor/bin/phpunit --coverage-text",
-        "phpcs": "phpcs --standard=phpcs.xml"
+        "phpcs": "phpcs --standard=phpcs.xml -n"
     },
     "config": {
         "sort-packages": true
