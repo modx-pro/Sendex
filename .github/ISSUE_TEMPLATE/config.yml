@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Документация Sendex
+    url: https://docs.modx.pro/komponentyi/sendex
+    about: Справка по сниппету, очереди и настройкам
+  - name: Roadmap фиксов
+    url: https://github.com/modx-pro/Sendex/issues/75
+    about: Порядок работ по open issues
