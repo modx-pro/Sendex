@@ -29,6 +29,8 @@ $_lang['sendex_newsletter_err_remove'] = 'An error occurred while trying to remo
 $_lang['sendex_newsletter_err_save'] = 'An error occurred while trying to save the newsletter.';
 $_lang['sendex_newsletter_err_no_subscribers'] = 'This newsletter has no subscribers.';
 $_lang['sendex_newsletter_err_no_template'] = 'This newsletter has no template.';
+$_lang['sendex_newsletter_err_no_queues'] = 'No letters were added to the queue (0 rows).';
+$_lang['sendex_newsletter_queues_added'] = 'Added [[+count]] letter(s) to the queue.';
 $_lang['sendex_newsletter_err_template'] = 'You must select template.';
 
 $_lang['sendex_newsletters_remove'] = 'Remove newsletters';

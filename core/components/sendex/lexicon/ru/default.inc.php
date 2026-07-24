@@ -29,6 +29,8 @@ $_lang['sendex_newsletter_err_remove'] = 'Ошибка при удалении �
 $_lang['sendex_newsletter_err_save'] = 'Ошибка при сохранении подписки.';
 $_lang['sendex_newsletter_err_no_subscribers'] = 'У этой рассылки нет подписчиков.';
 $_lang['sendex_newsletter_err_no_template'] = 'У этой рассылки нет шаблона.';
+$_lang['sendex_newsletter_err_no_queues'] = 'В очередь не добавлено ни одного письма (0 строк).';
+$_lang['sendex_newsletter_queues_added'] = 'В очередь добавлено писем: [[+count]].';
 $_lang['sendex_newsletter_err_template'] = 'Вы должны выбрать шаблон.';
 
 $_lang['sendex_newsletters_remove'] = 'Удалить подписки';

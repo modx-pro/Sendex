@@ -90,12 +90,22 @@ class FakeModX extends modX
 
     /**
      * @param string $key
+     * @param array $params
      *
      * @return string
      */
-    public function lexicon($key)
+    public function lexicon($key, $params = array())
     {
-        return $key;
+        if (!is_array($params) || $params === array()) {
+            return $key;
+        }
+
+        $out = $key;
+        foreach ($params as $name => $value) {
+            $out .= ':' . $name . '=' . $value;
+        }
+
+        return $out;
     }
 
     /**
@@ -299,6 +309,24 @@ class FakeModX extends modX
      */
     public function getCount($class, $criteria = array())
     {
+        if ($class === 'sxQueue') {
+            $count = 0;
+            foreach ($this->queues as $queue) {
+                $match = true;
+                foreach ($criteria as $key => $value) {
+                    if ((string) $queue->get($key) !== (string) $value) {
+                        $match = false;
+                        break;
+                    }
+                }
+                if ($match) {
+                    $count++;
+                }
+            }
+
+            return $count;
+        }
+
         if ($class !== 'sxSubscriber') {
             return 0;
         }
