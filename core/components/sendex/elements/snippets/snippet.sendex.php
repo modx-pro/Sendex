@@ -15,6 +15,7 @@ if (!($Sendex instanceof Sendex)) {
 }
 
 require_once $corePath . 'model/sendex/sxuserplaceholders.class.php';
+require_once $corePath . 'model/sendex/sxunsubscriberesolve.class.php';
 
 $tplSubscribeAuth = $modx->getOption('tplSubscribeAuth', $scriptProperties, 'tpl.Sendex.subscribe.auth');
 $tplSubscribeGuest = $modx->getOption('tplSubscribeGuest', $scriptProperties, 'tpl.Sendex.subscribe.guest');
@@ -109,7 +110,28 @@ if (!empty($_REQUEST['sx_action'])) {
             break;
         case 'unsubscribe':
             if (!empty($_REQUEST['code'])) {
-                $response = $newsletter->unSubscribe($_REQUEST['code']);
+                $code = $_REQUEST['code'];
+                $target = sxUnsubscribeResolve::forCode($modx, $code, $newsletter);
+                if ($target) {
+                    $newsletter = $target;
+                    $placeholders = array_merge(
+                        $newsletter->toArray(),
+                        array(
+                            'message' => '',
+                            'class'   => '',
+                            'error'   => 0,
+                        )
+                    );
+                    if ($isAuthenticated) {
+                        $profile = $modx->user->getOne('Profile');
+                        $placeholders = sxUserPlaceholders::mergeAuthenticated(
+                            $modx->user->toArray(),
+                            $profile ? $profile->toArray() : null,
+                            $placeholders
+                        );
+                    }
+                }
+                $response = $newsletter->unSubscribe($code);
                 if ($response === true) {
                     $placeholders['message'] = $modx->lexicon('sendex_subscribe_email_unsubscribed');
                     $params['sx_unsubscribed'] = 1;
@@ -120,7 +142,7 @@ if (!empty($_REQUEST['sx_action'])) {
                     $placeholders['error'] = 1;
                 }
             }
-            unset($params['code']);
+            unset($params['code'], $params['newsletter_id']);
             break;
     }
 

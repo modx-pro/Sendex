@@ -52,9 +52,12 @@
 <hr>
 
 <h1>Link for unsubscribe</h1>
-Link must lead to page with Sendex call and contain right sx_action and user code:<br/>
-<pre>&#91;&#91;~id_of_resource?scheme=`full`&action=`sx_unsubscribe`&code=`&#91;&#91;+subscriber.code&#93;&#93;`&#93;&#93;</pre>
+Link must lead to a page that calls the Sendex snippet. Required query params:
+<code>sx_action=unsubscribe</code>, <code>code</code> (subscriber code). Optional:
+<code>newsletter_id</code> (same as <code>[[+newsletter.id]]</code>; the snippet also resolves the newsletter from <code>code</code> if the snippet <code>&id</code> differs).
+<br/>
+<pre>&#91;&#91;~id_of_resource?scheme=`full`&sx_action=`unsubscribe`&newsletter_id=`&#91;&#91;+newsletter.id&#93;&#93;`&code=`&#91;&#91;+subscriber.code&#93;&#93;`&#93;&#93;</pre>
 
 <br/><br/>
-For example:<br/>
-<a href="[[~[[++site_start]]?scheme=`full`&sx_action=`unsubscribe`&code=`[[+subscriber.code]]`]]">Unsubscribe from this newsletter</a>
+For example (works on site_start even when the snippet &id is another newsletter):<br/>
+<a href="[[~[[++site_start]]?scheme=`full`&sx_action=`unsubscribe`&newsletter_id=`[[+newsletter.id]]`&code=`[[+subscriber.code]]`]]">Unsubscribe from this newsletter</a>
