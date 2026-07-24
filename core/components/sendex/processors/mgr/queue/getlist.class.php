@@ -12,6 +12,7 @@ class sxQueueGetListProcessor extends modObjectGetListProcessor
     public $classKey = 'sxQueue';
     public $defaultSortField = 'id';
     public $defaultSortDirection = 'DESC';
+    public $permission = 'view_document';
 
 
     /**

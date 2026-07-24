@@ -1,15 +1,15 @@
 <?php
 
-/**
- * Create an Subscriber
- */
+require_once dirname(__DIR__, 2) . '/sendexprocessor.class.php';
 
-class sxSubscriberCreateProcessor extends modProcessor
+/**
+ * Create a Subscriber
+ */
+class sxSubscriberCreateProcessor extends sxSendexProcessor
 {
     public $objectType = 'sxSubscriber';
     public $classKey = 'sxSubscriber';
     public $languageTopics = array('sendex');
-    public $permission = '';
 
 
     /**
@@ -17,6 +17,10 @@ class sxSubscriberCreateProcessor extends modProcessor
      */
     public function process()
     {
+        if ($failure = $this->failureIfNoPermission()) {
+            return $failure;
+        }
+
         $user_id = (int) $this->getProperty('user_id');
         $newsletter_id = (int) $this->getProperty('newsletter_id');
 

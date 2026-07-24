@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHP 7.4–8.4: dynamic properties, null Profile in `addQueues`, PHPMailer `ErrorInfo`.
 
 ### Changed
-- [#65] Queue delivery unified in `sxQueueSender` (`sendOne` / `flush`); cron and mgr send processors delegate to it (claim + log from #55).
+- [#69] Mgr processors share `sxSendexProcessor` (`edit_document` + `requireIds` / `parseIds`); get-list processors declare `view_document`.
 - [#62] Split `sxNewsletter` into `sxNewsletterSubscription`, `sxNewsletterQueueBuilder`, `sxSendexEvent`; model keeps a thin public API for processors/snippet.
 - **Breaking (DB):** existing `sendex_*` tables are converted to InnoDB on upgrade; queue `subscriber_id` meaning is `sxSubscriber.id` after backfill (join Queue→Subscriber for guests works). Soft FK to core `modUser` tables are not added.
 - `add_group` processor requires `edit_document` permission.

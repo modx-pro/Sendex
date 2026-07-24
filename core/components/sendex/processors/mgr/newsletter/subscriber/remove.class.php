@@ -1,10 +1,11 @@
 <?php
 
+require_once dirname(__DIR__, 2) . '/sendexprocessor.class.php';
+
 /**
  * Remove subscribers
  */
-
-class sxSubscriberRemoveProcessor extends modProcessor
+class sxSubscriberRemoveProcessor extends sxSendexProcessor
 {
     public $classKey = 'sxSubscriber';
 
@@ -12,9 +13,12 @@ class sxSubscriberRemoveProcessor extends modProcessor
     /** {inheritDoc} */
     public function process()
     {
-        $ids = array_filter(array_map('intval', explode(',', (string) $this->getProperty('ids'))));
-        if (empty($ids)) {
-            return $this->failure($this->modx->lexicon('sendex_subscribers_err_ns'));
+        if ($failure = $this->failureIfNoPermission()) {
+            return $failure;
+        }
+        list($ids, $failure) = $this->requireIds('sendex_subscribers_err_ns');
+        if ($failure) {
+            return $failure;
         }
 
         $errors = array();

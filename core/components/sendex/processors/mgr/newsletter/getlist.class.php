@@ -10,6 +10,7 @@ class sxNewsletterGetListProcessor extends modObjectGetListProcessor
     public $classKey = 'sxNewsletter';
     public $defaultSortField = 'id';
     public $defaultSortDirection = 'DESC';
+    public $permission = 'view_document';
 
 
     /**

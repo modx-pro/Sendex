@@ -1,10 +1,11 @@
 <?php
 
-/**
- * Remove an Queue
- */
+require_once dirname(__DIR__) . '/sendexprocessor.class.php';
 
-class sxQueueRemoveAllProcessor extends modProcessor
+/**
+ * Remove all queue rows
+ */
+class sxQueueRemoveAllProcessor extends sxSendexProcessor
 {
     public $objectType = 'sxQueue';
     public $classKey = 'sxQueue';
@@ -13,6 +14,10 @@ class sxQueueRemoveAllProcessor extends modProcessor
     /** {inheritDoc} */
     public function process()
     {
+        if ($failure = $this->failureIfNoPermission()) {
+            return $failure;
+        }
+
         $this->modx->removeCollection($this->classKey, array());
 
         return $this->success();
