@@ -50,6 +50,6 @@ define('BUILD_PLUGIN_STATIC', false);
 define('BUILD_TEMPLATE_STATIC', false);
 
 $BUILD_RESOLVERS = array(
-    'tables',
+    'migrations',
     //'setup',
 );

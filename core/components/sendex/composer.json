@@ -1,0 +1,16 @@
+{
+    "name": "modx-pro/sendex-component",
+    "description": "Sendex component runtime (Phinx migrations)",
+    "type": "library",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=7.4 <8.5",
+        "robmorgan/phinx": "^0.14"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "7.4.33"
+        }
+    }
+}
