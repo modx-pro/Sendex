@@ -493,35 +493,63 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
     }
 
     ,exportSubscribers: function() {
-        MODx.msg.confirm({
-            title: _('sendex_subscribers_export_confirm_title')
-            ,text: _('sendex_subscribers_export_confirm_text')
-            ,url: Sendex.config.connector_url
-            ,params: {
-                action: 'mgr/newsletter/subscriber/export'
-                ,newsletter_id: this.config.record.id
-            }
-            ,listeners: {
-                'success': {
-                    fn: function (data) {
-                        var date = new Date().format('Ymd-His');
-                        var newlink = document.createElement('a');
-                        newlink.setAttribute('target', '_blank');
-                        newlink.setAttribute('download', 'subscribers_' + date + '.csv');
-                        newlink.setAttribute('href',data.url);
-                        newlink.click()
-                    }, scope: this
-                },
-                'error': {
-                    fn: function (data) {
-                        MODx.msg.status({
-                            title: _('error'),
-                            message: _('sendex_subscribers_export_error')
-                        });
-                    }, scope: this
+        Ext.Msg.confirm(
+            _('sendex_subscribers_export_confirm_title')
+            ,_('sendex_subscribers_export_confirm_text')
+            ,function(btn) {
+                if (btn !== 'yes') {
+                    return;
                 }
+                MODx.Ajax.request({
+                    url: Sendex.config.connector_url
+                    ,params: {
+                        action: 'mgr/newsletter/subscriber/export'
+                        ,newsletter_id: this.config.record.id
+                    }
+                    ,listeners: {
+                        success: {
+                            fn: function(r) {
+                                var payload = r.object || r;
+                                if (typeof payload.csv === 'undefined' || payload.csv === null) {
+                                    MODx.msg.status({
+                                        title: _('error')
+                                        ,message: _('sendex_subscribers_export_error')
+                                    });
+                                    return;
+                                }
+                                this.saveCsvFile(
+                                    payload.filename || ('subscribers_' + new Date().format('Ymd-His') + '.csv')
+                                    ,payload.csv
+                                );
+                            }
+                            ,scope: this
+                        }
+                        ,failure: {
+                            fn: function() {
+                                MODx.msg.status({
+                                    title: _('error')
+                                    ,message: _('sendex_subscribers_export_error')
+                                });
+                            }
+                            ,scope: this
+                        }
+                    }
+                });
             }
-        });
+            ,this
+        );
+    }
+
+    ,saveCsvFile: function(filename, csv) {
+        var blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+        var url = window.URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
     }
 
 });

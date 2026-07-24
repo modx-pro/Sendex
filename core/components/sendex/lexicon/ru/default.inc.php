@@ -123,3 +123,4 @@ $_lang['sendex_action_sendQueue'] = 'Отправить письмо';
 $_lang['sendex_subscribers_export_confirm_title'] = 'Подтвердите экспорт';
 $_lang['sendex_subscribers_export_confirm_text'] = 'Экспортировать email адреса?';
 $_lang['sendex_subscribers_export_error'] = 'Ошибка при экспорте подписчиков!';
+$_lang['sendex_subscribers_export_fields_err'] = 'В настройках нет допустимых полей для экспорта.';

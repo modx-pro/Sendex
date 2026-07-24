@@ -1,64 +1,98 @@
-Changelog for Sendex.
+# Changelog
 
-1.1.5-pl
-==============
-- [#44] Plugin events for subscribe/unsubscribe (sxOnBeforeSubscribe, sxOnSubscribe, sxOnBeforeUnsubscribe, sxOnUnsubscribe)
-- Fix confirmEmail to return subscribe() result when confirming a hash for another newsletter
-- Declare PHP 7.4–8.4 support: fix dynamic properties, null Profile in addQueues, PHPMailer ErrorInfo, export stmt guard; CI lint matrix
-- Add PHPUnit unit tests for subscribe/unsubscribe events (stubs, no MODX install)
-- [#47] When adding a user group to a newsletter, only active and unblocked users are subscribed
-- Cast group_id and newsletter_id to int in add_group; require user Profile (innerJoin)
-- add_group processor requires edit_document permission
-- Renamed newsletter create processor class to sxNewsletterCreateProcessor
-- Renamed subscribe() method to camelCase (PHP method names are case-insensitive; Subscribe() calls still work)
+All notable changes to this project will be documented in this file.
 
-1.1.4-pl
-==============
-- Fix css bug for usergroup combo
-- [#37] Added functionality to export email addresses
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-1.1.3-pl
-==============
-- [#32, #33] Added parameter &msgClass for placeholder [[+class]]
-- [#31] Added messages for frontend
-- [#30] Change phptype text to string
+## [1.1.5-pl] - 2026-07-24
 
-1.1.2-pl
-==============
-- [#23] Added button for removing all letters from queue
+### Security
+- [#51] Subscriber export goes through the authenticated manager connector (no public CSV under `assets/`); processor requires `edit_document`.
+- CSV cells that look like spreadsheet formulas are prefixed so Excel/LibreOffice do not execute them.
 
-1.1.1-pl
-==============
-- Fixed modUserProfile getting on creating subscriber
+### Added
+- [#44] Plugin events for subscribe/unsubscribe (`sxOnBeforeSubscribe`, `sxOnSubscribe`, `sxOnBeforeUnsubscribe`, `sxOnUnsubscribe`).
+- PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
 
-1.1.0-pl
-==============
-- Improved installation script for MODX 2.4.
+### Fixed
+- [#47] Adding a user group to a newsletter subscribes only active and unblocked users.
+- `add_group`: cast `group_id` and `newsletter_id` to int; require user Profile (`innerJoin`).
+- `confirmEmail` returns the `subscribe()` result when confirming a hash for another newsletter.
+- PHP 7.4–8.4: dynamic properties, null Profile in `addQueues`, PHPMailer `ErrorInfo`.
 
-1.1.0-rc
-==============
+### Changed
+- `add_group` processor requires `edit_document` permission.
+- Newsletter create processor class renamed to `sxNewsletterCreateProcessor`.
+- `subscribe()` method name normalized to camelCase (PHP method names are case-insensitive; `Subscribe()` calls still work).
+- Declared PHP 7.4–8.4 support; CI lint matrix.
+
+## [1.1.4-pl] - 2022-12-23
+
+### Added
+- [#37] Export subscriber email addresses from the manager.
+
+### Fixed
+- CSS bug for the usergroup combo.
+
+## [1.1.3-pl] - 2019-08-24
+
+### Added
+- [#32], [#33] Snippet property `&msgClass` for placeholder `[[+class]]`.
+- [#31] Frontend messages.
+
+### Changed
+- [#30] Schema: `phptype` `text` → `string`.
+
+## [1.1.2-pl] - 2015-10-23
+
+### Added
+- [#23] Button to remove all letters from the queue.
+
+## [1.1.1-pl] - 2015-09-10
+
+### Fixed
+- Loading `modUserProfile` when creating a subscriber.
+
+## [1.1.0-pl] - 2015-08-19
+
+### Changed
+- Installation script improved for MODX 2.4.
+
+## [1.1.0-rc] - 2014-08-19
+
+### Added
+- Add all users of a group to a newsletter.
+- Multiselect in all grids.
+- Subscriber count in the newsletters grid.
+- Grid buttons for touch devices.
+- Font Awesome icons for MODX < 2.3.
+- [#20] “Send all” button on the queues grid.
+
+### Changed
 - UI improvements.
-- Ability to add all users of the group to the newsletter.
-- Added multiselect in all grids.
-- Added subscribers count in newsletters grid.
-- Added buttons to grids for touch devices.
-- Added Font Awesome icons for MODX < 2.3.
 - [#21] Compatibility with MODX 2.3.
-- [#20] Added "send all" button to queues grid.
 
-1.0.0-pl
-==============
-- Added multiremoving and multisending
-- [#11]Added $_GET's subscribed, unsubscribed, confirmed
-- [#1] Fixed urls of images
+## [1.0.0-pl] - 2014-03-27
 
-1.0.0-rc2
-==============
+### Added
+- Multi-remove and multi-send.
+- [#11] `$_GET` flags `subscribed`, `unsubscribed`, `confirmed`.
+
+### Fixed
+- [#1] Image URLs.
+
+## [1.0.0-rc2] - 2014-03-07
+
+### Fixed
 - Various small fixes.
 
-==============
-- Fixed caching of template.
+## [1.0.0-rc1] - 2013-12-30
 
-1.0.0-beta
-==============
+### Fixed
+- Template caching.
+
+## [1.0.0-beta] - 2013-12-19
+
+### Added
 - Initial release.

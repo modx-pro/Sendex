@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "79aa981cdd21e2925b2448746220acc9",
+    "content-hash": "39e66805676acf807e1d542a63af53a0",
     "packages": [],
     "packages-dev": [
         {
@@ -1736,6 +1736,24 @@
                 }
             ],
             "time": "2020-09-28T06:39:44+00:00"
+        },
+        {
+            "name": "squizlabs/php_codesniffer",
+            "version": "3.13.4",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer/archive/refs/tags/3.13.4.zip"
+            },
+            "bin": [
+                "bin/phpcs",
+                "bin/phpcbf"
+            ],
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "."
+                ]
+            }
         },
         {
             "name": "theseer/tokenizer",

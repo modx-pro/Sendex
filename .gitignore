@@ -8,3 +8,4 @@
 /vendor/
 .phpunit.result.cache
 /coverage/
+composer.lock

@@ -8,7 +8,8 @@
     },
     "require-dev": {
         "phpunit/php-code-coverage": "^9.2",
-        "phpunit/phpunit": "^9.6.22"
+        "phpunit/phpunit": "^9.6.22",
+        "squizlabs/php_codesniffer": "3.13.4"
     },
     "suggest": {
         "ext-pdo": "Required for MODX database access",
@@ -21,9 +22,33 @@
     },
     "scripts": {
         "test": "phpunit",
-        "test:coverage": "phpdbg -qrr vendor/bin/phpunit --coverage-text"
+        "test:coverage": "phpdbg -qrr vendor/bin/phpunit --coverage-text",
+        "phpcs": "phpcs --standard=phpcs.xml"
     },
     "config": {
         "sort-packages": true
-    }
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "squizlabs/php_codesniffer",
+                "version": "3.13.4",
+                "type": "library",
+                "dist": {
+                    "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer/archive/refs/tags/3.13.4.zip",
+                    "type": "zip"
+                },
+                "bin": [
+                    "bin/phpcs",
+                    "bin/phpcbf"
+                ],
+                "autoload": {
+                    "classmap": [
+                        "."
+                    ]
+                }
+            }
+        }
+    ]
 }
