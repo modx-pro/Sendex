@@ -2,27 +2,14 @@
 
 require_once dirname(__FILE__) . '/sxnewslettersubscription.class.php';
 require_once dirname(__FILE__) . '/sxnewsletterqueuebuilder.class.php';
-require_once dirname(__FILE__) . '/sxnewslettercascade.class.php';
 require_once dirname(__FILE__) . '/sxsendexevent.class.php';
 
 /**
  * Newsletter persistence + thin API over subscription / queue helpers (#62).
+ * Queue rows cascade via composite `Queues` in schema on parent::remove() (#59).
  */
 class sxNewsletter extends xPDOSimpleObject
 {
-    /**
-     * Remove newsletter, subscribers (composite), and queue rows (#59).
-     *
-     * @param array $ancestors
-     * @return bool
-     */
-    public function remove(array $ancestors = array())
-    {
-        sxNewsletterCascade::deleteQueues($this->xpdo, $this->get('id'));
-
-        return parent::remove($ancestors);
-    }
-
     /**
      * @return int|string
      */

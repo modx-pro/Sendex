@@ -307,37 +307,6 @@ class FakeModX extends modX
      *
      * @return int
      */
-    public function removeCollection($class, $criteria = array())
-    {
-        if ($class !== 'sxQueue' || !is_array($criteria)) {
-            return 0;
-        }
-
-        $removed = 0;
-        foreach ($this->queues as $index => $queue) {
-            $match = true;
-            foreach ($criteria as $key => $value) {
-                if ((string) $queue->get($key) !== (string) $value) {
-                    $match = false;
-                    break;
-                }
-            }
-            if ($match) {
-                unset($this->queues[$index]);
-                $removed++;
-            }
-        }
-        $this->queues = array_values($this->queues);
-
-        return $removed;
-    }
-
-    /**
-     * @param string $class
-     * @param array $criteria
-     *
-     * @return int
-     */
     public function getCount($class, $criteria = array())
     {
         if ($class === 'sxQueue') {

@@ -85,6 +85,12 @@ class xPDOSimpleObject
                 }
             }
             $this->xpdo->subscribers = array_values($this->xpdo->subscribers);
+            foreach ($this->xpdo->queues as $index => $queue) {
+                if ((int) $queue->get('newsletter_id') === $id) {
+                    unset($this->xpdo->queues[$index]);
+                }
+            }
+            $this->xpdo->queues = array_values($this->xpdo->queues);
         }
 
         return true;
@@ -103,6 +109,18 @@ class xPDOSimpleObject
             foreach ($this->xpdo->subscribers as $subscriber) {
                 if ((int) $subscriber->get('newsletter_id') === $id) {
                     $out[] = $subscriber;
+                }
+            }
+
+            return $out;
+        }
+
+        if ($alias === 'Queues' && $this->xpdo instanceof FakeModX) {
+            $id = (int) $this->get('id');
+            $out = array();
+            foreach ($this->xpdo->queues as $queue) {
+                if ((int) $queue->get('newsletter_id') === $id) {
+                    $out[] = $queue;
                 }
             }
 

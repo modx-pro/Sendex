@@ -42,10 +42,9 @@ class NewsletterSplitContractTest extends TestCase
 
         $this->assertStringContainsString('sxNewsletterSubscription', $facade);
         $this->assertStringContainsString('sxNewsletterQueueBuilder', $facade);
-        $this->assertStringContainsString('sxNewsletterCascade', $facade);
         $this->assertStringContainsString('sxSendexEvent::invoke', $facade);
         $this->assertStringContainsString('function subscribe(', $facade);
         $this->assertStringContainsString('function addQueues(', $facade);
-        $this->assertStringContainsString('function remove(', $facade);
+        $this->assertStringNotContainsString('function remove(', $facade);
     }
 }

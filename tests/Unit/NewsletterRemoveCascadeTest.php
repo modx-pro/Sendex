@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 /**
- * #59 — newsletter remove must clear sxQueue for that newsletter_id.
+ * #59 — newsletter remove must clear sxQueue for that newsletter_id (Queues composite).
  */
 class NewsletterRemoveCascadeTest extends TestCase
 {
@@ -13,31 +13,6 @@ class NewsletterRemoveCascadeTest extends TestCase
     protected function setUp(): void
     {
         $this->modx = new FakeModX();
-    }
-
-    public function testDeleteQueuesRemovesOnlyMatchingNewsletter()
-    {
-        $keep = new sxQueue($this->modx);
-        $keep->fromArray(array(
-            'id'            => 1,
-            'newsletter_id' => 20,
-            'email_to'      => 'keep@example.com',
-        ));
-        $keep->save();
-
-        $drop = new sxQueue($this->modx);
-        $drop->fromArray(array(
-            'id'            => 2,
-            'newsletter_id' => 10,
-            'email_to'      => 'drop@example.com',
-        ));
-        $drop->save();
-
-        $removed = sxNewsletterCascade::deleteQueues($this->modx, 10);
-
-        $this->assertSame(1, $removed);
-        $this->assertSame(0, $this->modx->getCount('sxQueue', array('newsletter_id' => 10)));
-        $this->assertSame(1, $this->modx->getCount('sxQueue', array('newsletter_id' => 20)));
     }
 
     public function testNewsletterRemoveClearsQueuesAndSubscribers()
@@ -72,6 +47,8 @@ class NewsletterRemoveCascadeTest extends TestCase
         ));
         $other->save();
 
+        $this->assertCount(1, $newsletter->getMany('Queues'));
+
         $this->assertTrue($newsletter->remove());
         $this->assertSame(0, $this->modx->getCount('sxQueue', array('newsletter_id' => 10)));
         $this->assertSame(1, $this->modx->getCount('sxQueue', array('newsletter_id' => 99)));
@@ -89,6 +66,7 @@ class NewsletterRemoveCascadeTest extends TestCase
         );
 
         $this->assertStringContainsString('alias="Queues"', $schema);
+        $this->assertStringContainsString('owner="local"', $schema);
         $this->assertStringContainsString("'Queues'", $map);
     }
 }
