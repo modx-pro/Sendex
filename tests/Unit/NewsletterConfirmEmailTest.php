@@ -78,7 +78,9 @@ class NewsletterConfirmEmailTest extends TestCase
 
         $this->assertFalse($this->newsletter->confirmEmail('hash3'));
         $this->assertCount(0, $this->modx->subscribers);
-        $this->assertSame($entry, $this->modx->registryEntries['hash3']);
+        $this->assertArrayHasKey('hash3', $this->modx->registryEntries);
+        $this->assertSame(8, $this->modx->registryEntries['hash3']['user_id']);
+        $this->assertSame('other@example.com', $this->modx->registryEntries['hash3']['email']);
     }
 
     public function testPluginCancelKeepsHashForRetry()
@@ -88,12 +90,16 @@ class NewsletterConfirmEmailTest extends TestCase
             'user_id'       => 7,
             'newsletter_id' => 10,
             'email'         => 'retry@example.com',
+            '_expires'      => time() + 120,
         );
         $this->modx->registryEntries['hash-cancel'] = $entry;
 
         $this->assertSame('not allowed', $this->newsletter->confirmEmail('hash-cancel'));
         $this->assertCount(0, $this->modx->subscribers);
-        $this->assertSame($entry, $this->modx->registryEntries['hash-cancel']);
+        $this->assertArrayHasKey('hash-cancel', $this->modx->registryEntries);
+        $this->assertSame('retry@example.com', $this->modx->registryEntries['hash-cancel']['email']);
+        $this->assertLessThanOrEqual(120, $this->modx->lastRegisterTtl);
+        $this->assertGreaterThanOrEqual(118, $this->modx->lastRegisterTtl);
     }
 
     public function testSaveFailureKeepsHashForRetry()
@@ -121,7 +127,9 @@ class NewsletterConfirmEmailTest extends TestCase
 
         $this->assertFalse($this->newsletter->confirmEmail('hash-fail'));
         $this->assertCount(0, $this->modx->subscribers);
-        $this->assertSame($entry, $this->modx->registryEntries['hash-fail']);
+        $this->assertArrayHasKey('hash-fail', $this->modx->registryEntries);
+        $this->assertSame('fail@example.com', $this->modx->registryEntries['hash-fail']['email']);
+        $this->assertSame(sxSubscribeRegistry::DEFAULT_TTL, $this->modx->lastRegisterTtl);
     }
 
     public function testAlreadySubscribedStillConsumesHash()

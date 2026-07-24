@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/sxconfirmregistry.class.php';
+require_once dirname(__FILE__) . '/sxsubscriberegistry.class.php';
 
 class sxNewsletter extends xPDOSimpleObject
 {
@@ -142,22 +142,15 @@ class sxNewsletter extends xPDOSimpleObject
 
         $hash = sha1(uniqid(sha1($email), true));
 
-        /** @var modRegistry $registry */
-        $registry = $this->xpdo->getService('registry', 'registry.modRegistry');
-        $instance = $registry->getRegister('user', 'registry.modDbRegister');
-
-        $instance->connect();
-        $instance->subscribe('/sendex/subscribe/');
-        $instance->send(
-            '/sendex/subscribe/',
+        sxSubscribeRegistry::store(
+            $this->xpdo,
+            $hash,
             array(
-                $hash => array(
-                    'user_id'       => $user_id,
-                    'newsletter_id' => $this->id,
-                    'email'         => $email,
-                ),
+                'user_id'       => $user_id,
+                'newsletter_id' => $this->id,
+                'email'         => $email,
             ),
-            array('ttl' => $linkTTL)
+            $linkTTL
         );
 
         return $hash;
@@ -177,7 +170,7 @@ class sxNewsletter extends xPDOSimpleObject
             return false;
         }
 
-        $entry = sxConfirmRegistry::consume($this->xpdo, $hash);
+        $entry = sxSubscribeRegistry::consume($this->xpdo, $hash);
         if ($entry === null) {
             return false;
         }
@@ -197,7 +190,7 @@ class sxNewsletter extends xPDOSimpleObject
         }
 
         if ($result !== true) {
-            sxConfirmRegistry::restore($this->xpdo, $hash, $entry);
+            sxSubscribeRegistry::restore($this->xpdo, $hash, $entry);
         }
 
         return $result;

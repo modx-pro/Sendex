@@ -33,6 +33,7 @@ class FakeRegister
      */
     public function send($path, array $payload, array $options = array())
     {
+        $this->modx->lastRegisterTtl = isset($options['ttl']) ? (int) $options['ttl'] : null;
         foreach ($payload as $hash => $entry) {
             $this->entries[$hash] = $entry;
             $this->modx->registryEntries[$hash] = $entry;
