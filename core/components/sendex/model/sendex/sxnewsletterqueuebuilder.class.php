@@ -6,6 +6,9 @@ require_once dirname(__FILE__) . '/sxnewsletterqueueusers.class.php';
 
 /**
  * Build queue rows from newsletter subscribers.
+ *
+ * Post-#62 home of `sxNewsletter::addQueues` (#63 batch user load lives here via
+ * `sxNewsletterQueueUsers`; facade delegates from `sxnewsletter.class.php`).
  */
 class sxNewsletterQueueBuilder
 {
