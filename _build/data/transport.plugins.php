@@ -8,6 +8,9 @@ $tmp = array(
         'description' => '',
         'events'      => array(
             'OnManagerPageInit' => array(),
+            'OnUserActivate' => array(),
+            'OnBeforeUserActivate' => array(),
+            'OnUserSave' => array(),
         ),
     ),
 );

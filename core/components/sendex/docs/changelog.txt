@@ -19,7 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - [#67] / [#52] Schema and upgrade: Sendex tables use InnoDB; queue index renamed `user_id` → `subscriber_id`; `addQueues` stores `sxSubscriber.id` (not `user_id`); Phinx backfill remaps legacy queue rows (by user_id, guests by email).
-- [#54] `isSubscribed` matches by `user_id` OR `email` within a newsletter; unique key is `(newsletter_id, email)`; guest rows attach `user_id` when the same email confirms as a user (also covers main #39 cases; activate-merge handler still open).
+- [#54] `isSubscribed` matches by `user_id` OR `email` within a newsletter; unique key is `(newsletter_id, email)`; guest rows attach `user_id` when the same email confirms as a user.
+- [#39] Guest rows merge onto `modUser` on `OnUserActivate` / `OnBeforeUserActivate` / `OnUserSave` (`sxSubscriberMerge`); registration does not create a second subscriber row for the same email.
 - [#58] `confirmEmail` restores registry hash when `subscribe()` fails so the confirm link stays usable; remaining TTL kept via `_expires`; `checkEmail` shares `sxSubscribeRegistry::store`.
 - [#61] `sxSubscriber::save` keeps existing `code` (generate only when empty) so unsubscribe links stay valid.
 - [#53] Snippet: authenticated user without Profile no longer triggers TypeError on PHP 8; merge via `sxUserPlaceholders`.
