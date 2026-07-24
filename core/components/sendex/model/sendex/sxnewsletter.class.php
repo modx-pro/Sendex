@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__FILE__) . '/sxconfirmregistry.class.php';
+
 class sxNewsletter extends xPDOSimpleObject
 {
     /**
@@ -167,7 +169,7 @@ class sxNewsletter extends xPDOSimpleObject
      *
      * @param $hash
      *
-     * @return bool
+     * @return bool|string true on success, false on failure, or plugin cancel message
      */
     public function confirmEmail($hash)
     {
@@ -175,34 +177,30 @@ class sxNewsletter extends xPDOSimpleObject
             return false;
         }
 
-        /** @var modRegistry $registry */
-        $registry = $this->xpdo->getService('registry', 'registry.modRegistry');
-        $instance = $registry->getRegister('user', 'registry.modDbRegister');
-
-        $instance->connect();
-        $instance->subscribe('/sendex/subscribe/' . $hash);
-
-        $entry = $instance->read(array('poll_limit' => 1));
-        if (!empty($entry[0])) {
-            $entry = reset($entry);
-            if ($this->id != $entry['newsletter_id']) {
-                /** @var sxNewsletter $newsletter */
-                if (
-                    $newsletter = $this->xpdo->getObject('sxNewsletter', array(
-                    'id'     => $entry['newsletter_id'],
-                    'active' => 1,
-                    ))
-                ) {
-                    return $newsletter->subscribe($entry['user_id'], $entry['email']);
-                } else {
-                    return false;
-                }
-            } else {
-                return $this->subscribe($entry['user_id'], $entry['email']);
-            }
+        $entry = sxConfirmRegistry::consume($this->xpdo, $hash);
+        if ($entry === null) {
+            return false;
         }
 
-        return false;
+        $result = false;
+        if ($this->id != $entry['newsletter_id']) {
+            /** @var sxNewsletter $newsletter */
+            $newsletter = $this->xpdo->getObject('sxNewsletter', array(
+                'id'     => $entry['newsletter_id'],
+                'active' => 1,
+            ));
+            if ($newsletter) {
+                $result = $newsletter->subscribe($entry['user_id'], $entry['email']);
+            }
+        } else {
+            $result = $this->subscribe($entry['user_id'], $entry['email']);
+        }
+
+        if ($result !== true) {
+            sxConfirmRegistry::restore($this->xpdo, $hash, $entry);
+        }
+
+        return $result;
     }
 
 
