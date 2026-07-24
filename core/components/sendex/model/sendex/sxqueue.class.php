@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__FILE__) . '/sxqueuedeliver.class.php';
+
 class sxQueue extends xPDOSimpleObject
 {
     /** {inheritDoc} */
@@ -32,31 +34,34 @@ class sxQueue extends xPDOSimpleObject
     /**
      * Sends an email to subscriber
      *
-     * @return bool
+     * @return bool|string
      */
     public function send()
     {
-        /** @var modPHPMailer $mail */
-        $mail = $this->xpdo->getService('mail', 'mail.modPHPMailer');
-        $mail->set(modMail::MAIL_BODY, $this->email_body);
-        $mail->set(modMail::MAIL_FROM, $this->email_from);
-        $mail->set(modMail::MAIL_FROM_NAME, $this->email_from_name);
-        $mail->set(modMail::MAIL_SUBJECT, $this->email_subject);
-        $mail->address('to', $this->email_to);
-        $mail->address('reply-to', $this->email_reply);
-        $mail->setHTML(true);
-        if (!$mail->send()) {
-            $this->xpdo->log(
-                xPDO::LOG_LEVEL_ERROR,
-                'An error occurred while trying to send the email: '
-                    . $mail->mailer->ErrorInfo
-            );
+        $queue = $this;
+
+        return sxQueueDeliver::send($this, function () use ($queue) {
+            /** @var modPHPMailer $mail */
+            $mail = $queue->xpdo->getService('mail', 'mail.modPHPMailer');
+            $mail->set(modMail::MAIL_BODY, $queue->email_body);
+            $mail->set(modMail::MAIL_FROM, $queue->email_from);
+            $mail->set(modMail::MAIL_FROM_NAME, $queue->email_from_name);
+            $mail->set(modMail::MAIL_SUBJECT, $queue->email_subject);
+            $mail->address('to', $queue->email_to);
+            $mail->address('reply-to', $queue->email_reply);
+            $mail->setHTML(true);
+            if (!$mail->send()) {
+                $queue->xpdo->log(
+                    xPDO::LOG_LEVEL_ERROR,
+                    'An error occurred while trying to send the email: '
+                        . $mail->mailer->ErrorInfo
+                );
+                $mail->reset();
+                return $mail->mailer->ErrorInfo;
+            }
+
             $mail->reset();
-            return $mail->mailer->ErrorInfo;
-        } else {
-            $mail->reset();
-            $this->remove();
             return true;
-        }
+        });
     }
 }
