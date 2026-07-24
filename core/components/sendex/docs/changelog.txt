@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#46] Search subscribers and queue by email or username.
 - [#44] Plugin events for subscribe/unsubscribe (`sxOnBeforeSubscribe`, `sxOnSubscribe`, `sxOnBeforeUnsubscribe`, `sxOnUnsubscribe`).
 - PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
+- Phinx migrations (MiniShop3-style): `core/components/sendex/phinx.php`, `migrations/`, install/upgrade resolver; metadata table `{prefix}sendex_migrations`.
 
 ### Fixed
 - [#54] `isSubscribed` matches by `user_id` OR `email` within a newsletter; unique key is `(newsletter_id, email)`; guest rows attach `user_id` when the same email confirms as a user (also covers main #39 cases; activate-merge handler still open).
@@ -32,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `subscribe()` method name normalized to camelCase (PHP method names are case-insensitive; `Subscribe()` calls still work).
 - Declared PHP 7.4–8.4 support; CI lint matrix.
 - Track `composer.lock` in git (removed from `.gitignore`) for reproducible CI installs.
+- Package schema install/upgrade runs via Phinx instead of ad-hoc `resolve.tables` Manager calls.
 
 ## [1.1.4-pl] - 2022-12-23
 

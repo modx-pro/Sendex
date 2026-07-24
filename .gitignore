@@ -7,5 +7,6 @@
 
 # Composer / PHPUnit
 /vendor/
+core/components/sendex/vendor/
 .phpunit.result.cache
 /coverage/

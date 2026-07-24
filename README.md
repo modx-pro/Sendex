@@ -17,6 +17,33 @@ Sendex runs email newsletters in MODX Revolution: subscribers, a send queue, and
 
 Install the transport package through Package Management, or build one from `_build/`.
 
+### Database migrations (Phinx)
+
+Schema changes ship as Phinx migrations (same pattern as MiniShop3):
+
+- Config: `core/components/sendex/phinx.php`
+- Migrations: `core/components/sendex/migrations/`
+- Metadata table: `{table_prefix}sendex_migrations`
+
+Before building the transport package, install runtime deps into the component:
+
+```
+cd core/components/sendex
+composer install --no-dev
+cd ../../..
+php _build/build.transport.php
+```
+
+On install/upgrade the `migrations` resolver runs `phinx migrate`. CLI on a live site:
+
+```
+cd core/components/sendex
+composer install --no-dev
+vendor/bin/phinx migrate -c phinx.php
+```
+
+Root `composer.json` remains for PHPUnit/phpcs only.
+
 ## Front-end
 
 ```
@@ -51,7 +78,7 @@ composer test
 composer test:coverage   # needs phpdbg
 ```
 
-Unit tests use lightweight MODX/xPDO stubs (no MODX install). Covered: `sxNewsletter` (100%), subscriber create/remove processors. CI runs `php -l` and PHPUnit on PHP 7.4–8.4.
+Unit tests use lightweight MODX/xPDO stubs (no MODX install). Covered: `sxNewsletter` (100%), subscriber create/remove processors. CI runs `php -l`, PHPUnit, and phpcs on PHP 7.4–8.4.
 
 ## Plugin events
 
