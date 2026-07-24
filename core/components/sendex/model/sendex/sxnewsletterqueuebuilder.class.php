@@ -2,6 +2,7 @@
 
 require_once dirname(__FILE__) . '/sxqueuelink.class.php';
 require_once dirname(__FILE__) . '/sxnewslettermailer.class.php';
+require_once dirname(__FILE__) . '/sxnewsletterqueueusers.class.php';
 
 /**
  * Build queue rows from newsletter subscribers.
@@ -51,6 +52,15 @@ class sxNewsletterQueueBuilder
         $newsletterId = (int) $newsletter->id;
         $before = (int) $xpdo->getCount('sxQueue', array('newsletter_id' => $newsletterId));
 
+        $userIds = array();
+        foreach ($subscribers as $subscriber) {
+            $userId = (int) $subscriber->get('user_id');
+            if ($userId > 0) {
+                $userIds[] = $userId;
+            }
+        }
+        $userContexts = sxNewsletterQueueUsers::loadContexts($xpdo, $userIds);
+
         /** @var sxSubscriber $subscriber */
         foreach ($subscribers as $subscriber) {
             $scriptProperties = array(
@@ -58,16 +68,14 @@ class sxNewsletterQueueBuilder
                 'subscriber' => $subscriber->toArray(),
             );
 
-            /** @var modUser $user */
-            if ($subscriber->get('user_id') && $user = $xpdo->getObject('modUser', $subscriber->user_id)) {
-                /** @var modUserProfile|null $profile */
-                $profile = $user->getOne('Profile');
-
-                if (!$profile || !$user->active || $profile->blocked) {
+            $userId = (int) $subscriber->get('user_id');
+            if ($userId > 0) {
+                if (isset($userContexts['eligible'][$userId])) {
+                    $scriptProperties['user'] = $userContexts['eligible'][$userId]['user'];
+                    $scriptProperties['profile'] = $userContexts['eligible'][$userId]['profile'];
+                } elseif (in_array($userId, $userContexts['loadedIds'], true)) {
                     continue;
                 }
-                $scriptProperties['user'] = $user->toArray();
-                $scriptProperties['profile'] = $profile->toArray();
             }
 
             $email = $subscriber->email;

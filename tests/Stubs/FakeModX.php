@@ -50,6 +50,12 @@ class FakeModX extends modX
     /** @var array<int,array{0:string,1:array}> */
     public $invoked = array();
 
+    /** @var array<string,int> */
+    public $getObjectCalls = array();
+
+    /** @var array<string,int> */
+    public $getCollectionCalls = array();
+
     /** @var array<string,bool> */
     public $permissions = array(
         'edit_document' => true,
@@ -185,6 +191,10 @@ class FakeModX extends modX
      */
     public function getObject($class, $criteria = null)
     {
+        if (!isset($this->getObjectCalls[$class])) {
+            $this->getObjectCalls[$class] = 0;
+        }
+        $this->getObjectCalls[$class]++;
         if ($class === 'modUserProfile') {
             if (is_array($criteria) && isset($criteria['email'])) {
                 $want = strtolower((string) $criteria['email']);
@@ -309,6 +319,19 @@ class FakeModX extends modX
      */
     public function getCollection($class, $criteria = null)
     {
+        if (!isset($this->getCollectionCalls[$class])) {
+            $this->getCollectionCalls[$class] = 0;
+        }
+        $this->getCollectionCalls[$class]++;
+
+        if ($class === 'modUser') {
+            return $this->userCollection($criteria);
+        }
+
+        if ($class === 'modUserProfile') {
+            return $this->userProfileCollection($criteria);
+        }
+
         if ($class === 'sxQueue') {
             return $this->queueCollection($criteria);
         }
@@ -332,6 +355,63 @@ class FakeModX extends modX
         }
 
         return $out;
+    }
+
+    /**
+     * @param FakeQuery|array|null $criteria
+     *
+     * @return modUser[]
+     */
+    protected function userCollection($criteria)
+    {
+        $ids = $this->inCriteria($criteria, 'id');
+        $out = array();
+        foreach ($this->users as $id => $user) {
+            if ($ids && !in_array((int) $id, $ids, true)) {
+                continue;
+            }
+            $out[] = $user;
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param FakeQuery|array|null $criteria
+     *
+     * @return modUserProfile[]
+     */
+    protected function userProfileCollection($criteria)
+    {
+        $ids = $this->inCriteria($criteria, 'internalKey');
+        $out = array();
+        foreach ($this->userProfiles as $userId => $profile) {
+            if ($ids && !in_array((int) $userId, $ids, true)) {
+                continue;
+            }
+            $out[] = $profile;
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param FakeQuery|array|null $criteria
+     * @param string $field
+     *
+     * @return int[]|null
+     */
+    protected function inCriteria($criteria, $field)
+    {
+        $key = $field . ':IN';
+        if ($criteria instanceof FakeQuery && isset($criteria->where[$key])) {
+            return array_map('intval', $criteria->where[$key]);
+        }
+        if (is_array($criteria) && isset($criteria[$key])) {
+            return array_map('intval', $criteria[$key]);
+        }
+
+        return null;
     }
 
     /**
