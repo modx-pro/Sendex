@@ -14,6 +14,8 @@ if (!($Sendex instanceof Sendex)) {
     return '';
 }
 
+require_once $corePath . 'model/sendex/sxuserplaceholders.class.php';
+
 $tplSubscribeAuth = $modx->getOption('tplSubscribeAuth', $scriptProperties, 'tpl.Sendex.subscribe.auth');
 $tplSubscribeGuest = $modx->getOption('tplSubscribeGuest', $scriptProperties, 'tpl.Sendex.subscribe.guest');
 $tplUnsubscribe = $modx->getOption('tplUnsubscribe', $scriptProperties, 'tpl.Sendex.unsubscribe');
@@ -37,12 +39,12 @@ $placeholders['class'] = '';
 $placeholders['error'] = 0;
 $isAuthenticated = $modx->user->isAuthenticated($modx->context->key);
 if ($isAuthenticated) {
-    $userData = $modx->user->toArray();
     $profile = $modx->user->getOne('Profile');
-    if ($profile) {
-        $userData = array_merge($userData, $profile->toArray());
-    }
-    $placeholders = array_merge($userData, $placeholders);
+    $placeholders = sxUserPlaceholders::mergeAuthenticated(
+        $modx->user->toArray(),
+        $profile ? $profile->toArray() : null,
+        $placeholders
+    );
 }
 
 if (!empty($_REQUEST['sx_action'])) {

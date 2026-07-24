@@ -24,7 +24,11 @@ class sxSubscriber extends xPDOSimpleObject
         if (sxSubscriberCode::needsNewCode($this->get('code'))) {
             $this->set(
                 'code',
-                sxSubscriberCode::generate($this->user_id, $this->newsletter_id, $this->email)
+                sxSubscriberCode::generate(
+                    $this->get('user_id'),
+                    $this->get('newsletter_id'),
+                    $this->get('email')
+                )
             );
         }
 
