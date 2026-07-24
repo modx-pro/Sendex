@@ -34,6 +34,7 @@ Sendex.grid.Queues = function(config) {
                 }
             },
             '->',
+            Sendex.utils.getSearchField(this),
             {
                 xtype: 'button',
                 text: '<i class="' + (MODx.modx23 ? 'icon icon-trash-o' : 'fa fa-trash-o') + '"></i> ' + _('sendex_btn_remove_all'),
@@ -48,12 +49,12 @@ Sendex.grid.Queues = function(config) {
             }
         ]
         /*
-         listeners: {
-             rowDblClick: function(grid, rowIndex, e) {
-                 var row = grid.store.getAt(rowIndex);
-                 this.update(grid, e, row);
-             }
-         }
+        listeners: {
+            rowDblClick: function(grid, rowIndex, e) {
+                var row = grid.store.getAt(rowIndex);
+                this.update(grid, e, row);
+            }
+        }
          */
     });
 

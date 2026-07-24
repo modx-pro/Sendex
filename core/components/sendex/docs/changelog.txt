@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CSV cells that look like spreadsheet formulas are prefixed so Excel/LibreOffice do not execute them.
 
 ### Added
+- [#46] Search subscribers and queue by email or username.
 - [#44] Plugin events for subscribe/unsubscribe (`sxOnBeforeSubscribe`, `sxOnSubscribe`, `sxOnBeforeUnsubscribe`, `sxOnUnsubscribe`).
 - PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
 

@@ -388,7 +388,8 @@ Sendex.grid.NewsletterSubscribers = function(config) {
             }
         }
         ,'->'
-        , {
+        ,Sendex.utils.getSearchField(this)
+        ,{
             xtype: 'sendex-combo-group'
             ,name: 'group_id'
             ,hiddenName: 'group_id'

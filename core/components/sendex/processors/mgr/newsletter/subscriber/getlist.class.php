@@ -4,6 +4,8 @@
  * Get a list of Subscribers
  */
 
+require_once dirname(dirname(__DIR__)) . '/likequery.class.php';
+
 class sxSubscriberGetListProcessor extends modObjectGetListProcessor
 {
     public $objectType = 'sxSubscriber';
@@ -25,6 +27,14 @@ class sxSubscriberGetListProcessor extends modObjectGetListProcessor
 
         $c->select($this->modx->getSelectColumns($this->classKey, $this->classKey));
         $c->select('modUser.username, modUserProfile.fullname');
+
+        $like = SendexLikeQuery::prepare($this->getProperty('query', ''));
+        if ($like !== null) {
+            $c->where(array(
+                'email:LIKE' => $like,
+                'OR:modUser.username:LIKE' => $like,
+            ));
+        }
 
         return $c;
     }

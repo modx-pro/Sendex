@@ -45,6 +45,45 @@ Sendex.utils.getMenu = function(actions, grid) {
     return menu;
 };
 
+Sendex.utils.getSearchField = function(grid, config) {
+    config = config || {};
+    var doSearch = function(field) {
+        var store = grid.getStore();
+        var value = field.getValue();
+        store.baseParams.query = value || '';
+        var pager = grid.getBottomToolbar();
+        if (pager && pager.changePage) {
+            pager.changePage(1);
+        } else {
+            store.reload();
+        }
+    };
+
+    return Ext.apply({
+        xtype: 'textfield'
+        ,name: 'query'
+        ,emptyText: _('sendex_search')
+        ,width: 200
+        ,enableKeyEvents: true
+        ,listeners: {
+            change: {
+                fn: function(field) {
+                    doSearch(field);
+                }
+                ,scope: grid
+            }
+            ,specialkey: {
+                fn: function(field, e) {
+                    if (e.getKey() === Ext.EventObject.ENTER) {
+                        doSearch(field);
+                    }
+                }
+                ,scope: grid
+            }
+        }
+    }, config);
+};
+
 Sendex.utils.onAjax = function(el) {
     Ext.Ajax.el = el;
     Ext.Ajax.on('beforerequest', Sendex.utils.beforerequest);
