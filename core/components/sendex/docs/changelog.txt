@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Newsletter create processor class renamed to `sxNewsletterCreateProcessor`.
 - `subscribe()` method name normalized to camelCase (PHP method names are case-insensitive; `Subscribe()` calls still work).
 - Declared PHP 7.4–8.4 support; CI lint matrix.
+- Track `composer.lock` in git (removed from `.gitignore`) for reproducible CI installs.
 
 ## [1.1.4-pl] - 2022-12-23
 
