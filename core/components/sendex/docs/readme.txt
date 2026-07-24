@@ -7,6 +7,8 @@ Author: Vasily Naumkin <bezumkin@yandex.ru>
 Sendex runs email newsletters in MODX Revolution: subscribers, a send
 queue, and a front-end form.
 
+Requires PHP 7.4–8.4 and MODX Revolution 2.x.
+
 Features:
 - Newsletters and subscribers in the manager
 - Add users one by one or from a MODX user group (active and unblocked

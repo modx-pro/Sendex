@@ -11,14 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#51] Subscriber export goes through the authenticated manager connector (no public CSV under `assets/`); processor requires `edit_document`.
 - CSV cells that look like spreadsheet formulas are prefixed so Excel/LibreOffice do not execute them.
 
+### Added
+- [#44] Plugin events for subscribe/unsubscribe (`sxOnBeforeSubscribe`, `sxOnSubscribe`, `sxOnBeforeUnsubscribe`, `sxOnUnsubscribe`).
+- PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
+
 ### Fixed
 - [#47] Adding a user group to a newsletter subscribes only active and unblocked users.
 - `add_group`: cast `group_id` and `newsletter_id` to int; require user Profile (`innerJoin`).
+- `confirmEmail` returns the `subscribe()` result when confirming a hash for another newsletter.
+- PHP 7.4–8.4: dynamic properties, null Profile in `addQueues`, PHPMailer `ErrorInfo`.
 
 ### Changed
 - `add_group` processor requires `edit_document` permission.
 - Newsletter create processor class renamed to `sxNewsletterCreateProcessor`.
 - `subscribe()` method name normalized to camelCase (PHP method names are case-insensitive; `Subscribe()` calls still work).
+- Declared PHP 7.4–8.4 support; CI lint matrix.
 
 ## [1.1.4-pl] - 2022-12-23
 

@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
-    bootstrap="tests/bootstrap.php"
-    colors="true"
-    cacheResult="false">
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
+         bootstrap="tests/bootstrap.php"
+         colors="true"
+         cacheResult="false"
+         beStrictAboutOutputDuringTests="true">
     <testsuites>
         <testsuite name="Sendex">
             <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
+    <coverage>
+        <include>
+            <file>core/components/sendex/model/sendex/sxnewsletter.class.php</file>
+            <file>core/components/sendex/processors/mgr/newsletter/subscriber/create.class.php</file>
+            <file>core/components/sendex/processors/mgr/newsletter/subscriber/remove.class.php</file>
+        </include>
+    </coverage>
 </phpunit>

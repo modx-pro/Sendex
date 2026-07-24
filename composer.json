@@ -7,11 +7,22 @@
         "php": ">=7.4 <8.5"
     },
     "require-dev": {
+        "phpunit/php-code-coverage": "^9.2",
         "phpunit/phpunit": "^9.6.22",
         "squizlabs/php_codesniffer": "3.13.4"
     },
+    "suggest": {
+        "ext-pdo": "Required for MODX database access",
+        "ext-json": "Required for manager JSON responses"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sendex\\Tests\\": "tests/"
+        }
+    },
     "scripts": {
         "test": "phpunit",
+        "test:coverage": "phpdbg -qrr vendor/bin/phpunit --coverage-text",
         "phpcs": "phpcs --standard=phpcs.xml"
     },
     "config": {

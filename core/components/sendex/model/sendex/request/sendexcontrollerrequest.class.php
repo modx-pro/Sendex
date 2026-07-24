@@ -12,6 +12,8 @@ class SendexControllerRequest extends modRequest
     public $Sendex = null;
     public $actionVar = 'action';
     public $defaultAction = 'home';
+    /** @var string */
+    public $action = '';
 
 
     /**

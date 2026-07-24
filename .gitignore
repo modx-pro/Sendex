@@ -4,6 +4,8 @@
 # VSCode
 .vscode
 
+# Composer / PHPUnit
 /vendor/
+.phpunit.result.cache
 /coverage/
 composer.lock
