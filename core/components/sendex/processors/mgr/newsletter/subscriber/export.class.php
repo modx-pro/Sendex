@@ -1,97 +1,80 @@
 <?php
 
 /**
- * Export Subscribers
+ * Export subscribers as CSV through the authenticated mgr connector.
+ * Does not write files under assets/ or return a public URL.
  */
+
+require_once dirname(__FILE__, 5) . '/model/sendex/sxsubscribercsv.class.php';
 
 class sxSubscribersExportProcessor extends modObjectProcessor
 {
     public $objectType = 'sxSubscriber';
     public $classKey = 'sxSubscriber';
     public $languageTopics = array('sendex');
-    public $permission = '';
+    /** Matches other newsletter mutation processors; blocks anonymous connector calls. */
+    public $permission = 'edit_document';
 
 
     /**
-     * @return json
+     * @return array|string
      */
     public function process()
     {
-
-        if (!$newsletter_id = $this->getProperty('newsletter_id')) {
+        $newsletterId = (int) $this->getProperty('newsletter_id');
+        if (!$newsletterId) {
             return $this->failure($this->modx->lexicon('sendex_newsletter_err_ns'));
         }
 
-        $assetsUrl = $this->modx->getOption(
-            'sendex_assets_url',
-            null,
-            $this->modx->getOption('assets_url') . 'components/sendex/',
-            true
+        $fields = sxSubscriberCsv::resolveFields(
+            $this->modx->getOption('sendex_export_fields', null, 'email', true)
         );
+        if (empty($fields)) {
+            return $this->failure($this->modx->lexicon('sendex_subscribers_export_fields_err'));
+        }
 
-        $optionFields = array_map(
-            'trim',
-            explode(
-                ',',
-                $this->modx->getOption('sendex_export_fields', null, 'email', true)
-            )
-        );
-        $allowedFields = [
-        'id',
-        'user_id',
-        'email',
-        'username',
-        'fullname',
-        'phone',
-        'mobilephone',
-        ];
-        $exportFields = array_intersect($optionFields, $allowedFields);
-        $selectfields = [];
+        $rows = $this->fetchRows($newsletterId, $fields);
+        if ($rows === null) {
+            return $this->failure($this->modx->lexicon('sendex_subscribers_export_error'));
+        }
 
+        $filename = 'subscribers_' . date('Ymd-His') . '.csv';
+
+        return $this->success('', array(
+            'filename' => $filename,
+            'csv' => sxSubscriberCsv::encode($rows),
+        ));
+    }
+
+
+    /**
+     * @param int $newsletterId
+     * @param string[] $fields
+     * @return array[]|null Null when the query cannot be executed
+     */
+    protected function fetchRows($newsletterId, array $fields)
+    {
         $q = $this->modx->newQuery($this->classKey);
+        $q->select(sxSubscriberCsv::selectColumns($fields, $this->classKey));
 
-        foreach ($exportFields as $field) {
-            if (in_array($field, ['fullname', 'phone', 'mobilephone'])) {
-                $selectfields[] = 'Profile.' . $field;
-            } elseif ($field == 'username') {
-                $selectfields[] = 'User.' . $field;
-            } else {
-                $selectfields[] =  $this->classKey . '.' . $field;
-            }
+        if (sxSubscriberCsv::needsUserJoin($fields)) {
+            $q->leftJoin('modUser', 'User', '`User`.`id`=`sxSubscriber`.`user_id`');
+        }
+        if (sxSubscriberCsv::needsProfileJoin($fields)) {
+            $q->leftJoin(
+                'modUserProfile',
+                'Profile',
+                'Profile.internalKey = sxSubscriber.user_id'
+            );
         }
 
-        foreach ($exportFields as $field) {
-            if ($field == 'username') {
-                $q->leftJoin('modUser', 'User', '`User`.`id`=`sxSubscriber`.`user_id`');
-                break;
-            }
+        $q->where(array('sxSubscriber.newsletter_id' => $newsletterId));
+        if (!$q->prepare() || !is_object($q->stmt) || !$q->stmt->execute()) {
+            return null;
         }
 
-        foreach ($exportFields as $field) {
-            if (in_array($field, ['fullname', 'phone', 'mobilephone'])) {
-                $q->leftJoin('modUserProfile', 'Profile', 'Profile.internalKey = sxSubscriber.user_id');
-                break;
-            }
-        }
-
-        $q->select($selectfields);
-        $q->where(array('sxSubscriber.newsletter_id' => $newsletter_id));
-
-        $out = [
-            'success' => true,
-            'url'     => $assetsUrl . 'subscribers.csv?' . time(),
-        ];
-        $fp = fopen('subscribers.csv', 'w');
-
-        $q->prepare();
-        $q->stmt->execute();
         $rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($rows as $row) {
-            fputcsv($fp, $row);
-        }
-        fclose($fp);
-
-        return json_encode($out, 256);
+        return is_array($rows) ? $rows : array();
     }
 }
 
