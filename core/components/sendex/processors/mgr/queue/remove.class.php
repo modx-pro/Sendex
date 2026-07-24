@@ -1,10 +1,11 @@
 <?php
 
-/**
- * Remove an Newsletter
- */
+require_once dirname(__DIR__) . '/sendexprocessor.class.php';
 
-class sxQueueRemoveProcessor extends modProcessor
+/**
+ * Remove queue rows
+ */
+class sxQueueRemoveProcessor extends sxSendexProcessor
 {
     public $classKey = 'sxQueue';
 
@@ -12,8 +13,12 @@ class sxQueueRemoveProcessor extends modProcessor
     /** {inheritDoc} */
     public function process()
     {
-        if (!$ids = explode(',', $this->getProperty('ids'))) {
-            return $this->failure($this->modx->lexicon('sendex_queue_err_ns'));
+        if ($failure = $this->failureIfNoPermission()) {
+            return $failure;
+        }
+        list($ids, $failure) = $this->requireIds('sendex_queue_err_ns');
+        if ($failure) {
+            return $failure;
         }
 
         $queues = $this->modx->getIterator($this->classKey, array('id:IN' => $ids));

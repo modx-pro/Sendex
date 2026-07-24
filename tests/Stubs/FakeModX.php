@@ -50,6 +50,13 @@ class FakeModX extends modX
     /** @var array<int,array{0:string,1:array}> */
     public $invoked = array();
 
+    /** @var array<string,bool> */
+    public $permissions = array(
+        'edit_document' => true,
+        'new_document'  => true,
+        'view_document' => true,
+    );
+
     /** @var array<int,array{0:mixed,1:string}> */
     public $logs = array();
 
@@ -96,6 +103,10 @@ class FakeModX extends modX
      */
     public function lexicon($key, $params = array())
     {
+        if ($key === 'access_denied') {
+            return 'access_denied';
+        }
+
         if (!is_array($params) || $params === array()) {
             return $key;
         }
@@ -106,6 +117,16 @@ class FakeModX extends modX
         }
 
         return $out;
+    }
+
+    /**
+     * @param string $permission
+     *
+     * @return bool
+     */
+    public function hasPermission($permission)
+    {
+        return !empty($this->permissions[$permission]);
     }
 
     /**

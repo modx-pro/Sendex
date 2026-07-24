@@ -1,12 +1,12 @@
 <?php
 
-require_once dirname(dirname(dirname(dirname(__FILE__))))
-    . '/model/sendex/sxqueuesender.class.php';
+require_once dirname(__DIR__) . '/sendexprocessor.class.php';
+require_once dirname(__FILE__, 4) . '/model/sendex/sxqueuesender.class.php';
 
 /**
  * Send queue rows by id (mgr).
  */
-class sxQueueSendProcessor extends modProcessor
+class sxQueueSendProcessor extends sxSendexProcessor
 {
     public $classKey = 'sxQueue';
 
@@ -14,9 +14,12 @@ class sxQueueSendProcessor extends modProcessor
     /** {inheritDoc} */
     public function process()
     {
-        $ids = explode(',', (string) $this->getProperty('ids'));
-        if (!$ids || $ids === array('')) {
-            return $this->failure($this->modx->lexicon('sendex_queue_err_ns'));
+        if ($failure = $this->failureIfNoPermission()) {
+            return $failure;
+        }
+        list($ids, $failure) = $this->requireIds('sendex_queue_err_ns');
+        if ($failure) {
+            return $failure;
         }
 
         $stats = sxQueueSender::flush($this->modx, array(

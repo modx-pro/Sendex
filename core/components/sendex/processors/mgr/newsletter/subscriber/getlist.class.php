@@ -12,6 +12,7 @@ class sxSubscriberGetListProcessor extends modObjectGetListProcessor
     public $classKey = 'sxSubscriber';
     public $defaultSortField = 'id';
     public $defaultSortDirection = 'DESC';
+    public $permission = 'view_document';
 
 
     /**

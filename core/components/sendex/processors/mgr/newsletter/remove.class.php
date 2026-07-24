@@ -1,10 +1,11 @@
 <?php
 
+require_once dirname(__DIR__) . '/sendexprocessor.class.php';
+
 /**
  * Remove an Newsletters
  */
-
-class sxNewsletterRemoveProcessor extends modProcessor
+class sxNewsletterRemoveProcessor extends sxSendexProcessor
 {
     public $classKey = 'sxNewsletter';
 
@@ -12,8 +13,12 @@ class sxNewsletterRemoveProcessor extends modProcessor
     /** {inheritDoc} */
     public function process()
     {
-        if (!$ids = explode(',', $this->getProperty('ids'))) {
-            return $this->failure($this->modx->lexicon('sendex_newsletters_err_ns'));
+        if ($failure = $this->failureIfNoPermission()) {
+            return $failure;
+        }
+        list($ids, $failure) = $this->requireIds('sendex_newsletters_err_ns');
+        if ($failure) {
+            return $failure;
         }
 
         $newsletters = $this->modx->getIterator($this->classKey, array('id:IN' => $ids));

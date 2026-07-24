@@ -26,6 +26,18 @@ class SubscriberCreateProcessorTest extends TestCase
         $this->assertSame('sendex_subscriber_err_save', $result['message']);
     }
 
+    public function testRequiresPermission()
+    {
+        $this->modx->permissions['edit_document'] = false;
+        $this->processor->properties = array(
+            'user_id'       => 5,
+            'newsletter_id' => 10,
+        );
+        $result = $this->processor->process();
+        $this->assertFalse($result['success']);
+        $this->assertSame('access_denied', $result['message']);
+    }
+
     public function testFailsWithoutProfile()
     {
         $this->processor->properties = array(

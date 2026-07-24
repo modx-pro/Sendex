@@ -27,6 +27,23 @@ class SubscriberRemoveProcessorTest extends TestCase
         $this->assertSame('sendex_subscribers_err_ns', $result['message']);
     }
 
+    public function testRejectsCommaOnlyIds()
+    {
+        $this->processor->properties = array('ids' => '0,');
+        $result = $this->processor->process();
+        $this->assertFalse($result['success']);
+        $this->assertSame('sendex_subscribers_err_ns', $result['message']);
+    }
+
+    public function testRequiresPermission()
+    {
+        $this->modx->permissions['edit_document'] = false;
+        $this->processor->properties = array('ids' => '1');
+        $result = $this->processor->process();
+        $this->assertFalse($result['success']);
+        $this->assertSame('access_denied', $result['message']);
+    }
+
     public function testRemovesViaUnSubscribe()
     {
         $subscriber = new sxSubscriber($this->modx);
