@@ -121,3 +121,4 @@ $_lang['sendex_action_sendQueue'] = 'Send email';
 $_lang['sendex_subscribers_export_confirm_title'] = 'Confirm export';
 $_lang['sendex_subscribers_export_confirm_text'] = 'Export email addresses?';
 $_lang['sendex_subscribers_export_error'] = 'Error while exporting subscribers!';
+$_lang['sendex_subscribers_export_fields_err'] = 'No valid export fields configured.';
