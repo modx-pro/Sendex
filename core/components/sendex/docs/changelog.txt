@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
 
 ### Fixed
+- [#61] `sxSubscriber::save` keeps existing `code` (generate only when empty) so unsubscribe links stay valid.
 - [#53] Snippet: authenticated user without Profile no longer triggers TypeError on PHP 8 (`getOne('Profile')` before merge).
 - [#47] Adding a user group to a newsletter subscribes only active and unblocked users.
 - `add_group`: cast `group_id` and `newsletter_id` to int; require user Profile (`innerJoin`).
