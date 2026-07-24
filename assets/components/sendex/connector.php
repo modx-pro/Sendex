@@ -13,6 +13,6 @@ $modx->lexicon->load('sendex:default');
 /* handle request */
 $path = $modx->getOption('processorsPath', $modx->sendex->config, $corePath . 'processors/');
 $modx->request->handleRequest(array(
-	'processors_path' => $path,
-	'location' => '',
+    'processors_path' => $path,
+    'location'        => '',
 ));

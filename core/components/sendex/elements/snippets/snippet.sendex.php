@@ -1,14 +1,26 @@
 <?php
-/** @var array $scriptProperties */
-/** @var Sendex $Sendex */
-$Sendex = $modx->getService('sendex','Sendex',$modx->getOption('sendex_core_path',null,$modx->getOption('core_path').'components/sendex/').'model/sendex/',$scriptProperties);
-if (!($Sendex instanceof Sendex)) return '';
 
-$tplSubscribeAuth = $modx->getOption('tplSubscribeAuth',$scriptProperties,'tpl.Sendex.subscribe.auth');
-$tplSubscribeGuest = $modx->getOption('tplSubscribeGuest',$scriptProperties,'tpl.Sendex.subscribe.guest');
-$tplUnsubscribe = $modx->getOption('tplUnsubscribe',$scriptProperties,'tpl.Sendex.unsubscribe');
-$tplActivate = $modx->getOption('tplActivate',$scriptProperties,'tpl.Sendex.activate');
-if (empty($linkTTL)) {$linkTTL = 1800;}
+/** @var array $scriptProperties */
+
+/** @var Sendex $Sendex */
+
+$corePath = $modx->getOption(
+    'sendex_core_path',
+    null,
+    $modx->getOption('core_path') . 'components/sendex/'
+);
+$Sendex = $modx->getService('sendex', 'Sendex', $corePath . 'model/sendex/', $scriptProperties);
+if (!($Sendex instanceof Sendex)) {
+    return '';
+}
+
+$tplSubscribeAuth = $modx->getOption('tplSubscribeAuth', $scriptProperties, 'tpl.Sendex.subscribe.auth');
+$tplSubscribeGuest = $modx->getOption('tplSubscribeGuest', $scriptProperties, 'tpl.Sendex.subscribe.guest');
+$tplUnsubscribe = $modx->getOption('tplUnsubscribe', $scriptProperties, 'tpl.Sendex.unsubscribe');
+$tplActivate = $modx->getOption('tplActivate', $scriptProperties, 'tpl.Sendex.activate');
+if (empty($linkTTL)) {
+    $linkTTL = 1800;
+}
 
 if (empty($id) || !$newsletter = $modx->getObject('sxNewsletter', $id)) {
     return $modx->lexicon('sendex_newsletter_err_ns');
@@ -43,7 +55,7 @@ if (!empty($_REQUEST['sx_action'])) {
     switch ($_REQUEST['sx_action']) {
         case 'subscribe':
             if ($isAuthenticated && $modx->user->id) {
-                if (!$response = $newsletter->Subscribe($modx->user->id)) {
+                if (!$response = $newsletter->subscribe($modx->user->id)) {
                     $placeholders['message'] = $modx->lexicon('sendex_subscribe_err_email_wrong');
                     $placeholders['error'] = 1;
                 }
@@ -100,7 +112,7 @@ if (!empty($_REQUEST['sx_action'])) {
 }
 
 if (!empty($placeholders['message'])) {
-    $placeholders['class'] = $modx->getOption('msgClass',$scriptProperties,'active');
+    $placeholders['class'] = $modx->getOption('msgClass', $scriptProperties, 'active');
 }
 
 if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {

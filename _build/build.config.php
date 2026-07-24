@@ -12,11 +12,11 @@ define('PKG_NAMESPACE_PATH', '{core_path}components/' . PKG_NAME_LOWER . '/');
 
 /* define paths */
 if (isset($_SERVER['MODX_BASE_PATH'])) {
-	define('MODX_BASE_PATH', $_SERVER['MODX_BASE_PATH']);
+    define('MODX_BASE_PATH', $_SERVER['MODX_BASE_PATH']);
 } elseif (file_exists(dirname(dirname(dirname(__FILE__))) . '/core')) {
-	define('MODX_BASE_PATH', dirname(dirname(dirname(__FILE__))) . '/');
+    define('MODX_BASE_PATH', dirname(dirname(dirname(__FILE__))) . '/');
 } else {
-	define('MODX_BASE_PATH', dirname(dirname(dirname(dirname(__FILE__)))) . '/');
+    define('MODX_BASE_PATH', dirname(dirname(dirname(dirname(__FILE__)))) . '/');
 }
 define('MODX_CORE_PATH', MODX_BASE_PATH . 'core/');
 define('MODX_MANAGER_PATH', MODX_BASE_PATH . 'manager/');
@@ -50,6 +50,6 @@ define('BUILD_PLUGIN_STATIC', false);
 define('BUILD_TEMPLATE_STATIC', false);
 
 $BUILD_RESOLVERS = array(
-	'tables',
-	//'setup',
+    'tables',
+    //'setup',
 );

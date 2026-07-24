@@ -3,6 +3,7 @@
 /**
  * Export Subscribers
  */
+
 class sxSubscribersExportProcessor extends modObjectProcessor
 {
     public $objectType = 'sxSubscriber';
@@ -21,10 +22,29 @@ class sxSubscribersExportProcessor extends modObjectProcessor
             return $this->failure($this->modx->lexicon('sendex_newsletter_err_ns'));
         }
 
-        $assetsUrl = $this->modx->getOption('sendex_assets_url', null, $this->modx->getOption('assets_url') . 'components/sendex/', true);
+        $assetsUrl = $this->modx->getOption(
+            'sendex_assets_url',
+            null,
+            $this->modx->getOption('assets_url') . 'components/sendex/',
+            true
+        );
 
-        $optionFields = array_map('trim', explode(',', $this->modx->getOption('sendex_export_fields', null, 'email', true)));
-        $allowedFields = ['id', 'user_id', 'email', 'username', 'fullname', 'phone', 'mobilephone'];
+        $optionFields = array_map(
+            'trim',
+            explode(
+                ',',
+                $this->modx->getOption('sendex_export_fields', null, 'email', true)
+            )
+        );
+        $allowedFields = [
+        'id',
+        'user_id',
+        'email',
+        'username',
+        'fullname',
+        'phone',
+        'mobilephone',
+        ];
         $exportFields = array_intersect($optionFields, $allowedFields);
         $selectfields = [];
 
@@ -42,7 +62,7 @@ class sxSubscribersExportProcessor extends modObjectProcessor
 
         foreach ($exportFields as $field) {
             if ($field == 'username') {
-                $q->leftJoin('modUser', 'User',  '`User`.`id`=`sxSubscriber`.`user_id`');
+                $q->leftJoin('modUser', 'User', '`User`.`id`=`sxSubscriber`.`user_id`');
                 break;
             }
         }
@@ -55,13 +75,11 @@ class sxSubscribersExportProcessor extends modObjectProcessor
         }
 
         $q->select($selectfields);
-        $q->where(array(
-            'sxSubscriber.newsletter_id' => $newsletter_id
-        ));
+        $q->where(array('sxSubscriber.newsletter_id' => $newsletter_id));
 
         $out = [
             'success' => true,
-            'url' => $assetsUrl . 'subscribers.csv?' . time(),
+            'url'     => $assetsUrl . 'subscribers.csv?' . time(),
         ];
         $fp = fopen('subscribers.csv', 'w');
 
