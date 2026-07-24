@@ -49,4 +49,47 @@ class NewsletterIsSubscribedTest extends TestCase
 
         $this->assertSame(7, $this->newsletter->isSubscribed(0, 'guest@example.com'));
     }
+
+    public function testMatchesByUserIdWhenEmailChanged()
+    {
+        $subscriber = new sxSubscriber($this->modx);
+        $subscriber->fromArray(array(
+            'id'            => 11,
+            'newsletter_id' => 10,
+            'user_id'       => 5,
+            'email'         => 'old@example.com',
+        ));
+        $this->modx->subscribers[] = $subscriber;
+
+        $this->assertSame(11, $this->newsletter->isSubscribed(5, 'new@example.com'));
+    }
+
+    public function testMatchesGuestEmailWhenUserSubscribesSameAddress()
+    {
+        $subscriber = new sxSubscriber($this->modx);
+        $subscriber->fromArray(array(
+            'id'            => 12,
+            'newsletter_id' => 10,
+            'user_id'       => 0,
+            'email'         => 'same@example.com',
+        ));
+        $this->modx->subscribers[] = $subscriber;
+
+        $this->assertSame(12, $this->newsletter->isSubscribed(9, 'same@example.com'));
+    }
+
+    public function testUserIdOnlyUsesProfileEmailForOrLookup()
+    {
+        $this->modx->profiles[5] = 'profile@example.com';
+        $subscriber = new sxSubscriber($this->modx);
+        $subscriber->fromArray(array(
+            'id'            => 15,
+            'newsletter_id' => 10,
+            'user_id'       => 0,
+            'email'         => 'profile@example.com',
+        ));
+        $this->modx->subscribers[] = $subscriber;
+
+        $this->assertSame(15, $this->newsletter->isSubscribed(5));
+    }
 }

@@ -1,4 +1,4 @@
-name: PHP Compatibility
+name: PHP
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
         php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -34,5 +34,8 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit
+      - name: PHPUnit
+        run: composer test
+
+      - name: PHPCS
+        run: composer phpcs

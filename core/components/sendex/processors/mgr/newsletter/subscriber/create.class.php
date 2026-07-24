@@ -43,20 +43,14 @@ class sxSubscriberCreateProcessor extends modProcessor
             return $this->failure($this->modx->lexicon('sendex_subscriber_err_email'));
         }
 
-        if (
-            $this->modx->getCount($this->classKey, array(
-                'newsletter_id' => $newsletter_id,
-                'user_id'       => $user_id,
-                'email'         => $email,
-            ))
-        ) {
-            return $this->failure($this->modx->lexicon('sendex_subscriber_err_ae'));
-        }
-
         /** @var sxNewsletter $newsletter */
         $newsletter = $this->modx->getObject('sxNewsletter', $newsletter_id);
         if (!$newsletter) {
             return $this->failure($this->modx->lexicon('sendex_newsletter_err_nf'));
+        }
+
+        if ($newsletter->isSubscribed($user_id, $email)) {
+            return $this->failure($this->modx->lexicon('sendex_subscriber_err_ae'));
         }
 
         $result = $newsletter->subscribe($user_id, $email);

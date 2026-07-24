@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/sxsubscriberegistry.class.php';
+require_once dirname(__FILE__) . '/sxsubscribermatch.class.php';
 
 class sxNewsletter extends xPDOSimpleObject
 {
@@ -101,21 +102,32 @@ class sxNewsletter extends xPDOSimpleObject
      */
     public function isSubscribed($user_id = 0, $email = '')
     {
-        $q = $this->xpdo->newQuery('sxSubscriber', array('newsletter_id' => $this->get('id')));
+        $user_id = (int) $user_id;
+        $email = sxSubscriberMatch::normalizeEmail($email);
 
-        if (!empty($user_id)) {
-            $q->where(array('user_id' => $user_id));
-        }
-        if (!empty($email)) {
-            $q->where(array('email' => $email));
+        if ($email === '' && $user_id > 0) {
+            /** @var modUserProfile $profile */
+            $profile = $this->xpdo->getObject('modUserProfile', array('internalKey' => $user_id));
+            if ($profile) {
+                $email = sxSubscriberMatch::normalizeEmail($profile->get('email'));
+            }
         }
 
-        /** @var sxSubscriber $subscriber */
-        if ($subscriber = $this->xpdo->getObject('sxSubscriber', $q)) {
-            return $subscriber->id;
-        } else {
+        $where = sxSubscriberMatch::whereClause($this->get('id'), $user_id, $email);
+        if ($where === null) {
             return 0;
         }
+
+        $q = $this->xpdo->newQuery('sxSubscriber');
+        $q->where($where);
+
+        /** @var sxSubscriber $subscriber */
+        $subscriber = $this->xpdo->getObject('sxSubscriber', $q);
+        if ($subscriber) {
+            return (int) $subscriber->id;
+        }
+
+        return 0;
     }
 
 
@@ -212,9 +224,16 @@ class sxNewsletter extends xPDOSimpleObject
             $email = $profile->get('email');
         }
 
-        if (empty($email) || !preg_match('/.+@.+\..+/i', $email)) {
+        $email = sxSubscriberMatch::normalizeEmail($email);
+        if ($email === '' || !preg_match('/.+@.+\..+/i', $email)) {
             return false;
-        } elseif ($this->isSubscribed($user_id, $email)) {
+        }
+
+        $user_id = sxSubscriberMatch::resolveUserId($this->xpdo, $user_id, $email);
+
+        if ($subscriberId = $this->isSubscribed($user_id, $email)) {
+            $this->attachUserToSubscriber($subscriberId, $user_id, $email);
+
             return true;
         }
 
@@ -247,6 +266,43 @@ class sxNewsletter extends xPDOSimpleObject
         $this->invokeSendexEvent('sxOnSubscribe', $params);
 
         return true;
+    }
+
+    /**
+     * Promote guest row / refresh email when identity already exists.
+     *
+     * @param int $subscriberId
+     * @param int $userId
+     * @param string $email
+     */
+    protected function attachUserToSubscriber($subscriberId, $userId, $email)
+    {
+        $userId = (int) $userId;
+        if ($userId <= 0 && $email === '') {
+            return;
+        }
+
+        /** @var sxSubscriber $subscriber */
+        $subscriber = $this->xpdo->getObject('sxSubscriber', (int) $subscriberId);
+        if (!$subscriber) {
+            return;
+        }
+
+        $changed = false;
+        if ($userId > 0 && (int) $subscriber->get('user_id') === 0) {
+            $subscriber->set('user_id', $userId);
+            $changed = true;
+        }
+        if ($email !== '' && strcasecmp((string) $subscriber->get('email'), $email) !== 0) {
+            if ($userId > 0 && (int) $subscriber->get('user_id') === $userId) {
+                $subscriber->set('email', $email);
+                $changed = true;
+            }
+        }
+
+        if ($changed) {
+            $subscriber->save();
+        }
     }
 
 

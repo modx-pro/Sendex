@@ -65,12 +65,6 @@ $xpdo_meta_map['sxSubscriber'] = array(
           'collation' => 'A',
           'null'      => false,
         ),
-        'user_id'       =>
-        array(
-          'length'    => '',
-          'collation' => 'A',
-          'null'      => false,
-        ),
         'email'         =>
         array(
           'length'    => '',

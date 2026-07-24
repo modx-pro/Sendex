@@ -135,6 +135,27 @@ class FakeModX extends modX
     public function getObject($class, $criteria = null)
     {
         if ($class === 'modUserProfile') {
+            if (is_array($criteria) && isset($criteria['email'])) {
+                $want = strtolower((string) $criteria['email']);
+                foreach ($this->userProfiles as $userId => $profile) {
+                    if (strtolower((string) $profile->get('email')) === $want) {
+                        return $profile;
+                    }
+                }
+                foreach ($this->profiles as $userId => $email) {
+                    if (strtolower((string) $email) === $want) {
+                        $profile = new modUserProfile($this);
+                        $profile->set('email', $email);
+                        $profile->set('blocked', false);
+                        $profile->set('internalKey', $userId);
+
+                        return $profile;
+                    }
+                }
+
+                return null;
+            }
+
             $userId = is_array($criteria) && isset($criteria['internalKey'])
                 ? (int) $criteria['internalKey']
                 : 0;
@@ -184,6 +205,17 @@ class FakeModX extends modX
         }
 
         if ($class === 'sxSubscriber') {
+            if (is_numeric($criteria)) {
+                $id = (int) $criteria;
+                foreach ($this->subscribers as $subscriber) {
+                    if ((int) $subscriber->get('id') === $id) {
+                        return $subscriber;
+                    }
+                }
+
+                return null;
+            }
+
             $where = array();
             if ($criteria instanceof FakeQuery) {
                 $where = $criteria->where;
@@ -192,14 +224,7 @@ class FakeModX extends modX
             }
 
             foreach ($this->subscribers as $subscriber) {
-                $match = true;
-                foreach ($where as $key => $value) {
-                    if ((string) $subscriber->get($key) !== (string) $value) {
-                        $match = false;
-                        break;
-                    }
-                }
-                if ($match) {
+                if (sxSubscriberMatch::matchesWhere($where, $subscriber)) {
                     return $subscriber;
                 }
             }
