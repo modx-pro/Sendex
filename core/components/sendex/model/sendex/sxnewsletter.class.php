@@ -6,6 +6,7 @@ require_once dirname(__FILE__) . '/sxsendexevent.class.php';
 
 /**
  * Newsletter persistence + thin API over subscription / queue helpers (#62).
+ * Queue rows cascade via composite `Queues` in schema on parent::remove() (#59).
  */
 class sxNewsletter extends xPDOSimpleObject
 {

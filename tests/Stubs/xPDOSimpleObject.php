@@ -68,6 +68,35 @@ class xPDOSimpleObject
     }
 
     /**
+     * @param array $ancestors
+     *
+     * @return bool
+     */
+    public function remove(array $ancestors = array())
+    {
+        if ($this->xpdo instanceof FakeModX && $this instanceof sxNewsletter) {
+            $id = (int) $this->get('id');
+            if ($id && isset($this->xpdo->newsletters[$id]) && $this->xpdo->newsletters[$id] === $this) {
+                unset($this->xpdo->newsletters[$id]);
+            }
+            foreach ($this->xpdo->subscribers as $index => $subscriber) {
+                if ((int) $subscriber->get('newsletter_id') === $id) {
+                    unset($this->xpdo->subscribers[$index]);
+                }
+            }
+            $this->xpdo->subscribers = array_values($this->xpdo->subscribers);
+            foreach ($this->xpdo->queues as $index => $queue) {
+                if ((int) $queue->get('newsletter_id') === $id) {
+                    unset($this->xpdo->queues[$index]);
+                }
+            }
+            $this->xpdo->queues = array_values($this->xpdo->queues);
+        }
+
+        return true;
+    }
+
+    /**
      * @param string $alias
      *
      * @return array
@@ -80,6 +109,18 @@ class xPDOSimpleObject
             foreach ($this->xpdo->subscribers as $subscriber) {
                 if ((int) $subscriber->get('newsletter_id') === $id) {
                     $out[] = $subscriber;
+                }
+            }
+
+            return $out;
+        }
+
+        if ($alias === 'Queues' && $this->xpdo instanceof FakeModX) {
+            $id = (int) $this->get('id');
+            $out = array();
+            foreach ($this->xpdo->queues as $queue) {
+                if ((int) $queue->get('newsletter_id') === $id) {
+                    $out[] = $queue;
                 }
             }
 

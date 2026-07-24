@@ -45,5 +45,6 @@ class NewsletterSplitContractTest extends TestCase
         $this->assertStringContainsString('sxSendexEvent::invoke', $facade);
         $this->assertStringContainsString('function subscribe(', $facade);
         $this->assertStringContainsString('function addQueues(', $facade);
+        $this->assertStringNotContainsString('function remove(', $facade);
     }
 }
