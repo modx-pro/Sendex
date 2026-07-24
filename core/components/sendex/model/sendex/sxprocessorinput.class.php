@@ -17,9 +17,11 @@ class sxProcessorInput
             return array();
         }
 
+        $parts = is_array($raw) ? $raw : explode(',', (string) $raw);
+
         $ids = array();
-        foreach (explode(',', (string) $raw) as $part) {
-            $id = (int) trim($part);
+        foreach ($parts as $part) {
+            $id = (int) trim((string) $part);
             if ($id > 0) {
                 $ids[] = $id;
             }
