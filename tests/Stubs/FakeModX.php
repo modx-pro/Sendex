@@ -50,10 +50,22 @@ class FakeModX extends modX
     /** @var array<int,array{0:string,1:array}> */
     public $invoked = array();
 
+    /** @var array<int,array{0:mixed,1:string}> */
+    public $logs = array();
+
     public function __construct()
     {
         $this->services['registry'] = new FakeRegistry($this);
         $this->services['parser'] = new modParser();
+    }
+
+    /**
+     * @param mixed $level
+     * @param string $message
+     */
+    public function log($level, $message)
+    {
+        $this->logs[] = array($level, (string) $message);
     }
 
     /**
@@ -202,6 +214,21 @@ class FakeModX extends modX
             }
 
             return isset($this->newsletters[$id]) ? $this->newsletters[$id] : null;
+        }
+
+        if ($class === 'sxQueue') {
+            if (is_numeric($criteria)) {
+                $id = (int) $criteria;
+                foreach ($this->queues as $queue) {
+                    if ((int) $queue->get('id') === $id) {
+                        return $queue;
+                    }
+                }
+
+                return null;
+            }
+
+            return null;
         }
 
         if ($class === 'sxSubscriber') {

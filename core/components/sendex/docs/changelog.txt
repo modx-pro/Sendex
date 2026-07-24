@@ -15,9 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#46] Search subscribers and queue by email or username.
 - [#44] Plugin events for subscribe/unsubscribe (`sxOnBeforeSubscribe`, `sxOnSubscribe`, `sxOnBeforeUnsubscribe`, `sxOnUnsubscribe`).
 - PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
+- [#72] Focused PHPUnit coverage for queue claim (#55), plus regression contracts for #52 / #58 / #61.
 - Phinx migrations: `core/components/sendex/phinx.php`, `migrations/`, install/upgrade resolver; metadata table `{prefix}sendex_migrations`.
 
 ### Fixed
+- [#55] Queue send claims the row (remove-before-send) so parallel cron/mgr workers do not double-deliver; mail failure requeues and logs; cron logs non-true `send()` results.
 - [#56] Unsubscribe from email: snippet resolves newsletter by subscriber `code` when snippet `&id` differs; default letter link includes `newsletter_id` (not MODX resource `id`).
 - [#67] / [#52] Schema and upgrade: Sendex tables use InnoDB; queue index renamed `user_id` → `subscriber_id`; `addQueues` stores `sxSubscriber.id` (not `user_id`); Phinx backfill remaps legacy queue rows (by user_id, guests by email).
 - [#54] `isSubscribed` matches by `user_id` OR `email` within a newsletter; unique key is `(newsletter_id, email)`; guest rows attach `user_id` when the same email confirms as a user.

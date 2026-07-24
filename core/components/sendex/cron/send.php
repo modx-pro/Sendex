@@ -12,5 +12,12 @@ $q->limit($modx->getOption('sendex_queue_limit', null, 100, true));
 $queue = $modx->getCollection('sxQueue', $q);
 /** @var sxQueue $email */
 foreach ($queue as $email) {
-    $email->send();
+    $result = $email->send();
+    if ($result !== true) {
+        $modx->log(
+            modX::LOG_LEVEL_ERROR,
+            '[Sendex] queue id ' . $email->get('id') . ': '
+                . (is_string($result) ? $result : 'send skipped or failed')
+        );
+    }
 }
