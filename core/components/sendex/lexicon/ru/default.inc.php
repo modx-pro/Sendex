@@ -64,11 +64,13 @@ $_lang['sendex_subscriber_username'] = 'Псевдоним';
 $_lang['sendex_subscriber_fullname'] = 'Полное имя';
 $_lang['sendex_subscriber_email'] = 'Email';
 $_lang['sendex_subscribers_remove'] = 'Удалить подписчиков';
-$_lang['sendex_subscribers_remove_confirm'] = 'Вы действительно хотите отписать выбранных пользователей от этой подписки?';
+$_lang['sendex_subscribers_remove_confirm'] = 'Вы действительно хотите отписать выбранных'
+    . ' пользователей от этой подписки?';
 
 $_lang['sendex_queues'] = 'Очередь писем';
 $_lang['sendex_queue'] = 'Письмо';
-$_lang['sendex_queue_intro'] = 'Здесь вы управляете очередью рассылки. Вы можете добавлять, удалять и отправлять письма.';
+$_lang['sendex_queue_intro'] = 'Здесь вы управляете очередью рассылки. Вы можете добавлять,'
+    . ' удалять и отправлять письма.';
 
 $_lang['sendex_queue_err_nf'] = 'Письмо не найдено.';
 $_lang['sendex_queue_err_ns'] = 'Не указаны идентификаторы писем.';

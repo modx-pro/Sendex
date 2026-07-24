@@ -12,5 +12,5 @@ $q->limit($modx->getOption('sendex_queue_limit', null, 100, true));
 $queue = $modx->getCollection('sxQueue', $q);
 /** @var sxQueue $email */
 foreach ($queue as $email) {
-	$email->send();
+    $email->send();
 }

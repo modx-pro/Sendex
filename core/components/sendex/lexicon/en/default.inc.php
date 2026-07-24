@@ -64,7 +64,8 @@ $_lang['sendex_subscriber_username'] = 'Username';
 $_lang['sendex_subscriber_fullname'] = 'Fullname';
 $_lang['sendex_subscriber_email'] = 'Email';
 $_lang['sendex_subscribers_remove'] = 'Remove subscribers';
-$_lang['sendex_subscribers_remove_confirm'] = 'Do you really want to unsubscribe selected subscribers from this newsletter?';
+$_lang['sendex_subscribers_remove_confirm'] = 'Do you really want to unsubscribe selected subscribers'
+    . ' from this newsletter?';
 
 $_lang['sendex_queues'] = 'Email queue';
 $_lang['sendex_queue'] = 'Queue';

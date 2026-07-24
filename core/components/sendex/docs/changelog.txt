@@ -1,5 +1,13 @@
 Changelog for Sendex.
 
+1.1.5-pl
+==============
+- [#47] When adding a user group to a newsletter, only active and unblocked users are subscribed
+- Cast group_id and newsletter_id to int in add_group; require user Profile (innerJoin)
+- add_group processor requires edit_document permission
+- Renamed newsletter create processor class to sxNewsletterCreateProcessor
+- Renamed subscribe() method to camelCase (PHP method names are case-insensitive; Subscribe() calls still work)
+
 1.1.4-pl
 ==============
 - Fix css bug for usergroup combo

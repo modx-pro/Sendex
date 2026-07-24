@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ruleset name="Sendex">
+    <description>PSR-12 with MODX Revolution 2 class-loading exceptions.</description>
+
+    <file>.</file>
+    <exclude-pattern>*/fonts/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+    <arg value="p"/>
+
+    <rule ref="PSR12">
+        <!-- MODX 2 loads services/processors/xPDO classes without namespaces. -->
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+        <!-- xPDO/MODX use prefixes like sxNewsletter, sxQueue_mysql. -->
+        <exclude name="Squiz.Classes.ValidClassName"/>
+        <!-- Processors end with return 'ClassName'; -->
+        <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
+    </rule>
+</ruleset>
