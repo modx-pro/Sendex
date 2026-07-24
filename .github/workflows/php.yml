@@ -1,4 +1,4 @@
-name: PHP
+name: CI
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
   pull_request:
 
 jobs:
-  php:
-    name: PHP ${{ matrix.php }}
+  phpunit:
+    name: PHPUnit (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -24,13 +24,6 @@ jobs:
           coverage: none
           tools: composer
 
-      - name: Syntax check (php -l)
-        run: |
-          set -e
-          while IFS= read -r -d '' file; do
-            php -l "$file"
-          done < <(find . -name '*.php' -not -path './.git/*' -not -path './vendor/*' -print0)
-
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
@@ -41,5 +34,42 @@ jobs:
       - name: PHPUnit
         run: composer test
 
+  phpcs:
+    name: PHPCS
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
       - name: PHPCS
         run: composer phpcs
+
+  syntax:
+    name: PHP syntax
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+
+      - name: Syntax check (php -l)
+        run: |
+          set -e
+          while IFS= read -r -d '' file; do
+            php -l "$file"
+          done < <(find . -name '*.php' -not -path './.git/*' -not -path './vendor/*' -print0)
