@@ -2,6 +2,11 @@
 
 /**
  * Shared newsletter mail headers + PHPMailer setup (#66).
+ *
+ * Post-#62 mail paths (issue originally named sxNewsletter::send/checkEmail):
+ * - activation: snippet → Sendex::sendEmail → buildActivationMessage
+ * - queue build: sxNewsletterQueueBuilder::addQueues → buildMessage
+ * - queue send: sxQueueSender::deliverMail → messageFromQueue
  */
 class sxNewsletterMailer
 {
@@ -81,12 +86,7 @@ class sxNewsletterMailer
             ),
             'email_from'      => $headers['email_from'],
             'email_from_name' => $headers['email_from_name'],
-            'email_reply'     => $xpdo->getOption(
-                'email_from',
-                $options,
-                $xpdo->getOption('emailsender'),
-                true
-            ),
+            'email_reply'     => $headers['email_reply'],
         );
     }
 

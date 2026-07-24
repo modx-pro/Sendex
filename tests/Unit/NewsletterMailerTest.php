@@ -68,7 +68,7 @@ class NewsletterMailerTest extends TestCase
         $this->assertSame('reply@example.com', $message['email_reply']);
     }
 
-    public function testBuildActivationMessageKeepsLegacyReplyTo()
+    public function testBuildActivationMessageUsesEmailReply()
     {
         $message = sxNewsletterMailer::buildActivationMessage(
             $this->modx,
@@ -82,7 +82,7 @@ class NewsletterMailerTest extends TestCase
             )
         );
 
-        $this->assertSame('from@example.com', $message['email_reply']);
+        $this->assertSame('reply@example.com', $message['email_reply']);
         $this->assertSame('Confirm', $message['email_subject']);
     }
 
