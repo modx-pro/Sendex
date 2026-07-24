@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `add_group`: cast `group_id` and `newsletter_id` to int; require user Profile (`innerJoin`).
 - `confirmEmail` returns the `subscribe()` result when confirming a hash for another newsletter.
 - PHP 7.4–8.4: dynamic properties, null Profile in `addQueues`, PHPMailer `ErrorInfo`.
+- [#28] `sxProcessorInput::parseIds` accepts `ids` as array or CSV; queue send from snippet/code matches ExtJS `runProcessor` input.
 
 ### Changed
 - [#69] Mgr processors share `sxSendexProcessor` (`edit_document` + `requireIds` / `parseIds`); get-list processors declare `view_document`.

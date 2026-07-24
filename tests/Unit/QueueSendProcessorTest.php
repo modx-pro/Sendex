@@ -23,6 +23,25 @@ class QueueSendProcessorTest extends TestCase
 
         $this->assertFalse($response['success']);
         $this->assertSame('sendex_queue_err_ns', $response['message']);
+
+        $processor = new sxQueueSendProcessor($this->modx, array('ids' => array()));
+        $response = $processor->process();
+
+        $this->assertFalse($response['success']);
+        $this->assertSame('sendex_queue_err_ns', $response['message']);
+    }
+
+    public function testSendProcessorAcceptsArrayIds()
+    {
+        $this->addQueue(1);
+        $this->addQueue(2);
+
+        $processor = new sxQueueSendProcessor($this->modx, array('ids' => array(1, 2)));
+        $response = $processor->process();
+
+        $this->assertTrue($response['success']);
+        $this->assertFalse($this->hasQueueId(1));
+        $this->assertFalse($this->hasQueueId(2));
     }
 
     public function testSendProcessorFailsOnMailError()
