@@ -16,6 +16,7 @@ $_lang['sendex_btn_send_all'] = 'Send all';
 $_lang['sendex_btn_remove_all'] = 'Remove all';
 $_lang['sendex_btn_subscrubers_export'] = 'Export';
 $_lang['sendex_select_user'] = 'Add user';
+$_lang['sendex_search'] = 'Email or username';
 $_lang['sendex_select_group'] = 'Add group';
 $_lang['sendex_select_newsletter'] = 'Add letters in the queue';
 

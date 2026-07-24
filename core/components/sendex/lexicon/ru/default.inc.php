@@ -16,6 +16,7 @@ $_lang['sendex_btn_send_all'] = 'Отправить все';
 $_lang['sendex_btn_remove_all'] = 'Удалить все';
 $_lang['sendex_btn_subscrubers_export'] = 'Экспорт';
 $_lang['sendex_select_user'] = 'Добавить пользователя';
+$_lang['sendex_search'] = 'Email или имя пользователя';
 $_lang['sendex_select_group'] = 'Добавить группу';
 $_lang['sendex_select_newsletter'] = 'Добавить письма рассылки в очередь';
 
