@@ -12,7 +12,8 @@ class sxSubscriberRemoveProcessor extends modProcessor
     /** {inheritDoc} */
     public function process()
     {
-        if (!$ids = explode(',', $this->getProperty('ids'))) {
+        $ids = array_filter(array_map('intval', explode(',', (string) $this->getProperty('ids'))));
+        if (empty($ids)) {
             return $this->failure($this->modx->lexicon('sendex_subscribers_err_ns'));
         }
 

@@ -7,6 +7,7 @@
         "php": ">=7.4 <8.5"
     },
     "require-dev": {
+        "phpunit/php-code-coverage": "^9.2",
         "phpunit/phpunit": "^9.6.22"
     },
     "suggest": {
@@ -19,7 +20,8 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "test:coverage": "phpdbg -qrr vendor/bin/phpunit --coverage-text"
     },
     "config": {
         "sort-packages": true

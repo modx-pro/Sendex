@@ -193,7 +193,7 @@ class sxNewsletter extends xPDOSimpleObject
                     'active' => 1,
                     ))
                 ) {
-                    $newsletter->subscribe($entry['user_id'], $entry['email']);
+                    return $newsletter->subscribe($entry['user_id'], $entry['email']);
                 } else {
                     return false;
                 }

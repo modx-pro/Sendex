@@ -39,6 +39,13 @@ class InvokeSendexEventTest extends TestCase
         $this->assertTrue($this->newsletter->callInvokeSendexEvent('sxOnBeforeSubscribe', array()));
     }
 
+    public function testNonArrayInvokeResponseReturnsTrue()
+    {
+        $this->modx->invokeResponses['sxOnBeforeSubscribe'] = true;
+
+        $this->assertTrue($this->newsletter->callInvokeSendexEvent('sxOnBeforeSubscribe', array()));
+    }
+
     public function testSkipsInvokeWhenXpdoIsNotModX()
     {
         $xpdo = new xPDOSimpleObject();

@@ -3,6 +3,7 @@ Changelog for Sendex.
 1.1.5-pl
 ==============
 - [#44] Plugin events for subscribe/unsubscribe (sxOnBeforeSubscribe, sxOnSubscribe, sxOnBeforeUnsubscribe, sxOnUnsubscribe)
+- Fix confirmEmail to return subscribe() result when confirming a hash for another newsletter
 - Declare PHP 7.4–8.4 support: fix dynamic properties, null Profile in addQueues, PHPMailer ErrorInfo, export stmt guard; CI lint matrix
 - Add PHPUnit unit tests for subscribe/unsubscribe events (stubs, no MODX install)
 - [#47] When adding a user group to a newsletter, only active and unblocked users are subscribed

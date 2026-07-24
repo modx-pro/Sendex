@@ -7,3 +7,4 @@
 # Composer / PHPUnit
 /vendor/
 .phpunit.result.cache
+/coverage/

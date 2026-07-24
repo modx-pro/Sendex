@@ -48,9 +48,10 @@ Set the batch size with the `sendex_queue_limit` system setting (default `100`).
 ```
 composer install
 composer test
+composer test:coverage   # needs phpdbg
 ```
 
-Unit tests use lightweight MODX/xPDO stubs (no MODX install). CI runs `php -l` and PHPUnit on PHP 7.4–8.4.
+Unit tests use lightweight MODX/xPDO stubs (no MODX install). Covered: `sxNewsletter` (100%), subscriber create/remove processors. CI runs `php -l` and PHPUnit on PHP 7.4–8.4.
 
 ## Plugin events
 

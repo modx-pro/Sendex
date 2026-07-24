@@ -10,4 +10,11 @@
             <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
+    <coverage>
+        <include>
+            <file>core/components/sendex/model/sendex/sxnewsletter.class.php</file>
+            <file>core/components/sendex/processors/mgr/newsletter/subscriber/create.class.php</file>
+            <file>core/components/sendex/processors/mgr/newsletter/subscriber/remove.class.php</file>
+        </include>
+    </coverage>
 </phpunit>

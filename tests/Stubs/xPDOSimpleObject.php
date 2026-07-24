@@ -60,6 +60,36 @@ class xPDOSimpleObject
     }
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->_fields;
+    }
+
+    /**
+     * @param string $alias
+     *
+     * @return array
+     */
+    public function getMany($alias)
+    {
+        if ($alias === 'Subscribers' && $this->xpdo instanceof FakeModX) {
+            $id = (int) $this->get('id');
+            $out = array();
+            foreach ($this->xpdo->subscribers as $subscriber) {
+                if ((int) $subscriber->get('newsletter_id') === $id) {
+                    $out[] = $subscriber;
+                }
+            }
+
+            return $out;
+        }
+
+        return array();
+    }
+
+    /**
      * @param string $name
      *
      * @return mixed
@@ -67,6 +97,16 @@ class xPDOSimpleObject
     public function __get($name)
     {
         return $this->get($name);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return array_key_exists($name, $this->_fields) && $this->_fields[$name] !== null;
     }
 
     /**
