@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phinx migrations: `core/components/sendex/phinx.php`, `migrations/`, install/upgrade resolver; metadata table `{prefix}sendex_migrations`.
 
 ### Fixed
+- [#57] `addQueues` returns an error when 0 queue rows were created (all subscribers skipped); mgr `queue/add` reports the created count on success.
 - [#55] Queue send claims the row (remove-before-send) so parallel cron/mgr workers do not double-deliver; mail failure requeues and logs; cron logs non-true `send()` results.
 - [#56] Unsubscribe from email: snippet resolves newsletter by subscriber `code` when snippet `&id` differs; default letter link includes `newsletter_id` (not MODX resource `id`).
 - [#67] / [#52] Schema and upgrade: Sendex tables use InnoDB; queue index renamed `user_id` → `subscriber_id`; `addQueues` stores `sxSubscriber.id` (not `user_id`); Phinx backfill remaps legacy queue rows (by user_id, guests by email).

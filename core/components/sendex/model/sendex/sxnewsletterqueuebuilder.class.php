@@ -19,7 +19,7 @@ class sxNewsletterQueueBuilder
     }
 
     /**
-     * @return bool|mixed|string
+     * @return int|string Number of queue rows created, or lexicon error key/message
      */
     public function addQueues()
     {
@@ -46,6 +46,9 @@ class sxNewsletterQueueBuilder
         if (!$template || !($template instanceof modTemplate)) {
             return $xpdo->lexicon('sendex_newsletter_err_no_template');
         }
+
+        $newsletterId = (int) $newsletter->id;
+        $before = (int) $xpdo->getCount('sxQueue', array('newsletter_id' => $newsletterId));
 
         /** @var sxSubscriber $subscriber */
         foreach ($subscribers as $subscriber) {
@@ -90,7 +93,7 @@ class sxNewsletterQueueBuilder
             $queue = $xpdo->newObject('sxQueue');
             $queue->fromArray(array(
                 'subscriber_id'   => sxQueueLink::subscriberIdFromSubscriber($subscriber),
-                'newsletter_id'   => $newsletter->id,
+                'newsletter_id'   => $newsletterId,
                 'email_to'        => $email,
                 'email_subject'   => $subject,
                 'email_body'      => $body,
@@ -101,6 +104,11 @@ class sxNewsletterQueueBuilder
             $queue->save();
         }
 
-        return true;
+        $created = (int) $xpdo->getCount('sxQueue', array('newsletter_id' => $newsletterId)) - $before;
+        if ($created <= 0) {
+            return $xpdo->lexicon('sendex_newsletter_err_no_queues');
+        }
+
+        return $created;
     }
 }

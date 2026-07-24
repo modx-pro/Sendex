@@ -60,7 +60,7 @@ class NewsletterAddQueuesTest extends TestCase
         ));
         $this->modx->subscribers[] = $subscriber;
 
-        $this->assertTrue($this->newsletter->addQueues());
+        $this->assertSame(1, $this->newsletter->addQueues());
         $this->assertCount(1, $this->modx->queues);
         $this->assertSame('guest@example.com', $this->modx->queues[0]->get('email_to'));
         $this->assertSame('Hello', $this->modx->queues[0]->get('email_subject'));
@@ -83,7 +83,7 @@ class NewsletterAddQueuesTest extends TestCase
         $user->active = true;
         $this->modx->users[5] = $user;
 
-        $this->assertTrue($this->newsletter->addQueues());
+        $this->assertSame('sendex_newsletter_err_no_queues', $this->newsletter->addQueues());
         $this->assertCount(0, $this->modx->queues);
     }
 
@@ -108,7 +108,7 @@ class NewsletterAddQueuesTest extends TestCase
         $profile->set('email', 'user@example.com');
         $this->modx->userProfiles[5] = $profile;
 
-        $this->assertTrue($this->newsletter->addQueues());
+        $this->assertSame('sendex_newsletter_err_no_queues', $this->newsletter->addQueues());
         $this->assertCount(0, $this->modx->queues);
     }
 
@@ -133,7 +133,7 @@ class NewsletterAddQueuesTest extends TestCase
         $profile->set('email', 'user@example.com');
         $this->modx->userProfiles[5] = $profile;
 
-        $this->assertTrue($this->newsletter->addQueues());
+        $this->assertSame(1, $this->newsletter->addQueues());
         $this->assertCount(1, $this->modx->queues);
         $this->assertSame('Body for user@example.com', $this->modx->queues[0]->get('email_body'));
         // Must be sxSubscriber.id (1), not modUser.id (5)

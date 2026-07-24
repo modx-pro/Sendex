@@ -21,11 +21,14 @@ class sxQueueAddProcessor extends modProcessor
 
         /** @var sxNewsletter $newsletter */
         $result = $newsletter->addQueues();
-        if ($result !== true) {
+        if (!is_int($result)) {
             return $this->failure($result);
-        } else {
-            return $this->success();
         }
+
+        return $this->success(
+            $this->modx->lexicon('sendex_newsletter_queues_added', array('count' => $result)),
+            array('count' => $result)
+        );
     }
 }
 

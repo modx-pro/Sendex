@@ -10,7 +10,7 @@ require_once dirname(__FILE__) . '/sxsendexevent.class.php';
 class sxNewsletter extends xPDOSimpleObject
 {
     /**
-     * @return bool|mixed|string
+     * @return int|string
      */
     public function addQueues()
     {
