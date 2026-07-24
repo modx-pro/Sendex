@@ -43,6 +43,7 @@ class SendexProcessorAclTest extends TestCase
             'queue/remove.class.php',
             'queue/remove_all.class.php',
             'queue/add.class.php',
+            'queue/send.class.php',
             'queue/send_all.class.php',
             'newsletter/subscriber/create.class.php',
             'newsletter/subscriber/remove.class.php',
