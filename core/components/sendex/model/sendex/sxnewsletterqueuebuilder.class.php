@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/sxqueuelink.class.php';
+require_once dirname(__FILE__) . '/sxnewslettermailer.class.php';
 
 /**
  * Build queue rows from newsletter subscribers.
@@ -71,13 +72,6 @@ class sxNewsletterQueueBuilder
 
             $email = $subscriber->email;
             $subject = !empty($newsletter->email_subject) ? $newsletter->email_subject : 'No subject';
-            $from = !empty($newsletter->email_from)
-                ? $newsletter->email_from
-                : $xpdo->getOption('emailsender');
-            $fromName = !empty($newsletter->email_from_name)
-                ? $newsletter->email_from_name
-                : $xpdo->getOption('site_name');
-            $emailReply = !empty($newsletter->email_reply) ? $newsletter->email_reply : $from;
 
             $template->_cacheable = false;
             $template->_processed = false;
@@ -89,17 +83,19 @@ class sxNewsletterQueueBuilder
                 $parser->processElementTags('', $body, true, true, '[[', ']]', array(), $maxIterations);
             }
 
+            $message = sxNewsletterMailer::buildMessage($newsletter, $subscriber, $subject, $body, $xpdo);
+
             /** @var sxQueue $queue */
             $queue = $xpdo->newObject('sxQueue');
             $queue->fromArray(array(
                 'subscriber_id'   => sxQueueLink::subscriberIdFromSubscriber($subscriber),
                 'newsletter_id'   => $newsletterId,
-                'email_to'        => $email,
-                'email_subject'   => $subject,
-                'email_body'      => $body,
-                'email_from'      => $from,
-                'email_from_name' => $fromName,
-                'email_reply'     => $emailReply,
+                'email_to'        => $message['email_to'],
+                'email_subject'   => $message['email_subject'],
+                'email_body'      => $message['email_body'],
+                'email_from'      => $message['email_from'],
+                'email_from_name' => $message['email_from_name'],
+                'email_reply'     => $message['email_reply'],
             ));
             $queue->save();
         }
