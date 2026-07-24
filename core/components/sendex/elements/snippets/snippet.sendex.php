@@ -35,15 +35,15 @@ $placeholders = $newsletter->toArray();
 $placeholders['message'] = '';
 $placeholders['class'] = '';
 $placeholders['error'] = 0;
-if ($modx->user->isAuthenticated($modx->context->key)) {
-    $placeholders = array_merge(
-        $modx->user->toArray(),
-        $modx->user->Profile->toArray(),
-        $placeholders
-    );
-}
-
 $isAuthenticated = $modx->user->isAuthenticated($modx->context->key);
+if ($isAuthenticated) {
+    $userData = $modx->user->toArray();
+    $profile = $modx->user->getOne('Profile');
+    if ($profile) {
+        $userData = array_merge($userData, $profile->toArray());
+    }
+    $placeholders = array_merge($userData, $placeholders);
+}
 
 if (!empty($_REQUEST['sx_action'])) {
     $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
