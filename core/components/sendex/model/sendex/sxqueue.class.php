@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/sxqueuedeliver.class.php';
+require_once dirname(__FILE__) . '/sxqueuesender.class.php';
 
 class sxQueue extends xPDOSimpleObject
 {
@@ -38,30 +38,6 @@ class sxQueue extends xPDOSimpleObject
      */
     public function send()
     {
-        $queue = $this;
-
-        return sxQueueDeliver::send($this, function () use ($queue) {
-            /** @var modPHPMailer $mail */
-            $mail = $queue->xpdo->getService('mail', 'mail.modPHPMailer');
-            $mail->set(modMail::MAIL_BODY, $queue->email_body);
-            $mail->set(modMail::MAIL_FROM, $queue->email_from);
-            $mail->set(modMail::MAIL_FROM_NAME, $queue->email_from_name);
-            $mail->set(modMail::MAIL_SUBJECT, $queue->email_subject);
-            $mail->address('to', $queue->email_to);
-            $mail->address('reply-to', $queue->email_reply);
-            $mail->setHTML(true);
-            if (!$mail->send()) {
-                $queue->xpdo->log(
-                    xPDO::LOG_LEVEL_ERROR,
-                    'An error occurred while trying to send the email: '
-                        . $mail->mailer->ErrorInfo
-                );
-                $mail->reset();
-                return $mail->mailer->ErrorInfo;
-            }
-
-            $mail->reset();
-            return true;
-        });
+        return sxQueueSender::sendOne($this);
     }
 }

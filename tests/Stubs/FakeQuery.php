@@ -8,6 +8,9 @@ class FakeQuery
     /** @var array */
     public $where = array();
 
+    /** @var int|null */
+    public $limit;
+
     /**
      * @param string $class
      * @param array|null $criteria
@@ -18,6 +21,18 @@ class FakeQuery
         if (is_array($criteria)) {
             $this->where = $criteria;
         }
+    }
+
+    /**
+     * @param int $limit
+     *
+     * @return self
+     */
+    public function limit($limit)
+    {
+        $this->limit = (int) $limit;
+
+        return $this;
     }
 
     /**
