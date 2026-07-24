@@ -64,6 +64,7 @@ class NewsletterAddQueuesTest extends TestCase
         $this->assertCount(1, $this->modx->queues);
         $this->assertSame('guest@example.com', $this->modx->queues[0]->get('email_to'));
         $this->assertSame('Hello', $this->modx->queues[0]->get('email_subject'));
+        $this->assertSame(1, $this->modx->queues[0]->get('subscriber_id'));
     }
 
     public function testSkipsUserWithoutProfile()
@@ -135,5 +136,24 @@ class NewsletterAddQueuesTest extends TestCase
         $this->assertTrue($this->newsletter->addQueues());
         $this->assertCount(1, $this->modx->queues);
         $this->assertSame('Body for user@example.com', $this->modx->queues[0]->get('email_body'));
+        // Must be sxSubscriber.id (1), not modUser.id (5)
+        $this->assertSame(1, $this->modx->queues[0]->get('subscriber_id'));
+    }
+
+    public function testSchemaQueueIndexNameMatchesSubscriberIdColumn()
+    {
+        $schema = file_get_contents(
+            dirname(__DIR__, 2) . '/core/components/sendex/model/schema/sendex.mysql.schema.xml'
+        );
+
+        $this->assertStringContainsString('defaultEngine="InnoDB"', $schema);
+        $this->assertStringContainsString(
+            'alias="subscriber_id" name="subscriber_id"',
+            $schema
+        );
+        $this->assertStringNotContainsString(
+            'alias="subscriber_id" name="user_id"',
+            $schema
+        );
     }
 }

@@ -119,7 +119,7 @@ $xpdo_meta_map['sxQueue'] = array(
         ),
       ),
     ),
-    'user_id'       =>
+    'subscriber_id' =>
     array(
       'alias'   => 'subscriber_id',
       'primary' => false,

@@ -2,6 +2,7 @@
 
 require_once dirname(__FILE__) . '/sxsubscriberegistry.class.php';
 require_once dirname(__FILE__) . '/sxsubscribermatch.class.php';
+require_once dirname(__FILE__) . '/sxqueuelink.class.php';
 
 class sxNewsletter extends xPDOSimpleObject
 {
@@ -76,7 +77,7 @@ class sxNewsletter extends xPDOSimpleObject
             /** @var sxQueue $queue */
             $queue = $this->xpdo->newObject('sxQueue');
             $queue->fromArray(array(
-                'subscriber_id'   => $subscriber->user_id,
+                'subscriber_id'   => sxQueueLink::subscriberIdFromSubscriber($subscriber),
                 'newsletter_id'   => $this->id,
                 'email_to'        => $email,
                 'email_subject'   => $subject,

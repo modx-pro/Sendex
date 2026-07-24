@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model package="sendex" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" phpdoc-package="sendex" version="1.1">
+<model package="sendex" baseClass="xPDOObject" platform="mysql" defaultEngine="InnoDB" phpdoc-package="sendex" version="1.1">
 
     <object class="sxNewsletter" table="sendex_newsletters" extends="xPDOSimpleObject">
         <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default="" />
@@ -63,7 +63,7 @@
         <index alias="newsletter_id" name="newsletter_id" primary="false" unique="false" type="BTREE">
             <column key="newsletter_id" length="" collation="A" null="false" />
         </index>
-        <index alias="subscriber_id" name="user_id" primary="false" unique="false" type="BTREE">
+        <index alias="subscriber_id" name="subscriber_id" primary="false" unique="false" type="BTREE">
             <column key="subscriber_id" length="" collation="A" null="false" />
         </index>
         <index alias="timestamp" name="timestamp" primary="false" unique="false" type="BTREE">
