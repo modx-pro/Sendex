@@ -54,6 +54,7 @@ class SubscriberCreateProcessorTest extends TestCase
         $this->modx->profiles[5] = 'a@example.com';
         $existing = new sxSubscriber($this->modx);
         $existing->fromArray(array(
+            'id'            => 3,
             'newsletter_id' => 10,
             'user_id'       => 5,
             'email'         => 'a@example.com',
@@ -107,5 +108,27 @@ class SubscriberCreateProcessorTest extends TestCase
         $result = $this->processor->process();
         $this->assertFalse($result['success']);
         $this->assertSame('blocked by plugin', $result['message']);
+    }
+
+    public function testFailsOnDuplicateByEmailAcrossUserIds()
+    {
+        $this->modx->profiles[5] = 'a@example.com';
+        $existing = new sxSubscriber($this->modx);
+        $existing->fromArray(array(
+            'id'            => 1,
+            'newsletter_id' => 10,
+            'user_id'       => 0,
+            'email'         => 'a@example.com',
+        ));
+        $this->modx->subscribers[] = $existing;
+
+        $this->processor->properties = array(
+            'user_id'       => 5,
+            'newsletter_id' => 10,
+        );
+        $result = $this->processor->process();
+        $this->assertFalse($result['success']);
+        $this->assertSame('sendex_subscriber_err_ae', $result['message']);
+        $this->assertCount(1, $this->modx->subscribers);
     }
 }

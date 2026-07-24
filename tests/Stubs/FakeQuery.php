@@ -27,7 +27,13 @@ class FakeQuery
      */
     public function where($criteria)
     {
-        $this->where = array_merge($this->where, $criteria);
+        foreach ($criteria as $key => $value) {
+            if (is_int($key)) {
+                $this->where[] = $value;
+                continue;
+            }
+            $this->where[$key] = $value;
+        }
 
         return $this;
     }

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
 
 ### Fixed
+- [#54] `isSubscribed` matches by `user_id` OR `email` within a newsletter; unique key is `(newsletter_id, email)`; guest rows attach `user_id` when the same email confirms as a user (also covers main #39 cases; activate-merge handler still open).
 - [#58] `confirmEmail` restores registry hash when `subscribe()` fails so the confirm link stays usable; remaining TTL kept via `_expires`; `checkEmail` shares `sxSubscribeRegistry::store`.
 - [#61] `sxSubscriber::save` keeps existing `code` (generate only when empty) so unsubscribe links stay valid.
 - [#53] Snippet: authenticated user without Profile no longer triggers TypeError on PHP 8; merge via `sxUserPlaceholders`.

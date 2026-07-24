@@ -86,4 +86,46 @@ class NewsletterSubscribeTest extends TestCase
         $this->assertCount(1, $this->modx->invoked);
         $this->assertSame('sxOnBeforeSubscribe', $this->modx->invoked[0][0]);
     }
+
+    public function testDoesNotCreateSecondRowWhenEmailChangedForSameUser()
+    {
+        $existing = new sxSubscriber($this->modx);
+        $existing->fromArray(array(
+            'id'            => 1,
+            'newsletter_id' => 10,
+            'user_id'       => 5,
+            'email'         => 'old@example.com',
+        ));
+        $this->modx->subscribers[] = $existing;
+
+        $this->assertTrue($this->newsletter->subscribe(5, 'new@example.com'));
+        $this->assertCount(1, $this->modx->subscribers);
+        $this->assertSame('new@example.com', $this->modx->subscribers[0]->get('email'));
+        $this->assertSame(array(), $this->modx->invoked);
+    }
+
+    public function testPromotesGuestRowWhenUserConfirmsSameEmail()
+    {
+        $existing = new sxSubscriber($this->modx);
+        $existing->fromArray(array(
+            'id'            => 1,
+            'newsletter_id' => 10,
+            'user_id'       => 0,
+            'email'         => 'same@example.com',
+        ));
+        $this->modx->subscribers[] = $existing;
+
+        $this->assertTrue($this->newsletter->subscribe(8, 'same@example.com'));
+        $this->assertCount(1, $this->modx->subscribers);
+        $this->assertSame(8, (int) $this->modx->subscribers[0]->get('user_id'));
+    }
+
+    public function testAnonymousSubscribeResolvesExistingUserByEmail()
+    {
+        $this->modx->profiles[4] = 'member@example.com';
+
+        $this->assertTrue($this->newsletter->subscribe(0, 'member@example.com'));
+        $this->assertCount(1, $this->modx->subscribers);
+        $this->assertSame(4, (int) $this->modx->subscribers[0]->get('user_id'));
+    }
 }
