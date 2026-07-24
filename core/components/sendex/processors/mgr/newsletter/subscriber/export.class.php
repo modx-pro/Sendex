@@ -84,7 +84,9 @@ class sxSubscribersExportProcessor extends modObjectProcessor
         $fp = fopen('subscribers.csv', 'w');
 
         $q->prepare();
-        $q->stmt->execute();
+        if (!$q->stmt || !$q->stmt->execute()) {
+            return $this->failure($this->modx->lexicon('sendex_subscribers_export_error'));
+        }
         $rows = $q->stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
             fputcsv($fp, $row);

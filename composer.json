@@ -1,0 +1,27 @@
+{
+    "name": "modx-pro/sendex",
+    "description": "Email newsletters for MODX Revolution",
+    "type": "library",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=7.4 <8.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6.22"
+    },
+    "suggest": {
+        "ext-pdo": "Required for MODX database access",
+        "ext-json": "Required for manager JSON responses"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sendex\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

@@ -4,7 +4,7 @@
  * Create an Subscriber
  */
 
-class sxSubscriberCreateProcessor extends modObjectCreateProcessor
+class sxSubscriberCreateProcessor extends modProcessor
 {
     public $objectType = 'sxSubscriber';
     public $classKey = 'sxSubscriber';
@@ -13,49 +13,60 @@ class sxSubscriberCreateProcessor extends modObjectCreateProcessor
 
 
     /**
-     * @return bool
+     * @return array|string
      */
-    public function beforeSet()
+    public function process()
     {
+        $user_id = (int) $this->getProperty('user_id');
+        $newsletter_id = (int) $this->getProperty('newsletter_id');
 
-        $required = array(
-        'user_id',
-        'newsletter_id',
-        );
-        foreach ($required as $tmp) {
-            if (!$this->getProperty($tmp)) {
-                $this->addFieldError($tmp, $this->modx->lexicon('field_required'));
-            }
+        if (!$user_id) {
+            $this->addFieldError('user_id', $this->modx->lexicon('field_required'));
         }
-
+        if (!$newsletter_id) {
+            $this->addFieldError('newsletter_id', $this->modx->lexicon('field_required'));
+        }
         if ($this->hasErrors()) {
-            return $this->modx->lexicon('sendex_subscriber_err_save');
+            return $this->failure($this->modx->lexicon('sendex_subscriber_err_save'));
         }
 
         /** @var modUserProfile $profile */
-        if (
-            $profile = $this->modx->getObject('modUserProfile', array(
-            'internalKey' => $this->getProperty('user_id'),
-            ))
-        ) {
-            $email = $profile->get('email');
-            if (empty($email) || strpos($email, '@') === false) {
-                return $this->modx->lexicon('sendex_subscriber_err_email');
-            }
-            $this->setProperty('email', $email);
+        $profile = $this->modx->getObject('modUserProfile', array(
+            'internalKey' => $user_id,
+        ));
+        if (!$profile) {
+            return $this->failure($this->modx->lexicon('sendex_subscriber_err_email'));
+        }
+
+        $email = $profile->get('email');
+        if (empty($email) || strpos($email, '@') === false) {
+            return $this->failure($this->modx->lexicon('sendex_subscriber_err_email'));
         }
 
         if (
             $this->modx->getCount($this->classKey, array(
-            'newsletter_id' => $this->getProperty('newsletter_id'),
-            'user_id'       => $this->getProperty('user_id'),
-            'email'         => $this->getProperty('email'),
+                'newsletter_id' => $newsletter_id,
+                'user_id'       => $user_id,
+                'email'         => $email,
             ))
         ) {
-            return $this->modx->lexicon('sendex_subscriber_err_ae');
+            return $this->failure($this->modx->lexicon('sendex_subscriber_err_ae'));
         }
 
-        return !$this->hasErrors();
+        /** @var sxNewsletter $newsletter */
+        $newsletter = $this->modx->getObject('sxNewsletter', $newsletter_id);
+        if (!$newsletter) {
+            return $this->failure($this->modx->lexicon('sendex_newsletter_err_nf'));
+        }
+
+        $result = $newsletter->subscribe($user_id, $email);
+        if ($result !== true) {
+            return $this->failure(
+                is_string($result) ? $result : $this->modx->lexicon('sendex_subscriber_err_save')
+            );
+        }
+
+        return $this->success();
     }
 }
 

@@ -2,6 +2,9 @@ Changelog for Sendex.
 
 1.1.5-pl
 ==============
+- [#44] Plugin events for subscribe/unsubscribe (sxOnBeforeSubscribe, sxOnSubscribe, sxOnBeforeUnsubscribe, sxOnUnsubscribe)
+- Declare PHP 7.4–8.4 support: fix dynamic properties, null Profile in addQueues, PHPMailer ErrorInfo, export stmt guard; CI lint matrix
+- Add PHPUnit unit tests for subscribe/unsubscribe events (stubs, no MODX install)
 - [#47] When adding a user group to a newsletter, only active and unblocked users are subscribed
 - Cast group_id and newsletter_id to int in add_group; require user Profile (innerJoin)
 - add_group processor requires edit_document permission

@@ -10,6 +10,8 @@ class Sendex
     public $modx;
     /* @var SendexControllerRequest $request */
     protected $request;
+    /** @var array */
+    public $config = array();
     public $initialized = array();
     public $chunks = array();
 
@@ -115,7 +117,7 @@ class Sendex
         $mail->setHTML(true);
 
         $response = !$mail->send()
-            ? $mail->mailer->errorInfo
+            ? $mail->mailer->ErrorInfo
             : true;
         $mail->reset();
 

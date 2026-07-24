@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Remove an Newsletter
+ * Remove subscribers
  */
 
 class sxSubscriberRemoveProcessor extends modProcessor
@@ -16,13 +16,27 @@ class sxSubscriberRemoveProcessor extends modProcessor
             return $this->failure($this->modx->lexicon('sendex_subscribers_err_ns'));
         }
 
+        $errors = array();
         $subscribers = $this->modx->getIterator($this->classKey, array('id:IN' => $ids));
         /** @var sxSubscriber $subscriber */
         foreach ($subscribers as $subscriber) {
-            $subscriber->remove();
+            /** @var sxNewsletter $newsletter */
+            $newsletter = $this->modx->getObject('sxNewsletter', $subscriber->get('newsletter_id'));
+            if ($newsletter) {
+                $result = $newsletter->unSubscribe($subscriber->get('code'));
+                if ($result !== true) {
+                    $errors[] = is_string($result)
+                        ? $result
+                        : $this->modx->lexicon('sendex_subscriber_err_remove');
+                }
+            } elseif (!$subscriber->remove()) {
+                $errors[] = $this->modx->lexicon('sendex_subscriber_err_remove');
+            }
         }
 
-        return $this->success();
+        return !empty($errors)
+            ? $this->failure(implode('<br/>', $errors))
+            : $this->success();
     }
 }
 

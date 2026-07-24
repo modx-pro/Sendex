@@ -55,8 +55,11 @@ if (!empty($_REQUEST['sx_action'])) {
     switch ($_REQUEST['sx_action']) {
         case 'subscribe':
             if ($isAuthenticated && $modx->user->id) {
-                if (!$response = $newsletter->subscribe($modx->user->id)) {
-                    $placeholders['message'] = $modx->lexicon('sendex_subscribe_err_email_wrong');
+                $response = $newsletter->subscribe($modx->user->id);
+                if ($response !== true) {
+                    $placeholders['message'] = is_string($response)
+                        ? $response
+                        : $modx->lexicon('sendex_subscribe_err_email_wrong');
                     $placeholders['error'] = 1;
                 }
             } elseif (!empty($_REQUEST['email'])) {
@@ -90,16 +93,30 @@ if (!empty($_REQUEST['sx_action'])) {
         case 'confirm':
             if (!empty($_REQUEST['hash'])) {
                 $response = $newsletter->confirmEmail($_REQUEST['hash']);
-                $placeholders['message'] = $modx->lexicon('sendex_subscribe_email_confirmed');
-                $params['sx_confirmed'] = 1;
+                if ($response === true) {
+                    $placeholders['message'] = $modx->lexicon('sendex_subscribe_email_confirmed');
+                    $params['sx_confirmed'] = 1;
+                } else {
+                    $placeholders['message'] = is_string($response)
+                        ? $response
+                        : $modx->lexicon('sendex_subscribe_err_email_wrong');
+                    $placeholders['error'] = 1;
+                }
                 unset($params['hash']);
             }
             break;
         case 'unsubscribe':
             if (!empty($_REQUEST['code'])) {
                 $response = $newsletter->unSubscribe($_REQUEST['code']);
-                $placeholders['message'] = $modx->lexicon('sendex_subscribe_email_unsubscribed');
-                $params['sx_unsubscribed'] = 1;
+                if ($response === true) {
+                    $placeholders['message'] = $modx->lexicon('sendex_subscribe_email_unsubscribed');
+                    $params['sx_unsubscribed'] = 1;
+                } else {
+                    $placeholders['message'] = is_string($response)
+                        ? $response
+                        : $modx->lexicon('sendex_subscriber_err_remove');
+                    $placeholders['error'] = 1;
+                }
             }
             unset($params['code']);
             break;
