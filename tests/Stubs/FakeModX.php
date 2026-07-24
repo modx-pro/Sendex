@@ -237,6 +237,35 @@ class FakeModX extends modX
 
     /**
      * @param string $class
+     * @param FakeQuery|array|null $criteria
+     *
+     * @return array
+     */
+    public function getCollection($class, $criteria = null)
+    {
+        if ($class !== 'sxSubscriber') {
+            return array();
+        }
+
+        $where = array();
+        if ($criteria instanceof FakeQuery) {
+            $where = $criteria->where;
+        } elseif (is_array($criteria)) {
+            $where = $criteria;
+        }
+
+        $out = array();
+        foreach ($this->subscribers as $subscriber) {
+            if ($where === array() || sxSubscriberMatch::matchesWhere($where, $subscriber)) {
+                $out[] = $subscriber;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param string $class
      * @param array $criteria
      *
      * @return int

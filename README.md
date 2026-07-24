@@ -9,6 +9,7 @@ Sendex runs email newsletters in MODX Revolution: subscribers, a send queue, and
 - Newsletters and subscribers in the manager
 - Add users one by one or from a MODX user group (active and unblocked accounts only)
 - Guest subscribe with email confirmation; authenticated users subscribe directly
+- Guest rows with the same email merge onto a new/activated `modUser` (no second subscriber row)
 - Queue letters; send one, send all, or flush via cron
 - Export subscriber emails
 - English and Russian lexicons
@@ -59,6 +60,16 @@ Root `composer.json` remains for PHPUnit/phpcs only.
 | `tplSubscribeGuest` | `tpl.Sendex.subscribe.guest` | Chunk for guests |
 | `tplUnsubscribe` | `tpl.Sendex.unsubscribe` | Unsubscribe chunk |
 | `tplActivate` | `tpl.Sendex.activate` | Confirmation email chunk |
+
+### Guest email vs existing User (#39)
+
+Policy: **merge**, not block.
+
+1. Anonymous confirm / `subscribe()` resolves `modUser` by profile email and stores `user_id` (see `#54`).
+2. Unique key `(newsletter_id, email)` prevents a guest+user duplicate row.
+3. If a guest subscribed first and the account is created later, the Sendex plugin merges on `OnUserActivate`, `OnBeforeUserActivate`, and `OnUserSave`: guest rows with that email get `user_id` set. Reinstall/upgrade the package so the plugin events are registered.
+
+Logged-in `isSubscribed($userId)` also matches a still-guest row by profile email, so the form shows unsubscribe without waiting for merge.
 
 ## Cron
 
