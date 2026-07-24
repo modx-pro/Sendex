@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#28] `sxProcessorInput::parseIds` accepts `ids` as array or CSV; queue send from snippet/code matches ExtJS `runProcessor` input.
 
 ### Changed
+- [#63] `addQueues` batch-loads `modUser` + Profile (`id:IN`) once instead of N+1 per subscriber.
 - [#66] `sxNewsletterMailer` centralizes From/Reply-To/HTML setup for activation mail and queue delivery; activation reply-to uses `email_reply` like queue build.
 - [#69] Mgr processors share `sxSendexProcessor` (`edit_document` + `requireIds` / `parseIds`); get-list processors declare `view_document`.
 - [#62] Split `sxNewsletter` into `sxNewsletterSubscription`, `sxNewsletterQueueBuilder`, `sxSendexEvent`; model keeps a thin public API for processors/snippet.

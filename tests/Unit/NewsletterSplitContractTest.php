@@ -21,6 +21,7 @@ class NewsletterSplitContractTest extends TestCase
         $files = array(
             'sxnewslettersubscription.class.php',
             'sxnewsletterqueuebuilder.class.php',
+            'sxnewsletterqueueusers.class.php',
             'sxnewslettermailer.class.php',
             'sxsendexevent.class.php',
         );

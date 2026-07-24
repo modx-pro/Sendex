@@ -104,6 +104,7 @@ class NewsletterAddQueuesTest extends TestCase
         $this->modx->users[5] = $user;
 
         $profile = new modUserProfile($this->modx);
+        $profile->set('internalKey', 5);
         $profile->set('blocked', false);
         $profile->set('email', 'user@example.com');
         $this->modx->userProfiles[5] = $profile;
@@ -129,6 +130,7 @@ class NewsletterAddQueuesTest extends TestCase
         $this->modx->users[5] = $user;
 
         $profile = new modUserProfile($this->modx);
+        $profile->set('internalKey', 5);
         $profile->set('blocked', false);
         $profile->set('email', 'user@example.com');
         $this->modx->userProfiles[5] = $profile;
@@ -138,6 +140,58 @@ class NewsletterAddQueuesTest extends TestCase
         $this->assertSame('Body for user@example.com', $this->modx->queues[0]->get('email_body'));
         // Must be sxSubscriber.id (1), not modUser.id (5)
         $this->assertSame(1, $this->modx->queues[0]->get('subscriber_id'));
+    }
+
+    public function testQueuesWhenUserIdMissingFromDatabase()
+    {
+        $subscriber = new sxSubscriber($this->modx);
+        $subscriber->fromArray(array(
+            'id'            => 1,
+            'newsletter_id' => 10,
+            'user_id'       => 99,
+            'email'         => 'orphan@example.com',
+        ));
+        $this->modx->subscribers[] = $subscriber;
+
+        $this->assertSame(1, $this->newsletter->addQueues());
+        $this->assertCount(1, $this->modx->queues);
+        $this->assertSame('orphan@example.com', $this->modx->queues[0]->get('email_to'));
+    }
+
+    public function testAddQueuesLoadsUsersInBatchNotPerSubscriber()
+    {
+        for ($i = 1; $i <= 100; $i++) {
+            $subscriber = new sxSubscriber($this->modx);
+            $subscriber->fromArray(array(
+                'id'            => $i,
+                'newsletter_id' => 10,
+                'user_id'       => ($i % 10) + 1,
+                'email'         => 'user' . $i . '@example.com',
+            ));
+            $this->modx->subscribers[] = $subscriber;
+        }
+
+        for ($userId = 1; $userId <= 10; $userId++) {
+            $user = new modUser($this->modx);
+            $user->set('id', $userId);
+            $user->active = true;
+            $this->modx->users[$userId] = $user;
+
+            $profile = new modUserProfile($this->modx);
+            $profile->set('internalKey', $userId);
+            $profile->set('blocked', false);
+            $profile->set('email', 'db' . $userId . '@example.com');
+            $this->modx->userProfiles[$userId] = $profile;
+        }
+
+        $this->modx->getObjectCalls = array();
+        $this->modx->getCollectionCalls = array();
+
+        $this->assertSame(100, $this->newsletter->addQueues());
+        $this->assertCount(100, $this->modx->queues);
+        $this->assertSame(1, isset($this->modx->getCollectionCalls['modUser']) ? $this->modx->getCollectionCalls['modUser'] : 0);
+        $this->assertSame(1, isset($this->modx->getCollectionCalls['modUserProfile']) ? $this->modx->getCollectionCalls['modUserProfile'] : 0);
+        $this->assertSame(0, isset($this->modx->getObjectCalls['modUser']) ? $this->modx->getObjectCalls['modUser'] : 0);
     }
 
     public function testSchemaQueueIndexNameMatchesSubscriberIdColumn()
