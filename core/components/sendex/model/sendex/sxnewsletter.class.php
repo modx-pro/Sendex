@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__FILE__) . '/sxsubscriberegistry.class.php';
+
 class sxNewsletter extends xPDOSimpleObject
 {
     /**
@@ -140,22 +142,15 @@ class sxNewsletter extends xPDOSimpleObject
 
         $hash = sha1(uniqid(sha1($email), true));
 
-        /** @var modRegistry $registry */
-        $registry = $this->xpdo->getService('registry', 'registry.modRegistry');
-        $instance = $registry->getRegister('user', 'registry.modDbRegister');
-
-        $instance->connect();
-        $instance->subscribe('/sendex/subscribe/');
-        $instance->send(
-            '/sendex/subscribe/',
+        sxSubscribeRegistry::store(
+            $this->xpdo,
+            $hash,
             array(
-                $hash => array(
-                    'user_id'       => $user_id,
-                    'newsletter_id' => $this->id,
-                    'email'         => $email,
-                ),
+                'user_id'       => $user_id,
+                'newsletter_id' => $this->id,
+                'email'         => $email,
             ),
-            array('ttl' => $linkTTL)
+            $linkTTL
         );
 
         return $hash;
@@ -167,7 +162,7 @@ class sxNewsletter extends xPDOSimpleObject
      *
      * @param $hash
      *
-     * @return bool
+     * @return bool|string true on success, false on failure, or plugin cancel message
      */
     public function confirmEmail($hash)
     {
@@ -175,34 +170,30 @@ class sxNewsletter extends xPDOSimpleObject
             return false;
         }
 
-        /** @var modRegistry $registry */
-        $registry = $this->xpdo->getService('registry', 'registry.modRegistry');
-        $instance = $registry->getRegister('user', 'registry.modDbRegister');
-
-        $instance->connect();
-        $instance->subscribe('/sendex/subscribe/' . $hash);
-
-        $entry = $instance->read(array('poll_limit' => 1));
-        if (!empty($entry[0])) {
-            $entry = reset($entry);
-            if ($this->id != $entry['newsletter_id']) {
-                /** @var sxNewsletter $newsletter */
-                if (
-                    $newsletter = $this->xpdo->getObject('sxNewsletter', array(
-                    'id'     => $entry['newsletter_id'],
-                    'active' => 1,
-                    ))
-                ) {
-                    return $newsletter->subscribe($entry['user_id'], $entry['email']);
-                } else {
-                    return false;
-                }
-            } else {
-                return $this->subscribe($entry['user_id'], $entry['email']);
-            }
+        $entry = sxSubscribeRegistry::consume($this->xpdo, $hash);
+        if ($entry === null) {
+            return false;
         }
 
-        return false;
+        $result = false;
+        if ($this->id != $entry['newsletter_id']) {
+            /** @var sxNewsletter $newsletter */
+            $newsletter = $this->xpdo->getObject('sxNewsletter', array(
+                'id'     => $entry['newsletter_id'],
+                'active' => 1,
+            ));
+            if ($newsletter) {
+                $result = $newsletter->subscribe($entry['user_id'], $entry['email']);
+            }
+        } else {
+            $result = $this->subscribe($entry['user_id'], $entry['email']);
+        }
+
+        if ($result !== true) {
+            sxSubscribeRegistry::restore($this->xpdo, $hash, $entry);
+        }
+
+        return $result;
     }
 
 

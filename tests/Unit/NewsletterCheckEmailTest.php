@@ -49,9 +49,14 @@ class NewsletterCheckEmailTest extends TestCase
 
     public function testStoresHashInRegistry()
     {
+        $before = time();
         $hash = $this->newsletter->checkEmail('new@example.com', 9, 600);
         $this->assertIsString($hash);
         $this->assertSame(10, $this->modx->registryEntries[$hash]['newsletter_id']);
         $this->assertSame(9, $this->modx->registryEntries[$hash]['user_id']);
+        $this->assertSame(600, $this->modx->lastRegisterTtl);
+        $this->assertArrayHasKey('_expires', $this->modx->registryEntries[$hash]);
+        $this->assertGreaterThanOrEqual($before + 600, $this->modx->registryEntries[$hash]['_expires']);
+        $this->assertLessThanOrEqual(time() + 600, $this->modx->registryEntries[$hash]['_expires']);
     }
 }

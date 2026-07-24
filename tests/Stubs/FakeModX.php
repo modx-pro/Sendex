@@ -29,6 +29,9 @@ class FakeModX extends modX
     /** @var string */
     public $lastRegisterPath = '';
 
+    /** @var int|null */
+    public $lastRegisterTtl = null;
+
     /** @var array<string,mixed> */
     public $options = array(
         'emailsender'           => 'noreply@example.com',
