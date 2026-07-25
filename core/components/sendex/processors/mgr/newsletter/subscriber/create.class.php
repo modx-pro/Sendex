@@ -57,7 +57,7 @@ class sxSubscriberCreateProcessor extends sxSendexProcessor
             return $this->failure($this->modx->lexicon('sendex_subscriber_err_ae'));
         }
 
-        $result = $newsletter->subscribe($user_id, $email);
+        $result = $newsletter->subscribe($user_id, $email, 'mgr');
         if ($result !== true) {
             return $this->failure(
                 is_string($result) ? $result : $this->modx->lexicon('sendex_subscriber_err_save')

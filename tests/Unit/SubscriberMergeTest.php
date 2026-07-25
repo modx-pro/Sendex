@@ -68,6 +68,15 @@ class SubscriberMergeTest extends TestCase
         $this->assertSame('', sxSubscriberMerge::emailFromUser($this->modx, null));
     }
 
+    public function testHandlesUserEventAllowsActivateAndSaveOnly()
+    {
+        $this->assertTrue(sxSubscriberMerge::handlesUserEvent('OnUserActivate'));
+        $this->assertTrue(sxSubscriberMerge::handlesUserEvent('OnUserSave'));
+        $this->assertFalse(sxSubscriberMerge::handlesUserEvent('OnBeforeUserActivate'));
+        $this->assertFalse(sxSubscriberMerge::handlesUserEvent('OnManagerPageInit'));
+        $this->assertFalse(sxSubscriberMerge::handlesUserEvent(''));
+    }
+
     public function testPluginSourceRegistersActivateAndSaveEvents()
     {
         $plugin = file_get_contents(
@@ -77,13 +86,12 @@ class SubscriberMergeTest extends TestCase
             dirname(__DIR__, 2) . '/_build/data/transport.plugins.php'
         );
 
-        $this->assertStringContainsString("case 'OnUserActivate':", $plugin);
-        $this->assertStringContainsString("case 'OnBeforeUserActivate':", $plugin);
-        $this->assertStringContainsString("case 'OnUserSave':", $plugin);
+        $this->assertStringContainsString('sxSubscriberMerge::handlesUserEvent', $plugin);
         $this->assertStringContainsString('sxSubscriberMerge::attachGuestsForUser', $plugin);
+        $this->assertStringNotContainsString('OnBeforeUserActivate', $plugin);
         $this->assertStringContainsString("'OnUserActivate'", $transport);
-        $this->assertStringContainsString("'OnBeforeUserActivate'", $transport);
         $this->assertStringContainsString("'OnUserSave'", $transport);
+        $this->assertStringNotContainsString("'OnBeforeUserActivate'", $transport);
     }
 
     /**

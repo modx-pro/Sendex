@@ -57,6 +57,29 @@ class QueueSenderTest extends TestCase
         $this->assertSame(1, $calls);
     }
 
+    public function testFlushStopOnErrorContinuesAfterPluginSkip()
+    {
+        $this->addQueue(1);
+        $this->addQueue(2);
+
+        $calls = 0;
+        $stats = sxQueueSender::flush($this->modx, array(
+            'stopOnError' => true,
+            'sendFn'      => function () use (&$calls) {
+                $calls++;
+                if ($calls === 1) {
+                    return false;
+                }
+
+                return true;
+            },
+        ));
+
+        $this->assertSame(1, $stats['skipped']);
+        $this->assertSame(1, $stats['sent']);
+        $this->assertSame(2, $calls);
+    }
+
     public function testFlushRespectsLimitAndCriteria()
     {
         $this->addQueue(1);

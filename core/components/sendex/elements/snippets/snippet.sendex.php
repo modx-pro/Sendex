@@ -60,11 +60,12 @@ if ($handlesRequest) {
     $params = $_GET;
     unset($params[$modx->getOption('request_param_alias')]);
     unset($params[$modx->getOption('request_param_id')]);
+    $eventSource = $isAjax ? 'ajax' : 'snippet';
 
     switch ($_REQUEST['sx_action']) {
         case 'subscribe':
             if ($isAuthenticated && $modx->user->id) {
-                $response = $newsletter->subscribe($modx->user->id);
+                $response = $newsletter->subscribe($modx->user->id, '', $eventSource);
                 if ($response !== true) {
                     $placeholders['message'] = is_string($response)
                         ? $response
@@ -149,7 +150,7 @@ if ($handlesRequest) {
                         );
                     }
                 }
-                $response = $newsletter->unSubscribe($code);
+                $response = $newsletter->unSubscribe($code, $eventSource);
                 if ($response === true) {
                     $placeholders['message'] = $modx->lexicon('sendex_subscribe_email_unsubscribed');
                     $params['sx_unsubscribed'] = 1;

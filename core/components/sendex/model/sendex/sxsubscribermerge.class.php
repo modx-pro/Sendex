@@ -9,6 +9,20 @@ require_once dirname(__FILE__) . '/sxuserprofile.class.php';
 class sxSubscriberMerge
 {
     /**
+     * MODX system events that may merge guests onto a user (#104 C1).
+     *
+     * OnBeforeUserActivate is excluded: another plugin can cancel activation after
+     * this handler would already have attached guests to an inactive user.
+     *
+     * @param string $eventName
+     * @return bool
+     */
+    public static function handlesUserEvent($eventName)
+    {
+        return in_array((string) $eventName, array('OnUserActivate', 'OnUserSave'), true);
+    }
+
+    /**
      * Set user_id on guest rows (user_id = 0) with the same email across newsletters.
      *
      * Policy: merge, never create a second row for the same newsletter email.

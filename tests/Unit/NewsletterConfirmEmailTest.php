@@ -40,6 +40,7 @@ class NewsletterConfirmEmailTest extends TestCase
         $this->assertTrue($this->newsletter->confirmEmail('hash1'));
         $this->assertCount(1, $this->modx->subscribers);
         $this->assertSame('sxOnSubscribe', $this->modx->invoked[1][0]);
+        $this->assertSame('confirm', $this->modx->invoked[1][1]['source']);
         $this->assertArrayNotHasKey('hash1', $this->modx->registryEntries);
     }
 

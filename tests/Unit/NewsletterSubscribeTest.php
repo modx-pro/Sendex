@@ -76,6 +76,23 @@ class NewsletterSubscribeTest extends TestCase
         $this->assertSame('sxOnBeforeSubscribe', $this->modx->invoked[0][0]);
         $this->assertSame('sxOnSubscribe', $this->modx->invoked[1][0]);
         $this->assertInstanceOf('sxSubscriber', $this->modx->invoked[1][1]['subscriber']);
+        $this->assertSame('snippet', $this->modx->invoked[0][1]['source']);
+        $this->assertSame('snippet', $this->modx->invoked[1][1]['source']);
+    }
+
+    public function testSubscribePassesExplicitSource()
+    {
+        $this->assertTrue($this->newsletter->subscribe(7, 'mgr@example.com', 'mgr'));
+
+        $this->assertSame('mgr', $this->modx->invoked[0][1]['source']);
+        $this->assertSame('mgr', $this->modx->invoked[1][1]['source']);
+    }
+
+    public function testSubscribeNormalizesUnknownSourceToSnippet()
+    {
+        $this->assertTrue($this->newsletter->subscribe(7, 'x@example.com', 'weird'));
+
+        $this->assertSame('snippet', $this->modx->invoked[0][1]['source']);
     }
 
     public function testBeforeCancelReturnsPluginMessageAndDoesNotSave()

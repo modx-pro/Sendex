@@ -66,6 +66,22 @@ class NewsletterUnsubscribeTest extends TestCase
         $this->assertSame('sxOnBeforeUnsubscribe', $this->modx->invoked[0][0]);
         $this->assertSame('sxOnUnsubscribe', $this->modx->invoked[1][0]);
         $this->assertSame('abc123', $this->modx->invoked[0][1]['code']);
+        $this->assertSame('snippet', $this->modx->invoked[0][1]['source']);
+        $this->assertSame('snippet', $this->modx->invoked[1][1]['source']);
+    }
+
+    public function testUnsubscribePassesExplicitSource()
+    {
+        $this->addSubscriber(array(
+            'id'            => 1,
+            'newsletter_id' => 10,
+            'user_id'       => 5,
+            'email'         => 'user@example.com',
+            'code'          => 'abc123',
+        ));
+
+        $this->assertTrue($this->newsletter->unSubscribe('abc123', 'mgr'));
+        $this->assertSame('mgr', $this->modx->invoked[0][1]['source']);
     }
 
     public function testBeforeCancelReturnsPluginMessageAndKeepsSubscriber()

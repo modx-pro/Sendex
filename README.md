@@ -112,7 +112,7 @@ Policy: **merge**, not block.
 
 1. Anonymous confirm / `subscribe()` resolves `modUser` by profile email and stores `user_id` (see `#54`).
 2. Unique key `(newsletter_id, email)` prevents a guest+user duplicate row.
-3. If a guest subscribed first and the account is created later, the Sendex plugin merges on `OnUserActivate`, `OnBeforeUserActivate`, and `OnUserSave`: guest rows with that email get `user_id` set. Reinstall/upgrade the package so the plugin events are registered.
+3. If a guest subscribed first and the account is created later, the Sendex plugin merges on `OnUserActivate` and `OnUserSave`: guest rows with that email get `user_id` set. Merge does not run on `OnBeforeUserActivate` (cancelled activation must not attach guests). Reinstall/upgrade the package so the plugin events are registered.
 
 Logged-in `isSubscribed($userId)` also matches a still-guest row by profile email, so the form shows unsubscribe without waiting for merge.
 
@@ -150,7 +150,9 @@ Unit tests use lightweight MODX/xPDO stubs (no MODX install). Covered: `sxNewsle
 
 ## Plugin events
 
-Fired from `sxNewsletter::subscribe()` / `unSubscribe()` (front-end and manager). Event names are registered in the transport package (`BUILD_EVENT_UPDATE`); reinstall or upgrade the package so they appear under System Events in the manager. `invokeEvent` by name works even before that.
+Event names are registered in the transport package (`BUILD_EVENT_UPDATE`); reinstall or upgrade so they appear under System Events. `invokeEvent` by name works even before that.
+
+### Subscribe / unsubscribe
 
 | Event | When | Cancel |
 | --- | --- | --- |
@@ -159,16 +161,28 @@ Fired from `sxNewsletter::subscribe()` / `unSubscribe()` (front-end and manager)
 | `sxOnBeforeUnsubscribe` | Before removing a subscriber | Yes |
 | `sxOnUnsubscribe` | After a successful remove | No |
 
-Params: `newsletter`, `newsletter_id`, `user_id`, `email`, `subscriber` (object after create / before remove). Unsubscribe also passes `code`.
+Params: `newsletter`, `newsletter_id`, `user_id`, `email`, `subscriber`, `source` (`snippet`\|`ajax`\|`confirm`\|`mgr`\|`guest`). Unsubscribe also passes `code`.
 
-Cancel a Before event with `$modx->event->output('error message');`. Callers get that string back from `subscribe()` / `unSubscribe()` (`true` on success, `false` on validation/save failure). Already-subscribed / missing or mismatched code paths are no-ops and do not fire events. `unSubscribe` only removes a subscriber that belongs to this newsletter.
+### Queue lifecycle
 
-### Manual check
+| Event | When | Cancel |
+| --- | --- | --- |
+| `sxOnBeforeAddQueues` | Before building queue rows | Yes (abort batch) |
+| `sxOnAddQueues` | After rows created | No |
+| `sxOnBeforeQueueSend` | Before sending one row (after claim) | Yes (skip, no requeue); may mutate `message` |
+| `sxOnQueueSend` | After successful send | No |
+| `sxOnQueueSendFailed` | After mail failure + requeue | No |
+| `sxOnQueueFlushComplete` | After `flush` batch | No |
 
-1. Subscribe (auth user / guest confirm) → `sxOnBeforeSubscribe` + `sxOnSubscribe`.
-2. Plugin `output()` on Before → subscribe aborted; message shown in mgr/front.
-3. Unsubscribe front + mgr remove → Before + After; cancel → mgr `failure`, not silent success.
-4. Unsubscribe with a code from another newsletter → no remove, no events.
+### Listens to (plugin.sendex.php)
+
+| MODX event | Behavior |
+| --- | --- |
+| `OnManagerPageInit` | Mgr CSS |
+| `OnUserActivate` / `OnUserSave` | Merge guest rows onto user by email |
+| `OnBeforeUserActivate` | Not used (cancelled activation must not merge) |
+
+Cancel a Before event with `$modx->event->output('error message');`. Already-subscribed / missing or mismatched code paths are no-ops and do not fire subscribe events.
 
 ## Docs
 
