@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - [#51] Subscriber export goes through the authenticated manager connector (no public CSV under `assets/`); processor requires `edit_document`.
 - CSV cells that look like spreadsheet formulas are prefixed so Excel/LibreOffice do not execute them.
+- [#103] Mail header fields (`email_from`, `email_reply`, `email_to`) are sanitized to strip CR/LF/control characters before PHPMailer configuration.
 
 ### Added
 - [#42] Frontend AJAX subscribe/unsubscribe: JSON `{success, message, html}` from snippet, default chunks + `assets/components/sendex/js/web/sendex.js`. Multi-widget pages scope POST via `newsletter_id` and optional `widgetKey`.
