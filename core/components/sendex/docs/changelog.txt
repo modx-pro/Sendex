@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - [#40] MODX 3 package install: `registerNamespace` sets `assets_path`; build script aliases `modPackageBuilder`, skips model regen on MODX 3 (preserves global `sx*` maps); mgr menu without `modAction`; Phinx migration property no longer conflicts with `AbstractMigration::$tables` on PHP 8.4.
+- [#74] MODX 3 mgr: `SendexIndexManagerController` in `controllers/`; menu action `home` on MODX 3 (direct action routing).
 - [#60] Mgr grids: empty checkbox selection no longer sends `ids:''`; alert via `Sendex.utils.requireSelectedIds`, row action falls back to `menu.record`.
 - [#59] Deleting a newsletter removes its `sxQueue` rows via xPDO composite `Queues`; upgrade migration purges queue rows left orphaned by earlier deletes.
 - [#57] `addQueues` returns an error when 0 queue rows were created (all subscribers skipped); mgr `queue/add` reports the created count on success.

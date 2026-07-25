@@ -37,6 +37,9 @@ foreach ($tmp as $k => $v) {
             ), $v['action']), '', true, true);
         } else {
             $controller = !empty($v['action']['controller']) ? $v['action']['controller'] : 'index';
+            if ($controller === 'index') {
+                $controller = 'home';
+            }
             $menuFields['action'] = $controller;
             $menuFields['namespace'] = PKG_NAME_LOWER;
         }

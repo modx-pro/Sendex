@@ -59,7 +59,18 @@ class BuildTransportModx3ContractTest extends TestCase
 
         $this->assertStringContainsString("class_exists('modAction')", $source);
         $this->assertStringContainsString("\$menuFields['namespace'] = PKG_NAME_LOWER", $source);
+        $this->assertStringContainsString("\$controller = 'home'", $source);
         $this->assertStringNotContainsString('instanceof modAction', $source);
+    }
+
+    public function testModx3IndexControllerUsesSendexPrefixedClassName()
+    {
+        $source = file_get_contents(
+            $this->root . '/core/components/sendex/controllers/index.class.php'
+        );
+
+        $this->assertStringContainsString('class SendexIndexManagerController', $source);
+        $this->assertStringContainsString('extends SendexHomeManagerController', $source);
     }
 
     public function testModelMetadataKeepsGlobalSxClassNames()
