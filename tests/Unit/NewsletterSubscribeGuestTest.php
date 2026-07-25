@@ -38,15 +38,6 @@ class NewsletterSubscribeGuestTest extends TestCase
         $this->assertCount(0, $this->modx->subscribers);
     }
 
-    public function testConfirmFlowReturnsRateLimitedWhenWindowActive()
-    {
-        sxSubscribeRegistry::touchConfirmRateLimit($this->modx, 'guest@example.com', 120);
-
-        $result = $this->newsletter->subscribeGuest('guest@example.com', 0, 600, true, 120);
-
-        $this->assertSame('rate_limited', $result['status']);
-    }
-
     public function testAlreadySubscribedReturnsAlready()
     {
         $subscriber = new sxSubscriber($this->modx);

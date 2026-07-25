@@ -72,7 +72,6 @@ class sxSubscribeConfirm
      * @param int $userId
      * @param int $linkTTL
      * @param bool $requireConfirm
-     * @param int $rateLimit
      * @return array{status:string,hash?:string,message?:string}
      */
     public static function guestSubscribe(
@@ -80,11 +79,8 @@ class sxSubscribeConfirm
         $email = '',
         $userId = 0,
         $linkTTL = 1800,
-        $requireConfirm = true,
-        $rateLimit = 0
+        $requireConfirm = true
     ) {
-        $xpdo = $subscription->newsletter()->xpdo;
-
         if (!$requireConfirm) {
             $result = $subscription->subscribe($userId, $email, 'guest');
             if ($result === true) {
@@ -98,10 +94,6 @@ class sxSubscribeConfirm
                 'status'  => 'error',
                 'message' => (string) $result,
             );
-        }
-
-        if (sxSubscribeRegistry::isConfirmRateLimited($xpdo, $email, $rateLimit)) {
-            return array('status' => 'rate_limited');
         }
 
         $response = $subscription->checkEmail($email, $userId, $linkTTL);

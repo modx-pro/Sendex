@@ -104,7 +104,7 @@ Guest chunk structure (for custom templates):
 </div>
 ```
 
-Set `&loadJs=`0`` if you ship your own JS but keep the same JSON contract (`X-Requested-With: XMLHttpRequest` or `ajax=1`).
+Set `&loadJs=0` if you ship your own JS but keep the same JSON contract (`X-Requested-With: XMLHttpRequest` or `ajax=1`).
 
 ### Guest email vs existing User (#39)
 
@@ -118,7 +118,7 @@ Logged-in `isSubscribed($userId)` also matches a still-guest row by profile emai
 
 ### Unsubscribe from email (#56)
 
-The page must call `[[!Sendex? &id=`…`]]` (any newsletter id is fine). Query params:
+The page must call `[[!Sendex? &id=...]]` (any newsletter id is fine). Query params:
 
 | Param | Required | Meaning |
 | --- | --- | --- |

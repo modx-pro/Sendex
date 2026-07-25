@@ -19,6 +19,7 @@ require_once $corePath . 'model/sendex/sxunsubscriberesolve.class.php';
 require_once $corePath . 'model/sendex/sxsubscribeconfirm.class.php';
 require_once $corePath . 'model/sendex/sxsubscribeajaxresponse.class.php';
 require_once $corePath . 'model/sendex/sxsubscribecsrf.class.php';
+require_once $corePath . 'model/sendex/sxsubscriberegistry.class.php';
 
 $tplSubscribeAuth = $modx->getOption('tplSubscribeAuth', $scriptProperties, 'tpl.Sendex.subscribe.auth');
 $tplSubscribeGuest = $modx->getOption('tplSubscribeGuest', $scriptProperties, 'tpl.Sendex.subscribe.guest');
@@ -91,12 +92,16 @@ if ($handlesRequest) {
                     }
                 } elseif (!empty($_REQUEST['email'])) {
                     $email = htmlentities(strip_tags(urldecode($_REQUEST['email'])));
+                    if ($requireConfirm && sxSubscribeRegistry::isConfirmRateLimited($modx, $email, $confirmRateLimit)) {
+                        $placeholders['message'] = $modx->lexicon('sendex_subscribe_err_rate_limited');
+                        $placeholders['error'] = 1;
+                        break;
+                    }
                     $guestResult = $newsletter->subscribeGuest(
                         $email,
                         $modx->user->id,
                         $linkTTL,
-                        $requireConfirm,
-                        $confirmRateLimit
+                        $requireConfirm
                     );
                     if ($guestResult['status'] === 'already') {
                         $placeholders['message'] = $modx->lexicon('sendex_subscribe_err_already');

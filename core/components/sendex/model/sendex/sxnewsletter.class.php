@@ -80,18 +80,16 @@ class sxNewsletter extends xPDOSimpleObject
      * @param int $user_id
      * @param int $linkTTL
      * @param bool $requireConfirm
-     * @param int $rateLimit
      * @return array{status:string,hash?:string,message?:string}
      */
-    public function subscribeGuest($email = '', $user_id = 0, $linkTTL = 1800, $requireConfirm = true, $rateLimit = 0)
+    public function subscribeGuest($email = '', $user_id = 0, $linkTTL = 1800, $requireConfirm = true)
     {
         return sxSubscribeConfirm::guestSubscribe(
             $this->subscription(),
             $email,
             $user_id,
             $linkTTL,
-            $requireConfirm,
-            $rateLimit
+            $requireConfirm
         );
     }
 
