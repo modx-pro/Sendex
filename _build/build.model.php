@@ -25,6 +25,16 @@ $modx->initialize('mgr');
 $modx->getService('error', 'error.modError');
 $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget(XPDO_CLI_MODE ? 'ECHO' : 'HTML');
+
+if (!sendexShouldRegenerateModel($modx)) {
+    sendexRemoveModx3ModelArtifacts($sources['model'] . PKG_NAME_LOWER);
+    $modx->log(
+        modX::LOG_LEVEL_WARN,
+        'Model regeneration skipped on MODX 3 (xPDO generator rewrites sx* maps to sendex\\sx*).'
+    );
+    exit(0);
+}
+
 $modx->loadClass('transport.modPackageBuilder', '', false, true);
 
 /** @var xPDOManager $manager */
@@ -37,5 +47,6 @@ rrmdir($sources['model'] . PKG_NAME_LOWER . '/mysql');
 
 // Generate a new one
 $generator->parseSchema($sources['xml'], $sources['model']);
+sendexNormalizeGeneratedPhpFiles($sources['model'] . PKG_NAME_LOWER);
 
 $modx->log(modX::LOG_LEVEL_INFO, 'Model generated.');

@@ -32,6 +32,27 @@ class BuildTransportModx3ContractTest extends TestCase
         $this->assertStringContainsString('sendexShouldRegenerateModel', $source);
     }
 
+    public function testBuildTransportCleansModx3ModelArtifactsWhenSkippingRegeneration()
+    {
+        $source = file_get_contents($this->root . '/_build/build.transport.php');
+
+        $this->assertStringContainsString('sendexRemoveModx3ModelArtifacts($sendexModelDir)', $source);
+        $this->assertStringContainsString('sendexNormalizeGeneratedPhpFiles($sendexModelDir)', $source);
+    }
+
+    public function testBuildModelSkipsRegenerationOnModx3AndNormalizesGeneratedPhp()
+    {
+        $source = file_get_contents($this->root . '/_build/build.model.php');
+        $functions = file_get_contents($this->root . '/_build/includes/functions.php');
+
+        $this->assertStringContainsString('sendexShouldRegenerateModel($modx)', $source);
+        $this->assertStringContainsString('sendexRemoveModx3ModelArtifacts', $source);
+        $this->assertStringContainsString('sendexNormalizeGeneratedPhpFiles', $source);
+        $this->assertStringContainsString('function sendexRemoveModx3ModelArtifacts', $functions);
+        $this->assertStringContainsString('function sendexNormalizeGeneratedPhpFiles', $functions);
+        $this->assertStringContainsString("preg_match('/^\\{\\s*$/',", $functions);
+    }
+
     public function testTransportMenuUsesCapabilityCheckForModAction()
     {
         $source = file_get_contents($this->root . '/_build/data/transport.menu.php');

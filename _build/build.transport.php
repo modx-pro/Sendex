@@ -15,6 +15,10 @@ if (file_exists('build.model.php')) {
     $sendexBuildModx->initialize('mgr');
     if (sendexShouldRegenerateModel($sendexBuildModx)) {
         require_once 'build.model.php';
+    } else {
+        $sendexModelDir = dirname(dirname(__FILE__)) . '/core/components/' . PKG_NAME_LOWER . '/model/' . PKG_NAME_LOWER;
+        sendexRemoveModx3ModelArtifacts($sendexModelDir);
+        sendexNormalizeGeneratedPhpFiles($sendexModelDir);
     }
     unset($sendexBuildModx);
 }
