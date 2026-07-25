@@ -70,7 +70,7 @@ class NewsletterDispatchTest extends TestCase
 
         $user = new modUser($this->modx);
         $user->set('id', 5);
-        $user->active = false;
+        $user->set('active', 0);
         $this->modx->users[5] = $user;
 
         $queue = new sxQueue($this->modx);
@@ -111,7 +111,7 @@ class NewsletterDispatchTest extends TestCase
 
         $user = new modUser($this->modx);
         $user->set('id', 5);
-        $user->active = true;
+        $user->set('active', 1);
         $this->modx->users[5] = $user;
 
         $result = sxNewsletterDispatch::queueAndSend($this->newsletter);

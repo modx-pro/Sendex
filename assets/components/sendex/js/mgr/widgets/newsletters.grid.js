@@ -408,7 +408,7 @@ Sendex.grid.NewsletterSubscribers = function(config) {
         },{
             xtype: 'button',
             hidden: Sendex.config.hideExportButton,
-            text: '<i class="icon-arrow-circle-up icon"></i> ' + _('sendex_btn_subscrubers_export'),
+            text: '<i class="' + (MODx.modx23 ? 'icon icon-arrow-circle-up' : 'fa fa-arrow-circle-up') + '"></i> ' + _('sendex_btn_subscrubers_export'),
             id: 'sendex-export-form',
             cls: 'x-btn-restore-all',
             listeners: {

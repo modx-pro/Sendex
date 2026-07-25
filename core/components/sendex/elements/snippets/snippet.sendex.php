@@ -14,7 +14,7 @@ if (!($Sendex instanceof Sendex)) {
     return '';
 }
 
-require_once $corePath . 'model/sendex/sxuserplaceholders.class.php';
+require_once $corePath . 'model/sendex/sxuserprofile.class.php';
 require_once $corePath . 'model/sendex/sxunsubscriberesolve.class.php';
 require_once $corePath . 'model/sendex/sxsubscribeconfirm.class.php';
 require_once $corePath . 'model/sendex/sxsubscribeajaxresponse.class.php';
@@ -53,12 +53,7 @@ $handlesRequest = !empty($_REQUEST['sx_action'])
     && sxSubscribeAjaxResponse::matchesRequest($newsletterId, $widgetKey, $_REQUEST);
 $isAuthenticated = $modx->user->isAuthenticated($modx->context->key);
 if ($isAuthenticated) {
-    $profile = $modx->user->getOne('Profile');
-    $placeholders = sxUserPlaceholders::mergeAuthenticated(
-        $modx->user->toArray(),
-        $profile ? $profile->toArray() : null,
-        $placeholders
-    );
+    $placeholders = sxUserProfile::authenticatedPlaceholders($modx, $modx->user, $placeholders);
 }
 
 if ($handlesRequest) {
@@ -147,10 +142,9 @@ if ($handlesRequest) {
                         )
                     );
                     if ($isAuthenticated) {
-                        $profile = $modx->user->getOne('Profile');
-                        $placeholders = sxUserPlaceholders::mergeAuthenticated(
-                            $modx->user->toArray(),
-                            $profile ? $profile->toArray() : null,
+                        $placeholders = sxUserProfile::authenticatedPlaceholders(
+                            $modx,
+                            $modx->user,
                             $placeholders
                         );
                     }

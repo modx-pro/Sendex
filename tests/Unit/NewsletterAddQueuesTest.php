@@ -81,7 +81,7 @@ class NewsletterAddQueuesTest extends TestCase
 
         $user = new modUser($this->modx);
         $user->set('id', 5);
-        $user->active = true;
+        $user->set('active', 1);
         $this->modx->users[5] = $user;
 
         $this->assertSame('sendex_newsletter_err_no_queues', $this->newsletter->addQueues());
@@ -101,7 +101,7 @@ class NewsletterAddQueuesTest extends TestCase
 
         $user = new modUser($this->modx);
         $user->set('id', 5);
-        $user->active = false;
+        $user->set('active', 0);
         $this->modx->users[5] = $user;
 
         $profile = new modUserProfile($this->modx);
@@ -127,7 +127,7 @@ class NewsletterAddQueuesTest extends TestCase
 
         $user = new modUser($this->modx);
         $user->set('id', 5);
-        $user->active = true;
+        $user->set('active', 1);
         $this->modx->users[5] = $user;
 
         $profile = new modUserProfile($this->modx);
@@ -175,7 +175,7 @@ class NewsletterAddQueuesTest extends TestCase
         for ($userId = 1; $userId <= 10; $userId++) {
             $user = new modUser($this->modx);
             $user->set('id', $userId);
-            $user->active = true;
+            $user->set('active', 1);
             $this->modx->users[$userId] = $user;
 
             $profile = new modUserProfile($this->modx);

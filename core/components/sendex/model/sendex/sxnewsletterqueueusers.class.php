@@ -31,7 +31,7 @@ class sxNewsletterQueueUsers
             $id = (int) $user->get('id');
             $loadedIds[] = $id;
             $profile = isset($profilesByUser[$id]) ? $profilesByUser[$id] : null;
-            if (!$profile || !$user->active || $profile->get('blocked')) {
+            if (!$profile || !sxUserProfile::isActiveUser($user) || $profile->get('blocked')) {
                 continue;
             }
 

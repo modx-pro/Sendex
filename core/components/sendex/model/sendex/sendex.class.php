@@ -31,6 +31,10 @@ class Sendex
             $config,
             $this->modx->getOption('core_path') . 'components/sendex/'
         );
+        if (is_file($corePath . 'bootstrap.php')) {
+            require_once $corePath . 'bootstrap.php';
+            sendexRegisterAutoload($corePath);
+        }
         $assetsUrl = $this->modx->getOption(
             'sendex_assets_url',
             $config,
@@ -75,7 +79,7 @@ class Sendex
     public function sendEmail($email, array $options = array())
     {
         /** @var modPHPMailer $mail */
-        $mail = $this->modx->getService('mail', 'mail.modPHPMailer');
+        $mail = sxModxCompat::getMail($this->modx);
         sxNewsletterMailer::configureMailer(
             $mail,
             sxNewsletterMailer::buildActivationMessage($this->modx, $email, $options)

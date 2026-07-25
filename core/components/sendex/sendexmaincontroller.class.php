@@ -16,6 +16,7 @@ abstract class SendexMainController extends modExtraManagerController
     public function initialize()
     {
         $version = $this->modx->getVersionData();
+        // MODx.modx23 = modern mgr UI (MODX 2.3+ and MODX 3.x), not a separate MODX 3 branch.
         $modx23 = !empty($version) && version_compare($version['full_version'], '2.3.0', '>=');
         if (!$modx23) {
             $this->addCss(MODX_ASSETS_URL . 'components/sendex/css/mgr/font-awesome.min.css');
@@ -27,9 +28,9 @@ abstract class SendexMainController extends modExtraManagerController
             null,
             $this->modx->getOption('core_path') . 'components/sendex/'
         );
-        require_once $corePath . 'model/sendex/sendex.class.php';
+        require_once $corePath . 'bootstrap.php';
 
-        $this->Sendex = new Sendex($this->modx);
+        $this->Sendex = sendexBootstrap($this->modx);
         $this->addCss($this->Sendex->config['cssUrl'] . 'mgr/main.css');
         $this->addJavascript($this->Sendex->config['jsUrl'] . 'mgr/sendex.js');
         $this->addJavascript($this->Sendex->config['jsUrl'] . 'mgr/misc/utils.js');

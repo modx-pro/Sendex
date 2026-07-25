@@ -102,7 +102,7 @@ class sxQueueSender
         }
 
         /** @var modPHPMailer $mail */
-        $mail = $queue->xpdo->getService('mail', 'mail.modPHPMailer');
+        $mail = sxModxCompat::getMail($queue->xpdo);
         sxNewsletterMailer::configureMailer($mail, $message);
         if (!$mail->send()) {
             $error = $mail->mailer->ErrorInfo;

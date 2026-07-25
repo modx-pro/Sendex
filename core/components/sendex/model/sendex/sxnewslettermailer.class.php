@@ -123,10 +123,10 @@ class sxNewsletterMailer
      */
     public static function configureMailer($mail, array $message)
     {
-        $mail->set(modMail::MAIL_BODY, $message['email_body']);
-        $mail->set(modMail::MAIL_FROM, $message['email_from']);
-        $mail->set(modMail::MAIL_FROM_NAME, $message['email_from_name']);
-        $mail->set(modMail::MAIL_SUBJECT, $message['email_subject']);
+        $mail->set(sxModxCompat::mailConst('BODY'), $message['email_body']);
+        $mail->set(sxModxCompat::mailConst('FROM'), $message['email_from']);
+        $mail->set(sxModxCompat::mailConst('FROM_NAME'), $message['email_from_name']);
+        $mail->set(sxModxCompat::mailConst('SUBJECT'), $message['email_subject']);
         $mail->address('to', $message['email_to']);
         $mail->address('reply-to', $message['email_reply']);
         $mail->setHTML(true);

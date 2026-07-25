@@ -41,7 +41,7 @@ class UserPlaceholdersTest extends TestCase
         );
         $this->assertNotFalse($snippet);
         $this->assertStringNotContainsString('->Profile->', $snippet);
-        $this->assertStringContainsString('sxUserPlaceholders::mergeAuthenticated', $snippet);
-        $this->assertStringContainsString("getOne('Profile')", $snippet);
+        $this->assertStringContainsString('sxUserProfile::authenticatedPlaceholders', $snippet);
+        $this->assertStringNotContainsString("getOne('Profile')", $snippet);
     }
 }

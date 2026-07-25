@@ -6,14 +6,16 @@ Sendex runs email newsletters in MODX Revolution: subscribers, a send queue, and
 
 ## MODX 3 compatibility
 
-Sendex keeps global `sx*` xPDO models (not `MODX\Revolution\sx*`). Verified on MODX **3.2.0-pl** (2026-07-25): transport install, namespace `assets_path`, mgr menu (`namespace` + `action`), Phinx migrations, `sx*` class map.
+Sendex keeps global `sx*` xPDO models (not `MODX\Revolution\sx*`). Verified on MODX **3.2.0-pl** (2026-07-25): transport install, namespace `assets_path`, mgr menu (`namespace` + `action`), Phinx migrations, `sx*` class map, connector bootstrap, mgr processors, ExtJS UI.
 
 Build/package notes:
 
 - `_build/build.transport.php` registers `PKG_ASSETS_PATH` and skips `build.model.php` on MODX 3 (xPDO 3 schema generator would rewrite maps to `sendex\sx*`).
 - Mgr menu uses legacy `modAction` on MODX 2 and `modMenu.action` + `namespace` on MODX 3.
+- `core/components/sendex/bootstrap.php` — shared init for connector, mgr, and cron (autoload + processor base aliases).
+- `sxModxCompat` / `sxUserProfile` — MODX 2/3 boundary for mail, parser, registry, and user/profile placeholders.
 
-Not covered yet (see [#74](https://github.com/modx-pro/Sendex/issues/74)): processors/connector autoload, user/profile/mailer API boundary, new non-ExtJS admin UI, CI matrix MODX 2.8 + 3.x.
+Not covered yet (see [#74](https://github.com/modx-pro/Sendex/issues/74)): new non-ExtJS admin UI, CI matrix MODX 2.8 + 3.x.
 
 ## Features
 

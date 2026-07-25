@@ -1,6 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/sxsubscribermatch.class.php';
+require_once dirname(__FILE__) . '/sxuserprofile.class.php';
 
 /**
  * Attach guest subscriber rows to a modUser when email matches (#39).
@@ -56,22 +57,12 @@ class sxSubscriberMerge
             return '';
         }
 
-        $profile = null;
-        if (method_exists($user, 'getOne')) {
-            $profile = $user->getOne('Profile');
-        }
-
-        if (!$profile && method_exists($user, 'get')) {
-            $profile = $xpdo->getObject('modUserProfile', array(
-                'internalKey' => (int) $user->get('id'),
-            ));
-        }
-
+        $profile = sxUserProfile::profileArray($user, $xpdo);
         if (!$profile) {
             return '';
         }
 
-        return sxSubscriberMatch::normalizeEmail($profile->get('email'));
+        return sxSubscriberMatch::normalizeEmail($profile['email']);
     }
 
     /**
