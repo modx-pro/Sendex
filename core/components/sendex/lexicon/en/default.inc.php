@@ -13,6 +13,7 @@ $_lang['sendex_btn_create'] = 'Create';
 $_lang['sendex_btn_subscribe'] = 'Subscribe!';
 $_lang['sendex_btn_unsubscribe'] = 'Unsubscribe';
 $_lang['sendex_btn_send_all'] = 'Send all';
+$_lang['sendex_btn_send_subscribers'] = 'Send to subscribers';
 $_lang['sendex_btn_remove_all'] = 'Remove all';
 $_lang['sendex_btn_subscrubers_export'] = 'Export';
 $_lang['sendex_select_user'] = 'Add user';
@@ -31,6 +32,9 @@ $_lang['sendex_newsletter_err_no_subscribers'] = 'This newsletter has no subscri
 $_lang['sendex_newsletter_err_no_template'] = 'This newsletter has no template.';
 $_lang['sendex_newsletter_err_no_queues'] = 'No letters were added to the queue (0 rows).';
 $_lang['sendex_newsletter_queues_added'] = 'Added [[+count]] letter(s) to the queue.';
+$_lang['sendex_newsletter_send'] = 'Send to subscribers';
+$_lang['sendex_newsletter_send_confirm'] = 'Queue all subscribers and send pending emails for this newsletter?';
+$_lang['sendex_newsletter_send_success'] = 'Queued [[+queued]] letter(s), sent [[+sent]].';
 $_lang['sendex_newsletter_err_template'] = 'You must select template.';
 
 $_lang['sendex_newsletters_remove'] = 'Remove newsletters';
@@ -114,6 +118,7 @@ $_lang['sendex_subscribe_err_email_wrong'] = 'Wrong email.';
 $_lang['sendex_subscribe_err_email_ns'] = 'You need to specify email.';
 $_lang['sendex_subscribe_err_email_send'] = 'Could not send email.';
 
+$_lang['sendex_action_sendNewsletter'] = 'Send to subscribers';
 $_lang['sendex_action_updateNewsletter'] = 'Update newsletter';
 $_lang['sendex_action_disableNewsletter'] = 'Disable newsletter';
 $_lang['sendex_action_enableNewsletter'] = 'Enable newsletter';

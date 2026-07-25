@@ -13,6 +13,7 @@ $_lang['sendex_btn_create'] = 'Создать';
 $_lang['sendex_btn_subscribe'] = 'Подписаться!';
 $_lang['sendex_btn_unsubscribe'] = 'Отписаться';
 $_lang['sendex_btn_send_all'] = 'Отправить все';
+$_lang['sendex_btn_send_subscribers'] = 'Отправить подписчикам';
 $_lang['sendex_btn_remove_all'] = 'Удалить все';
 $_lang['sendex_btn_subscrubers_export'] = 'Экспорт';
 $_lang['sendex_select_user'] = 'Добавить пользователя';
@@ -31,6 +32,9 @@ $_lang['sendex_newsletter_err_no_subscribers'] = 'У этой рассылки �
 $_lang['sendex_newsletter_err_no_template'] = 'У этой рассылки нет шаблона.';
 $_lang['sendex_newsletter_err_no_queues'] = 'В очередь не добавлено ни одного письма (0 строк).';
 $_lang['sendex_newsletter_queues_added'] = 'В очередь добавлено писем: [[+count]].';
+$_lang['sendex_newsletter_send'] = 'Отправить подписчикам';
+$_lang['sendex_newsletter_send_confirm'] = 'Поставить всех подписчиков в очередь и отправить ожидающие письма?';
+$_lang['sendex_newsletter_send_success'] = 'В очередь: [[+queued]], отправлено: [[+sent]].';
 $_lang['sendex_newsletter_err_template'] = 'Вы должны выбрать шаблон.';
 
 $_lang['sendex_newsletters_remove'] = 'Удалить подписки';
@@ -116,6 +120,7 @@ $_lang['sendex_subscribe_err_email_wrong'] = 'Неверный email.';
 $_lang['sendex_subscribe_err_email_ns'] = 'Нужно указать email.';
 $_lang['sendex_subscribe_err_email_send'] = 'Не могу отправить email.';
 
+$_lang['sendex_action_sendNewsletter'] = 'Отправить подписчикам';
 $_lang['sendex_action_updateNewsletter'] = 'Изменить рассылку';
 $_lang['sendex_action_disableNewsletter'] = 'Отключить рассылку';
 $_lang['sendex_action_enableNewsletter'] = 'Включить рассылку';
