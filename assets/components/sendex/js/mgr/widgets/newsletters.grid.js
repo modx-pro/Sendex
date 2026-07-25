@@ -54,7 +54,7 @@ Sendex.grid.Newsletters = function(config) {
     });
     Sendex.grid.Newsletters.superclass.constructor.call(this,config);
 };
-Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
+Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,Ext.apply({
     windows: {}
 
     ,getMenu: function(grid, rowIndex) {
@@ -150,70 +150,43 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,{
     }
 
     ,removeNewsletter: function(grid, e) {
-        var ids = this._getSelectedIds();
-        if (!ids) {return;}
-        Sendex.utils.onAjax(this.getEl());
-
-        MODx.msg.confirm({
-            title: _('sendex_newsletters_remove')
-            ,text: _('sendex_newsletters_remove_confirm')
-            ,url: this.config.url
-            ,params: {
+        this.confirmWithSelection({
+            emptyLex: 'sendex_newsletters_err_ns',
+            title: _('sendex_newsletters_remove'),
+            text: _('sendex_newsletters_remove_confirm'),
+            params: {
                 action: 'mgr/newsletter/remove'
-                ,ids: ids.join(',')
-            }
-            ,listeners: {
-                success: {fn:function(r) { this.refresh(); },scope:this}
+            },
+            listeners: {
+                success: {fn:function() { this.refresh(); },scope:this}
             }
         });
     }
 
     ,disableNewsletter: function(grid, e) {
-        var ids = this._getSelectedIds();
-        if (!ids) {return;}
-        Sendex.utils.onAjax(this.getEl());
-
-        MODx.Ajax.request({
-            url: this.config.url
-            ,params: {
+        this.ajaxWithSelection({
+            emptyLex: 'sendex_newsletters_err_ns',
+            params: {
                 action: 'mgr/newsletter/disable'
-                ,ids: ids.join(',')
-            }
-            ,listeners: {
-                success: {fn:function(r) { this.refresh(); },scope:this}
+            },
+            listeners: {
+                success: {fn:function() { this.refresh(); },scope:this}
             }
         });
     }
 
     ,enableNewsletter: function(grid, e) {
-        var ids = this._getSelectedIds();
-        if (!ids) {return;}
-        Sendex.utils.onAjax(this.getEl());
-
-        MODx.Ajax.request({
-            url: this.config.url
-            ,params: {
+        this.ajaxWithSelection({
+            emptyLex: 'sendex_newsletters_err_ns',
+            params: {
                 action: 'mgr/newsletter/enable'
-                ,ids: ids.join(',')
-            }
-            ,listeners: {
-                success: {fn:function(r) { this.refresh(); },scope:this}
+            },
+            listeners: {
+                success: {fn:function() { this.refresh(); },scope:this}
             }
         });
     }
-
-    ,_getSelectedIds: function() {
-        var ids = [];
-        var selected = this.getSelectionModel().getSelections();
-
-        for (var i in selected) {
-            if (!selected.hasOwnProperty(i)) {continue;}
-            ids.push(selected[i]['id']);
-        }
-
-        return ids;
-    }
-});
+}, Sendex.grid.SelectionMixin);
 Ext.reg('sendex-grid-newsletters',Sendex.grid.Newsletters);
 
 
@@ -401,7 +374,7 @@ Sendex.grid.NewsletterSubscribers = function(config) {
     });
     Sendex.grid.NewsletterSubscribers.superclass.constructor.call(this,config);
 };
-Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
+Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, Ext.apply({
 
     getMenu: function(grid, rowIndex) {
         var row = grid.getStore().getAt(rowIndex);
@@ -463,34 +436,17 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
     }
 
     ,removeSubscriber:function(btn,e) {
-        var ids = this._getSelectedIds();
-        if (!ids) {return;}
-        Sendex.utils.onAjax(this.getEl());
-
-        MODx.msg.confirm({
-            title: _('sendex_subscribers_remove')
-            ,text: _('sendex_subscribers_remove_confirm')
-            ,url: Sendex.config.connector_url
-            ,params: {
+        this.confirmWithSelection({
+            emptyLex: 'sendex_subscribers_err_ns',
+            title: _('sendex_subscribers_remove'),
+            text: _('sendex_subscribers_remove_confirm'),
+            params: {
                 action: 'mgr/newsletter/subscriber/remove'
-                ,ids: ids.join(',')
-            }
-            ,listeners: {
-                success: {fn:function(r) {this.refresh();},scope:this}
+            },
+            listeners: {
+                success: {fn:function() {this.refresh();},scope:this}
             }
         });
-    }
-
-    ,_getSelectedIds: function() {
-        var ids = [];
-        var selected = this.getSelectionModel().getSelections();
-
-        for (var i in selected) {
-            if (!selected.hasOwnProperty(i)) {continue;}
-            ids.push(selected[i]['id']);
-        }
-
-        return ids;
     }
 
     ,exportSubscribers: function() {
@@ -553,5 +509,5 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, {
         window.URL.revokeObjectURL(url);
     }
 
-});
+}, Sendex.grid.SelectionMixin));
 Ext.reg('sendex-grid-newsletter-subscribers',Sendex.grid.NewsletterSubscribers);

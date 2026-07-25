@@ -60,7 +60,7 @@ Sendex.grid.Queues = function(config) {
 
     Sendex.grid.Queues.superclass.constructor.call(this, config);
 };
-Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
+Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, Ext.apply({
     windows: {}
 
     ,getMenu: function(grid, rowIndex) {
@@ -108,36 +108,27 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
     }
 
     ,sendQueue: function(btn,e,row) {
-        var ids = this._getSelectedIds();
-        if (!ids) {return;}
-        Sendex.utils.onAjax(this.getEl());
-
-        MODx.Ajax.request({
-            url: Sendex.config.connector_url
-            ,params: {
+        this.ajaxWithSelection({
+            emptyLex: 'sendex_queue_err_ns',
+            params: {
                 action: 'mgr/queue/send'
-                ,ids: ids.join(',')
-            }
-            ,listeners: {
-                success: {fn:function(r) {this.refresh();},scope:this}
+            },
+            listeners: {
+                success: {fn:function() {this.refresh();},scope:this}
             }
         });
     }
 
     ,removeQueue: function(btn,e,row) {
-        var ids = this._getSelectedIds();
-        if (!ids) {return;}
-
-        MODx.msg.confirm({
-            title: _('sendex_queues_remove')
-            ,text: _('sendex_queues_remove_confirm')
-            ,url: Sendex.config.connector_url
-            ,params: {
+        this.confirmWithSelection({
+            emptyLex: 'sendex_queue_err_ns',
+            title: _('sendex_queues_remove'),
+            text: _('sendex_queues_remove_confirm'),
+            params: {
                 action: 'mgr/queue/remove'
-                ,ids: ids.join(',')
-            }
-            ,listeners: {
-                success: {fn:function(r) {this.refresh();},scope:this}
+            },
+            listeners: {
+                success: {fn:function() {this.refresh();},scope:this}
             }
         });
     }
@@ -182,17 +173,5 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, {
         });
     }
 
-    ,_getSelectedIds: function() {
-        var ids = [];
-        var selected = this.getSelectionModel().getSelections();
-
-        for (var i in selected) {
-            if (!selected.hasOwnProperty(i)) {continue;}
-            ids.push(selected[i]['id']);
-        }
-
-        return ids;
-    }
-
-});
+}, Sendex.grid.SelectionMixin));
 Ext.reg('sendex-grid-queues',Sendex.grid.Queues);
