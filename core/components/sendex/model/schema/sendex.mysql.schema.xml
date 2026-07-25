@@ -52,8 +52,11 @@
 
     <object class="sxQueue" table="sendex_queue" extends="xPDOSimpleObject">
         <field key="newsletter_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" default="0" />
-        <field key="subscriber_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="true" default="0" />
+        <field key="subscriber_id" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" default="0" />
         <field key="timestamp" dbtype="timestamp" phptype="timestamp" null="false" default="CURRENT_TIMESTAMP" />
+        <field key="claimed_at" dbtype="timestamp" phptype="timestamp" null="true" default="NULL" />
+        <field key="attempts" dbtype="int" precision="10" phptype="integer" attributes="unsigned" null="false" default="0" />
+        <field key="expires_at" dbtype="timestamp" phptype="timestamp" null="true" default="NULL" />
 
         <field key="email_to" dbtype="varchar" precision="191" phptype="string" null="true" default="" />
         <field key="email_subject" dbtype="varchar" precision="191" phptype="string" null="true" default="" />

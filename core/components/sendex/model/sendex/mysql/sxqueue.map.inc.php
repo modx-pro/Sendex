@@ -10,6 +10,9 @@ $xpdo_meta_map['sxQueue'] = array(
     'newsletter_id'   => 0,
     'subscriber_id'   => 0,
     'timestamp'       => 'CURRENT_TIMESTAMP',
+    'claimed_at'      => null,
+    'attempts'        => 0,
+    'expires_at'      => null,
     'email_to'        => '',
     'email_subject'   => '',
     'email_body'      => '',
@@ -35,7 +38,7 @@ $xpdo_meta_map['sxQueue'] = array(
       'precision'  => '10',
       'phptype'    => 'integer',
       'attributes' => 'unsigned',
-      'null'       => true,
+      'null'       => false,
       'default'    => 0,
     ),
     'timestamp'       =>
@@ -44,6 +47,29 @@ $xpdo_meta_map['sxQueue'] = array(
       'phptype' => 'timestamp',
       'null'    => false,
       'default' => 'CURRENT_TIMESTAMP',
+    ),
+    'claimed_at'      =>
+    array(
+      'dbtype'  => 'timestamp',
+      'phptype' => 'timestamp',
+      'null'    => true,
+      'default' => null,
+    ),
+    'attempts'        =>
+    array(
+      'dbtype'     => 'int',
+      'precision'  => '10',
+      'phptype'    => 'integer',
+      'attributes' => 'unsigned',
+      'null'       => false,
+      'default'    => 0,
+    ),
+    'expires_at'      =>
+    array(
+      'dbtype'  => 'timestamp',
+      'phptype' => 'timestamp',
+      'null'    => true,
+      'default' => null,
     ),
     'email_to'        =>
     array(

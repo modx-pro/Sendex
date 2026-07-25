@@ -17,6 +17,18 @@ class FakePdoConnection
     /** @var bool */
     public $executeResult = true;
 
+    /** @var bool */
+    public $failClaimUpdate = false;
+
+    /** @var string */
+    public $claimUpdateErrorCode = 'HY000';
+
+    /** @var string */
+    public $claimUpdateErrorMessage = 'Simulated claim update failure';
+
+    /** @var bool */
+    public $failDelete = false;
+
     /** @var array<int,array{sql:string,values:array}> */
     public $executions = array();
 
