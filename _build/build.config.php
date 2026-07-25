@@ -8,6 +8,7 @@ define('PKG_VERSION', '1.2.0');
 define('PKG_RELEASE', 'pl');
 define('PKG_AUTO_INSTALL', true);
 define('PKG_NAMESPACE_PATH', '{core_path}components/' . PKG_NAME_LOWER . '/');
+define('PKG_ASSETS_PATH', '{assets_path}components/' . PKG_NAME_LOWER . '/');
 //define('PKG_NAMESPACE_PATH', '{base_path}'.PKG_NAME.'/core/components/'.PKG_NAME_LOWER.'/');
 
 /* define paths */

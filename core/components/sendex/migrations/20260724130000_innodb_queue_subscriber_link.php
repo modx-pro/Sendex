@@ -8,7 +8,7 @@ use Phinx\Migration\AbstractMigration;
 class InnodbQueueSubscriberLink extends AbstractMigration
 {
     /** @var string[] */
-    protected $tables = array(
+    private $sendexTableNames = array(
         'sendex_newsletters',
         'sendex_subscribers',
         'sendex_queue',
@@ -16,7 +16,7 @@ class InnodbQueueSubscriberLink extends AbstractMigration
 
     public function up()
     {
-        foreach ($this->tables as $tableName) {
+        foreach ($this->sendexTableNames as $tableName) {
             $this->convertToInnoDb($tableName);
         }
 
