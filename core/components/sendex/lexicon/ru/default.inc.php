@@ -57,6 +57,7 @@ $_lang['sendex_subscriber_err_ae'] = 'Этот пользователь уже �
 $_lang['sendex_subscriber_err_nf'] = 'Подписчик не найден.';
 $_lang['sendex_subscriber_err_ns'] = 'Подписчик не указан.';
 $_lang['sendex_subscribers_err_ns'] = 'Подписчики не указаны.';
+$_lang['sendex_selection_err_ns'] = 'Выберите хотя бы одну строку.';
 $_lang['sendex_subscriber_err_remove'] = 'Ошибка при удалении подписчика.';
 $_lang['sendex_subscriber_err_save'] = 'Ошибка при сохранении подписчика.';
 $_lang['sendex_subscriber_err_email'] = 'Не указан email пописчика.';

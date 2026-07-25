@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phinx migrations: `core/components/sendex/phinx.php`, `migrations/`, install/upgrade resolver; metadata table `{prefix}sendex_migrations`.
 
 ### Fixed
+- [#60] Mgr grids: empty checkbox selection no longer sends `ids:''`; alert via `Sendex.utils.requireSelectedIds`, row action falls back to `menu.record`.
 - [#59] Deleting a newsletter removes its `sxQueue` rows via xPDO composite `Queues`; upgrade migration purges queue rows left orphaned by earlier deletes.
 - [#57] `addQueues` returns an error when 0 queue rows were created (all subscribers skipped); mgr `queue/add` reports the created count on success.
 - [#55] Queue send claims the row (remove-before-send) so parallel cron/mgr workers do not double-deliver; mail failure requeues and logs; cron logs non-true `send()` results.
@@ -36,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#28] `sxProcessorInput::parseIds` accepts `ids` as array or CSV; queue send from snippet/code matches ExtJS `runProcessor` input.
 
 ### Changed
+- [#68] ExtJS mgr grids share `Sendex.grid.SelectionMixin` (`getSelectedIds`, `confirmWithSelection`, `ajaxWithSelection`) instead of per-grid `_getSelectedIds` copy-paste.
 - [#73] Newsletter mgr `getlist`: COUNT runs on filters only; JOIN/COUNT(`Subscribers`)/GROUP BY moved to `prepareQueryAfterCount` via `sxNewsletterListQuery`.
 - [#71] Confirm/subscribe reuses one `sxSubscriber` lookup (`findSubscriber`) instead of SELECT in `isSubscribed` plus a second SELECT in `attachUserToSubscriber`.
 - [#70] `add_group` bulk-subscribes group members via one query + chunked multi-row INSERT; mgr sync path skips per-row subscribe events (#44).

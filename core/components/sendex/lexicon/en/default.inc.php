@@ -57,6 +57,7 @@ $_lang['sendex_subscriber_err_ae'] = 'This user is already subscribed.';
 $_lang['sendex_subscriber_err_nf'] = 'Subscriber not found.';
 $_lang['sendex_subscriber_err_ns'] = 'Subscriber not set.';
 $_lang['sendex_subscribers_err_ns'] = 'Subscribers not set.';
+$_lang['sendex_selection_err_ns'] = 'Select at least one row.';
 $_lang['sendex_subscriber_err_remove'] = 'Error when remove subscriber.';
 $_lang['sendex_subscriber_err_save'] = 'Error when save subscriber.';
 $_lang['sendex_subscriber_err_email'] = 'Email of subscriber is not set.';

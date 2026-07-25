@@ -97,3 +97,84 @@ Sendex.utils.requestcomplete = function() {
     Ext.Ajax.un('beforerequest', Sendex.utils.beforerequest);
     Ext.Ajax.un('requestcomplete', Sendex.utils.requestcomplete);
 };
+
+/**
+ * Selected row ids from checkbox selection, or menu.record for a single row action (#60 / #68).
+ *
+ * @param {Ext.grid.GridPanel} grid
+ * @param {Object} [options]
+ * @return {Array|null} null when nothing selected
+ */
+Sendex.utils.getSelectedIds = function(grid, options) {
+    options = options || {};
+    var idField = options.idField || 'id';
+    var ids = [];
+    var selected = grid.getSelectionModel().getSelections();
+    var i;
+    var record;
+
+    for (i = 0; i < selected.length; i++) {
+        record = selected[i];
+        if (record && record.data && typeof record.data[idField] !== 'undefined' && record.data[idField] !== '') {
+            ids.push(record.data[idField]);
+        }
+    }
+
+    if (ids.length === 0 && grid.menu && grid.menu.record && typeof grid.menu.record[idField] !== 'undefined') {
+        ids.push(grid.menu.record[idField]);
+    }
+
+    return ids.length > 0 ? ids : null;
+};
+
+/**
+ * @param {Ext.grid.GridPanel} grid
+ * @param {String} [emptyLex]
+ * @return {Array|null}
+ */
+Sendex.utils.requireSelectedIds = function(grid, emptyLex) {
+    var ids = Sendex.utils.getSelectedIds(grid);
+    if (!ids) {
+        MODx.msg.alert(_('warning'), _(emptyLex || 'sendex_selection_err_ns'));
+        return null;
+    }
+    return ids;
+};
+
+Sendex.grid.SelectionMixin = {
+    getSelectedIds: function() {
+        return Sendex.utils.getSelectedIds(this);
+    },
+
+    requireSelectedIds: function(emptyLex) {
+        return Sendex.utils.requireSelectedIds(this, emptyLex);
+    },
+
+    confirmWithSelection: function(config) {
+        config = config || {};
+        var ids = this.requireSelectedIds(config.emptyLex);
+        if (!ids) {
+            return;
+        }
+        Sendex.utils.onAjax(this.getEl());
+        config.params = Ext.apply({}, config.params || {});
+        config.params.ids = ids.join(',');
+        MODx.msg.confirm(Ext.apply({
+            url: config.url || this.config.url || Sendex.config.connector_url
+        }, config));
+    },
+
+    ajaxWithSelection: function(config) {
+        config = config || {};
+        var ids = this.requireSelectedIds(config.emptyLex);
+        if (!ids) {
+            return;
+        }
+        Sendex.utils.onAjax(this.getEl());
+        config.params = Ext.apply({}, config.params || {});
+        config.params.ids = ids.join(',');
+        MODx.Ajax.request(Ext.apply({
+            url: config.url || this.config.url || Sendex.config.connector_url
+        }, config));
+    }
+};
