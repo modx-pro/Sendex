@@ -3,6 +3,7 @@
 require_once dirname(__FILE__) . '/sxnewslettersubscription.class.php';
 require_once dirname(__FILE__) . '/sxnewsletterqueuebuilder.class.php';
 require_once dirname(__FILE__) . '/sxnewsletterdispatch.class.php';
+require_once dirname(__FILE__) . '/sxsubscribeconfirm.class.php';
 require_once dirname(__FILE__) . '/sxnewslettergroupsubscribe.class.php';
 require_once dirname(__FILE__) . '/sxsendexevent.class.php';
 
@@ -71,6 +72,24 @@ class sxNewsletter extends xPDOSimpleObject
     public function subscribe($user_id = 0, $email = '')
     {
         return $this->subscription()->subscribe($user_id, $email);
+    }
+
+    /**
+     * @param string $email
+     * @param int $user_id
+     * @param int $linkTTL
+     * @param bool $requireConfirm
+     * @return array{status:string,hash?:string,message?:string}
+     */
+    public function subscribeGuest($email = '', $user_id = 0, $linkTTL = 1800, $requireConfirm = true)
+    {
+        return sxSubscribeConfirm::guestSubscribe(
+            $this->subscription(),
+            $email,
+            $user_id,
+            $linkTTL,
+            $requireConfirm
+        );
     }
 
     /**

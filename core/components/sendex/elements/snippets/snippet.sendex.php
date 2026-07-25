@@ -16,6 +16,7 @@ if (!($Sendex instanceof Sendex)) {
 
 require_once $corePath . 'model/sendex/sxuserplaceholders.class.php';
 require_once $corePath . 'model/sendex/sxunsubscriberesolve.class.php';
+require_once $corePath . 'model/sendex/sxsubscribeconfirm.class.php';
 
 $tplSubscribeAuth = $modx->getOption('tplSubscribeAuth', $scriptProperties, 'tpl.Sendex.subscribe.auth');
 $tplSubscribeGuest = $modx->getOption('tplSubscribeGuest', $scriptProperties, 'tpl.Sendex.subscribe.guest');
@@ -24,6 +25,7 @@ $tplActivate = $modx->getOption('tplActivate', $scriptProperties, 'tpl.Sendex.ac
 if (empty($linkTTL)) {
     $linkTTL = 1800;
 }
+$requireConfirm = sxSubscribeConfirm::isRequired($modx, $scriptProperties);
 
 if (empty($id) || !$newsletter = $modx->getObject('sxNewsletter', $id)) {
     return $modx->lexicon('sendex_newsletter_err_ns');
@@ -67,14 +69,25 @@ if (!empty($_REQUEST['sx_action'])) {
                 }
             } elseif (!empty($_REQUEST['email'])) {
                 $email = htmlentities(strip_tags(urldecode($_REQUEST['email'])));
-                $response = $newsletter->checkEmail($email, $modx->user->id, $linkTTL);
-                if ($response === true) {
+                $guestResult = $newsletter->subscribeGuest(
+                    $email,
+                    $modx->user->id,
+                    $linkTTL,
+                    $requireConfirm
+                );
+                if ($guestResult['status'] === 'already') {
                     $placeholders['message'] = $modx->lexicon('sendex_subscribe_err_already');
-                } elseif ($response === false) {
+                } elseif ($guestResult['status'] === 'invalid') {
                     $placeholders['message'] = $modx->lexicon('sendex_subscribe_err_email_wrong');
                     $placeholders['error'] = 1;
-                } else {
-                    $params['hash'] = $response;
+                } elseif ($guestResult['status'] === 'subscribed') {
+                    $placeholders['message'] = $modx->lexicon('sendex_subscribe_email_confirmed');
+                    $params['sx_confirmed'] = 1;
+                } elseif ($guestResult['status'] === 'error') {
+                    $placeholders['message'] = $guestResult['message'];
+                    $placeholders['error'] = 1;
+                } elseif ($guestResult['status'] === 'confirm') {
+                    $params['hash'] = $guestResult['hash'];
                     $params['sx_action'] = 'confirm';
                     $placeholders['link'] = $modx->makeUrl($modx->resource->id, $modx->context->key, $params, 'full');
                     $placeholders['email_body'] = $modx->getChunk($tplActivate, $placeholders);

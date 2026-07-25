@@ -60,6 +60,9 @@ Root `composer.json` remains for PHPUnit/phpcs only.
 | `tplSubscribeGuest` | `tpl.Sendex.subscribe.guest` | Chunk for guests |
 | `tplUnsubscribe` | `tpl.Sendex.unsubscribe` | Unsubscribe chunk |
 | `tplActivate` | `tpl.Sendex.activate` | Confirmation email chunk |
+| `confirmEmail` | system `sendex_confirm_email` (default `1`) | Guest flow: `1` = confirm link by email; `0` = subscribe immediately |
+
+When `confirmEmail` is off, guest addresses are saved without a confirmation message. Typos and spam signups are harder to catch; use only when you accept that tradeoff.
 
 ### Guest email vs existing User (#39)
 
