@@ -66,6 +66,9 @@ class FakeModX extends modX
     /** @var array<int,array{0:mixed,1:string}> */
     public $logs = array();
 
+    /** @var FakePdoConnection|null */
+    public $fakeConnection;
+
     public function __construct()
     {
         $this->services['registry'] = new FakeRegistry($this);
@@ -523,6 +526,31 @@ class FakeModX extends modX
         }
 
         return $out;
+    }
+
+    /**
+     * @param string $class
+     * @return string
+     */
+    public function getTableName($class)
+    {
+        if ($class === 'sxSubscriber') {
+            return 'sendex_subscribers';
+        }
+
+        return $class;
+    }
+
+    /**
+     * @return FakePdoConnection
+     */
+    public function getConnection()
+    {
+        if ($this->fakeConnection === null) {
+            $this->fakeConnection = new FakePdoConnection($this);
+        }
+
+        return $this->fakeConnection;
     }
 
     /**
