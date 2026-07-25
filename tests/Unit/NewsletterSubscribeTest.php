@@ -48,6 +48,26 @@ class NewsletterSubscribeTest extends TestCase
         $this->assertCount(1, $this->modx->subscribers);
     }
 
+    public function testAlreadySubscribedUsesSingleSubscriberLookup()
+    {
+        $existing = new sxSubscriber($this->modx);
+        $existing->fromArray(array(
+            'id'            => 1,
+            'newsletter_id' => 10,
+            'user_id'       => 5,
+            'email'         => 'user@example.com',
+        ));
+        $this->modx->subscribers[] = $existing;
+
+        $before = isset($this->modx->getObjectCalls['sxSubscriber'])
+            ? $this->modx->getObjectCalls['sxSubscriber']
+            : 0;
+
+        $this->assertTrue($this->newsletter->subscribe(5, 'user@example.com'));
+
+        $this->assertSame(1, $this->modx->getObjectCalls['sxSubscriber'] - $before);
+    }
+
     public function testFiresBeforeAndAfterEventsOnSuccess()
     {
         $this->assertTrue($this->newsletter->subscribe(7, 'new@example.com'));

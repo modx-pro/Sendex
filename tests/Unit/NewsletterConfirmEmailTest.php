@@ -152,4 +152,30 @@ class NewsletterConfirmEmailTest extends TestCase
         $this->assertTrue($this->newsletter->confirmEmail('hash-dup'));
         $this->assertArrayNotHasKey('hash-dup', $this->modx->registryEntries);
     }
+
+    public function testAlreadySubscribedConfirmUsesSingleSubscriberLookup()
+    {
+        $existing = new sxSubscriber($this->modx);
+        $existing->fromArray(array(
+            'id'            => 1,
+            'newsletter_id' => 10,
+            'user_id'       => 4,
+            'email'         => 'ok@example.com',
+        ));
+        $this->modx->subscribers[] = $existing;
+
+        $this->modx->registryEntries['hash-one-select'] = array(
+            'user_id'       => 4,
+            'newsletter_id' => 10,
+            'email'         => 'ok@example.com',
+        );
+
+        $before = isset($this->modx->getObjectCalls['sxSubscriber'])
+            ? $this->modx->getObjectCalls['sxSubscriber']
+            : 0;
+
+        $this->assertTrue($this->newsletter->confirmEmail('hash-one-select'));
+
+        $this->assertSame(1, $this->modx->getObjectCalls['sxSubscriber'] - $before);
+    }
 }
