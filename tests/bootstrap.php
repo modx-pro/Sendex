@@ -17,11 +17,16 @@ require_once __DIR__ . '/Stubs/sxSubscriber.php';
 require_once __DIR__ . '/Stubs/sxQueue.php';
 require_once __DIR__ . '/Stubs/FakeMail.php';
 require_once __DIR__ . '/Stubs/FakeModX.php';
+require_once __DIR__ . '/Stubs/FakePdoConnection.php';
+require_once __DIR__ . '/Stubs/FakePdoStatement.php';
 require_once __DIR__ . '/Stubs/modProcessor.php';
+require_once __DIR__ . '/Stubs/modObjectProcessor.php';
 
 require_once dirname(__DIR__) . '/core/components/sendex/model/sendex/sxnewsletter.class.php';
 require_once dirname(__DIR__) . '/core/components/sendex/model/sendex/sxqueuesender.class.php';
 require_once __DIR__ . '/Support/TestableNewsletter.php';
 
+require_once dirname(__DIR__) . '/core/components/sendex/processors/mgr/sendexprocessor.class.php';
 require_once dirname(__DIR__) . '/core/components/sendex/processors/mgr/newsletter/subscriber/create.class.php';
+require_once dirname(__DIR__) . '/core/components/sendex/processors/mgr/newsletter/subscriber/add_group.class.php';
 require_once dirname(__DIR__) . '/core/components/sendex/processors/mgr/newsletter/subscriber/remove.class.php';

@@ -22,6 +22,7 @@ class NewsletterSplitContractTest extends TestCase
             'sxnewslettersubscription.class.php',
             'sxnewsletterqueuebuilder.class.php',
             'sxnewsletterqueueusers.class.php',
+            'sxnewslettergroupsubscribe.class.php',
             'sxqueuebodyrenderer.class.php',
             'sxnewslettermailer.class.php',
             'sxsendexevent.class.php',
@@ -47,6 +48,8 @@ class NewsletterSplitContractTest extends TestCase
         $this->assertStringContainsString('sxNewsletterQueueBuilder', $facade);
         $this->assertStringContainsString('sxSendexEvent::invoke', $facade);
         $this->assertStringContainsString('function subscribe(', $facade);
+        $this->assertStringContainsString('function subscribeGroup(', $facade);
+        $this->assertStringContainsString('sxNewsletterGroupSubscribe', $facade);
         $this->assertStringContainsString('function addQueues(', $facade);
         $this->assertStringNotContainsString('function remove(', $facade);
     }

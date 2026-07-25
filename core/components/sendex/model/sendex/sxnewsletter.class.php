@@ -2,6 +2,7 @@
 
 require_once dirname(__FILE__) . '/sxnewslettersubscription.class.php';
 require_once dirname(__FILE__) . '/sxnewsletterqueuebuilder.class.php';
+require_once dirname(__FILE__) . '/sxnewslettergroupsubscribe.class.php';
 require_once dirname(__FILE__) . '/sxsendexevent.class.php';
 
 /**
@@ -58,6 +59,17 @@ class sxNewsletter extends xPDOSimpleObject
     public function subscribe($user_id = 0, $email = '')
     {
         return $this->subscription()->subscribe($user_id, $email);
+    }
+
+    /**
+     * Bulk subscribe active members of a user group (mgr add_group; #70).
+     *
+     * @param int $group_id
+     * @return true|string[]
+     */
+    public function subscribeGroup($group_id = 0)
+    {
+        return sxNewsletterGroupSubscribe::subscribeGroup($this, $group_id);
     }
 
     /**
