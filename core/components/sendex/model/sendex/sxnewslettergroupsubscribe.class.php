@@ -2,7 +2,6 @@
 
 require_once dirname(__FILE__) . '/sxsubscribercode.class.php';
 require_once dirname(__FILE__) . '/sxsubscribermatch.class.php';
-
 /**
  * Bulk subscribe active group members to a newsletter (#70).
  * Mgr sync path: no per-row sxOn*Subscribe events (#44).
@@ -28,10 +27,7 @@ class sxNewsletterGroupSubscribe
             return true;
         }
 
-        /** @var sxSubscriber[] $existing */
-        $existing = $xpdo->getCollection('sxSubscriber', array(
-            'newsletter_id' => $newsletterId,
-        ));
+        $existing = self::fetchExistingSubscribers($xpdo, $newsletterId, $members);
 
         $plan = self::plan($members, $newsletterId, $existing, $xpdo);
         $errors = $plan['errors'];
@@ -48,6 +44,51 @@ class sxNewsletterGroupSubscribe
         }
 
         return $errors === array() ? true : $errors;
+    }
+
+    /**
+     * @param object $xpdo
+     * @param int $newsletterId
+     * @param array<int,array{user_id:int,username:string,email:string}> $members
+     * @return sxSubscriber[]
+     */
+    protected static function fetchExistingSubscribers($xpdo, $newsletterId, array $members)
+    {
+        $userIds = array();
+        $emails = array();
+        foreach ($members as $member) {
+            $userId = (int) $member['user_id'];
+            if ($userId > 0) {
+                $userIds[] = $userId;
+            }
+            $email = sxSubscriberMatch::normalizeEmail($member['email']);
+            if ($email !== '') {
+                $emails[] = $email;
+            }
+        }
+
+        $userIds = array_values(array_unique($userIds));
+        $emails = array_values(array_unique($emails));
+        if ($userIds === array() && $emails === array()) {
+            return array();
+        }
+
+        $criteria = array(
+            'newsletter_id' => (int) $newsletterId,
+        );
+        if ($userIds !== array() && $emails !== array()) {
+            $criteria[] = array(
+                'user_id:IN' => $userIds,
+                'OR:email:IN' => $emails,
+            );
+        } elseif ($userIds !== array()) {
+            $criteria['user_id:IN'] = $userIds;
+        } else {
+            $criteria['email:IN'] = $emails;
+        }
+
+        $existing = $xpdo->getCollection('sxSubscriber', $criteria);
+        return is_array($existing) ? $existing : array();
     }
 
     /**

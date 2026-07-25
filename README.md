@@ -104,7 +104,7 @@ Guest chunk structure (for custom templates):
 </div>
 ```
 
-Set `&loadJs=`0`` if you ship your own JS but keep the same JSON contract (`X-Requested-With: XMLHttpRequest` or `ajax=1`).
+Set `&loadJs=0` if you ship your own JS but keep the same JSON contract (`X-Requested-With: XMLHttpRequest` or `ajax=1`).
 
 ### Guest email vs existing User (#39)
 
@@ -118,7 +118,7 @@ Logged-in `isSubscribed($userId)` also matches a still-guest row by profile emai
 
 ### Unsubscribe from email (#56)
 
-The page must call `[[!Sendex? &id=`…`]]` (any newsletter id is fine). Query params:
+The page must call `[[!Sendex? &id=...]]` (any newsletter id is fine). Query params:
 
 | Param | Required | Meaning |
 | --- | --- | --- |
@@ -146,7 +146,7 @@ composer test
 composer test:coverage   # needs phpdbg
 ```
 
-Unit tests use lightweight MODX/xPDO stubs (no MODX install). Covered: `sxNewsletter` (100%), subscriber create/remove processors. CI runs `php -l`, PHPUnit, and phpcs on PHP 7.4–8.4.
+Unit tests use lightweight MODX/xPDO stubs (no MODX install). Coverage includes subscription/confirm flows, queue lifecycle events, queue claim, group subscribe, ACL contracts, frontend snippet contracts, and mail header sanitization. CI runs `php -l`, PHPUnit, and PHPCS on PHP 7.4–8.4; one PHP 8.2 job publishes Clover coverage as an artifact. Remaining integration gaps are tracked in issue [#103](https://github.com/modx-pro/Sendex/issues/103).
 
 ## Plugin events
 

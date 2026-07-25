@@ -89,6 +89,22 @@ $xpdo_meta_map['sxSubscriber'] = array(
         ),
       ),
     ),
+    'user_id' =>
+    array(
+      'alias'   => 'user_id',
+      'primary' => false,
+      'unique'  => false,
+      'type'    => 'BTREE',
+      'columns' =>
+      array(
+        'user_id' =>
+        array(
+          'length'    => '',
+          'collation' => 'A',
+          'null'      => false,
+        ),
+      ),
+    ),
   ),
   'aggregates' =>
   array(

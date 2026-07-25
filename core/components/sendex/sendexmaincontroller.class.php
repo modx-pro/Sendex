@@ -60,6 +60,7 @@ abstract class SendexMainController extends modExtraManagerController
      */
     public function checkPermissions()
     {
-        return true;
+        return $this->modx->hasPermission('view_sendex')
+            || $this->modx->hasPermission('view_document');
     }
 }

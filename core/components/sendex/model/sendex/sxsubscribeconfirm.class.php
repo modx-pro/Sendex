@@ -24,6 +24,22 @@ class sxSubscribeConfirm
     }
 
     /**
+     * Snippet &confirmRateLimit= overrides system setting sendex_confirm_rate_limit.
+     *
+     * @param object $modx modX
+     * @param array $scriptProperties
+     * @return int
+     */
+    public static function rateLimitSeconds($modx, array $scriptProperties = array())
+    {
+        if (array_key_exists('confirmRateLimit', $scriptProperties)) {
+            return max(0, (int) $scriptProperties['confirmRateLimit']);
+        }
+
+        return max(0, (int) $modx->getOption('sendex_confirm_rate_limit', null, 0));
+    }
+
+    /**
      * @param mixed $value
      * @param bool $default
      * @return bool

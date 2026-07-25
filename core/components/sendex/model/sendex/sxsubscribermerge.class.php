@@ -112,20 +112,16 @@ class sxSubscriberMerge
         $q = $xpdo->newQuery('sxSubscriber');
         $q->where(array(
             'user_id' => 0,
+            array(
+                'email' => $email,
+                'OR:email:=' => $email,
+            ),
         ));
 
         $rows = $xpdo->getCollection('sxSubscriber', $q);
         if (!is_array($rows)) {
             return array();
         }
-
-        $matched = array();
-        foreach ($rows as $subscriber) {
-            if (strcasecmp((string) $subscriber->get('email'), $email) === 0) {
-                $matched[] = $subscriber;
-            }
-        }
-
-        return $matched;
+        return $rows;
     }
 }

@@ -76,4 +76,19 @@ class MgrGridSelectionContractTest extends TestCase
         $this->assertStringContainsString('sendex_selection_err_ns', $en);
         $this->assertStringContainsString('sendex_selection_err_ns', $ru);
     }
+
+    public function testNewsletterGridRenderersEscapeImageAndCloseSpanTags()
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/assets/components/sendex/js/mgr/widgets/newsletters.grid.js'
+        );
+
+        $this->assertStringContainsString("'</span>'", $source);
+        $this->assertStringContainsString('_escapeHtmlAttr: function(value)', $source);
+        $this->assertStringContainsString(".replace(/\"/g, '&quot;')", $source);
+        $this->assertStringContainsString(
+            "return '<img src=\"' + this._escapeHtmlAttr(val) + '\" alt=\"\" height=\"50\" />';",
+            $source
+        );
+    }
 }

@@ -11,6 +11,11 @@ class SnippetSubscribeConfirmContractTest extends TestCase
         );
 
         $this->assertStringContainsString('sxSubscribeConfirm::isRequired', $source);
+        $this->assertStringContainsString('sxSubscribeConfirm::rateLimitSeconds', $source);
+        $this->assertStringContainsString('sxSubscribeCsrf::isRequired', $source);
+        $this->assertStringContainsString('sxSubscribeCsrf::isValid', $source);
+        $this->assertStringContainsString("&& \$method === 'POST'", $source);
+        $this->assertStringContainsString("array('subscribe', 'unsubscribe')", $source);
         $this->assertStringContainsString('subscribeGuest(', $source);
         $this->assertStringNotContainsString('->checkEmail(', $source);
     }

@@ -25,6 +25,19 @@ class QueueClaimTest extends TestCase
         $this->assertFalse(sxQueueClaim::tryClaim($this->modx, 5));
     }
 
+    public function testTryClaimUsesAtomicDeleteWithoutPreloadingRow()
+    {
+        $this->modx->queues[] = $this->queue(8, 'atomic@example.com');
+
+        $first = sxQueueClaim::tryClaim($this->modx, 8);
+        $second = sxQueueClaim::tryClaim($this->modx, 8);
+
+        $this->assertTrue($first);
+        $this->assertFalse($second);
+        $this->assertSame(0, isset($this->modx->getObjectCalls['sxQueue']) ? $this->modx->getObjectCalls['sxQueue'] : 0);
+        $this->assertSame(2, $this->modx->getConnection()->executeCalls);
+    }
+
     public function testTryClaimRejectsInvalidId()
     {
         $this->assertFalse(sxQueueClaim::tryClaim($this->modx, 0));

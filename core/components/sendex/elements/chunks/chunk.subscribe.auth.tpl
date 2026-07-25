@@ -10,6 +10,7 @@
         <input type="hidden" name="sx_action" value="subscribe">
         <input type="hidden" name="newsletter_id" value="[[+id]]">
         [[+widget_key:notempty=`<input type="hidden" name="sendex_widget_key" value="[[+widget_key]]">`]]
+        [[+csrf_token:notempty=`<input type="hidden" name="sendex_csrf" value="[[+csrf_token]]">`]]
 
         <button type="submit">[[%sendex_btn_subscribe]]</button>
     </form>

@@ -21,6 +21,14 @@ class sxNewsletterSubscription
     }
 
     /**
+     * @return sxNewsletter
+     */
+    public function newsletter()
+    {
+        return $this->newsletter;
+    }
+
+    /**
      * @param int $userId
      * @param string $email
      * @return int

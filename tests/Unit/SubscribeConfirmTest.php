@@ -47,4 +47,13 @@ class SubscribeConfirmTest extends TestCase
     {
         $this->assertTrue(sxSubscribeConfirm::isRequired($this->modx, array()));
     }
+
+    public function testRateLimitUsesSnippetOverrideThenSetting()
+    {
+        $this->modx->options['sendex_confirm_rate_limit'] = 30;
+
+        $this->assertSame(15, sxSubscribeConfirm::rateLimitSeconds($this->modx, array('confirmRateLimit' => 15)));
+        $this->assertSame(30, sxSubscribeConfirm::rateLimitSeconds($this->modx, array()));
+        $this->assertSame(0, sxSubscribeConfirm::rateLimitSeconds($this->modx, array('confirmRateLimit' => -5)));
+    }
 }
