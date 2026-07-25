@@ -84,8 +84,16 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,Ext.apply({
 
     ,_renderBoolean: function(val,cell,row) {
         return val == '' || val == 0
-            ? '<span style="color:red">' + _('no') + '<span>'
-            : '<span style="color:green">' + _('yes') + '<span>';
+            ? '<span style="color:red">' + _('no') + '</span>'
+            : '<span style="color:green">' + _('yes') + '</span>';
+    }
+
+    ,_escapeHtmlAttr: function(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
 
     ,_renderImage: function(val,cell,row) {
@@ -94,7 +102,7 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,Ext.apply({
             val = '/' + val;
         }
 
-        return '<img src="' + val + '" alt="" height="50" />';
+        return '<img src="' + this._escapeHtmlAttr(val) + '" alt="" height="50" />';
     }
 
     ,_renderTemplate: function(val,cell,row) {
