@@ -26,7 +26,7 @@ Sendex.panel.Home = function(config) {
                     ,bodyCssClass: 'panel-desc'
                 },{
                     xtype: 'sendex-grid-newsletters'
-                    ,cls: 'main-wrapper'
+                    ,cls: MODx.modx23 ? '' : 'main-wrapper'
                     ,preventRender: true
                 }]
             },{
@@ -38,7 +38,7 @@ Sendex.panel.Home = function(config) {
                     ,bodyCssClass: 'panel-desc'
                 },{
                     xtype: 'sendex-grid-queues'
-                    ,cls: 'main-wrapper'
+                    ,cls: MODx.modx23 ? '' : 'main-wrapper'
                     ,preventRender: true
                 }]
             }]

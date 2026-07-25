@@ -8,15 +8,41 @@
 ul.sendex-row-actions {margin:0; padding: 0; list-style: none;}
 ul.sendex-row-actions li {float:left;}
 ul.sendex-row-actions .btn {padding: 5px; margin-right:2px; min-width:26px; font-size: inherit;}
+ul.sendex-row-actions .btn > .icon,
+ul.sendex-row-actions .btn > .fa {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    line-height: 16px;
+}
+ul.sendex-row-actions .btn > .icon.icon-check-circle-o,
+ul.sendex-row-actions .btn > .icon.icon-trash-o,
+ul.sendex-row-actions .btn > .icon.icon-send-o,
+ul.sendex-row-actions .btn > .icon.icon-paper-plane-o {
+    font-weight: 400;
+}
 
 .red {color: darkred;}
 .green {color: darkgreen;}
 .blue {color: cadetblue;}
 .yellow {color: goldenrod;}
 
-a.x-menu-item .x-menu-item-text, a.x-menu-item .x-menu-item-text .fa {cursor: pointer;}
-a.x-menu-item .x-menu-item-text .fa {line-height:16px; top:auto;}
-.x-menu-list .fa {min-width: 1em; text-align:center;}
+a.x-menu-item .x-menu-item-text, a.x-menu-item .x-menu-item-text .fa,
+a.x-menu-item .x-menu-item-text .icon {cursor: pointer;}
+a.x-menu-item .x-menu-item-text .fa,
+a.x-menu-item .x-menu-item-text .icon {
+    line-height:16px;
+    top:auto;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+a.x-menu-item .x-menu-item-text .icon.icon-check-circle-o,
+a.x-menu-item .x-menu-item-text .icon.icon-trash-o,
+a.x-menu-item .x-menu-item-text .icon.icon-send-o,
+a.x-menu-item .x-menu-item-text .icon.icon-paper-plane-o {
+    font-weight: 400;
+}
+.x-menu-list .fa,
+.x-menu-list .icon {min-width: 1em; text-align:center;}
 .fa.actions-menu {width: 40px;}
 .fa.actions-menu:after {content: " \f107";}
 

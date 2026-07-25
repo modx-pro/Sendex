@@ -105,7 +105,7 @@ class sxSubscribeRegistry
      */
     private static function register($xpdo)
     {
-        $registry = $xpdo->getService('registry', 'registry.modRegistry');
+        $registry = sxModxCompat::getRegistry($xpdo);
         if (!$registry) {
             return null;
         }

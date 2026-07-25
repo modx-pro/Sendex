@@ -14,7 +14,7 @@ if (!($Sendex instanceof Sendex)) {
     return '';
 }
 
-require_once $corePath . 'model/sendex/sxuserplaceholders.class.php';
+require_once $corePath . 'model/sendex/sxuserprofile.class.php';
 require_once $corePath . 'model/sendex/sxunsubscriberesolve.class.php';
 require_once $corePath . 'model/sendex/sxsubscribeconfirm.class.php';
 require_once $corePath . 'model/sendex/sxsubscribeajaxresponse.class.php';
@@ -27,6 +27,7 @@ if (empty($linkTTL)) {
     $linkTTL = 1800;
 }
 $requireConfirm = sxSubscribeConfirm::isRequired($modx, $scriptProperties);
+$widgetKey = trim((string) $modx->getOption('widgetKey', $scriptProperties, ''));
 $loadJs = sxSubscribeAjaxResponse::parseEnabled(
     $modx->getOption('loadJs', $scriptProperties, true),
     true
@@ -46,17 +47,16 @@ $placeholders = $newsletter->toArray();
 $placeholders['message'] = '';
 $placeholders['class'] = '';
 $placeholders['error'] = 0;
+$placeholders['widget_key'] = $widgetKey;
+$newsletterId = (int) $id;
+$handlesRequest = !empty($_REQUEST['sx_action'])
+    && sxSubscribeAjaxResponse::matchesRequest($newsletterId, $widgetKey, $_REQUEST);
 $isAuthenticated = $modx->user->isAuthenticated($modx->context->key);
 if ($isAuthenticated) {
-    $profile = $modx->user->getOne('Profile');
-    $placeholders = sxUserPlaceholders::mergeAuthenticated(
-        $modx->user->toArray(),
-        $profile ? $profile->toArray() : null,
-        $placeholders
-    );
+    $placeholders = sxUserProfile::authenticatedPlaceholders($modx, $modx->user, $placeholders);
 }
 
-if (!empty($_REQUEST['sx_action'])) {
+if ($handlesRequest) {
     $params = $_GET;
     unset($params[$modx->getOption('request_param_alias')]);
     unset($params[$modx->getOption('request_param_id')]);
@@ -93,6 +93,7 @@ if (!empty($_REQUEST['sx_action'])) {
                 } elseif ($guestResult['status'] === 'confirm') {
                     $params['hash'] = $guestResult['hash'];
                     $params['sx_action'] = 'confirm';
+                    $params['newsletter_id'] = $newsletterId;
                     $placeholders['link'] = $modx->makeUrl($modx->resource->id, $modx->context->key, $params, 'full');
                     $placeholders['email_body'] = $modx->getChunk($tplActivate, $placeholders);
                     $response = $Sendex->sendEmail($email, $placeholders);
@@ -137,13 +138,13 @@ if (!empty($_REQUEST['sx_action'])) {
                             'message' => '',
                             'class'   => '',
                             'error'   => 0,
+                            'widget_key' => $widgetKey,
                         )
                     );
                     if ($isAuthenticated) {
-                        $profile = $modx->user->getOne('Profile');
-                        $placeholders = sxUserPlaceholders::mergeAuthenticated(
-                            $modx->user->toArray(),
-                            $profile ? $profile->toArray() : null,
+                        $placeholders = sxUserProfile::authenticatedPlaceholders(
+                            $modx,
+                            $modx->user,
                             $placeholders
                         );
                     }
@@ -175,8 +176,8 @@ if (!empty($placeholders['message'])) {
         : $modx->getOption('msgClass', $scriptProperties, 'active');
 }
 
-if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {
-    if ($subscriber = $modx->getObject('sxSubscriber', $id)) {
+if ($isAuthenticated && ($subscriberId = $newsletter->isSubscribed($modx->user->id))) {
+    if ($subscriber = $modx->getObject('sxSubscriber', $subscriberId)) {
         $placeholders = array_merge($subscriber->toArray(), $placeholders);
     }
     $output = $modx->getChunk($tplUnsubscribe, $placeholders);
@@ -186,7 +187,7 @@ if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {
         : $modx->getChunk($tplSubscribeGuest, $placeholders);
 }
 
-if ($isAjax && !empty($_REQUEST['sx_action'])) {
+if ($isAjax && $handlesRequest) {
     sxSubscribeAjaxResponse::send($placeholders, $output);
 }
 

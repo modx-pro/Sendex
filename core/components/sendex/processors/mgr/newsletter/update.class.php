@@ -40,8 +40,10 @@ class sxNewsletterUpdateProcessor extends modObjectUpdateProcessor
             }
         }
 
-        $active = $this->getProperty('active');
-        $this->setProperty('active', !empty($active) && $active != 'false');
+        if (array_key_exists('active', $this->getProperties())) {
+            $active = $this->getProperty('active');
+            $this->setProperty('active', !empty($active) && $active !== 'false' && $active !== '0');
+        }
 
         return !$this->hasErrors();
     }

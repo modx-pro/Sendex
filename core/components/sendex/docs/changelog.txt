@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CSV cells that look like spreadsheet formulas are prefixed so Excel/LibreOffice do not execute them.
 
 ### Added
-- [#42] Frontend AJAX subscribe/unsubscribe: JSON `{success, message, html}` from snippet, default chunks + `assets/components/sendex/js/web/sendex.js`.
+- [#42] Frontend AJAX subscribe/unsubscribe: JSON `{success, message, html}` from snippet, default chunks + `assets/components/sendex/js/web/sendex.js`. Multi-widget pages scope POST via `newsletter_id` and optional `widgetKey`.
 - [#38] Guest subscribe can skip email confirmation: snippet `&confirmEmail=`0`` or system setting `sendex_confirm_email`; domain helper `subscribeGuest()` keeps one subscribe path.
 - [#29] Mgr newsletter «Send to subscribers»: one action runs `addQueues` + `sxQueueSender::flush` for the newsletter (`mgr/newsletter/send`); button in grid row actions and update window.
 - [#46] Search subscribers and queue by email or username.
@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phinx migrations: `core/components/sendex/phinx.php`, `migrations/`, install/upgrade resolver; metadata table `{prefix}sendex_migrations`.
 
 ### Fixed
+- [#40] MODX 3 package install: `registerNamespace` sets `assets_path`; build script aliases `modPackageBuilder`, skips model regen on MODX 3 (preserves global `sx*` maps); mgr menu without `modAction`; Phinx migration property no longer conflicts with `AbstractMigration::$tables` on PHP 8.4.
+- [#74] MODX 3 mgr: `SendexIndexManagerController` aliases menu action `index` (no duplicate menu remap).
+- [#74] MODX 3 bootstrap: `bootstrap.php` for connector/mgr/cron; processor autoload + `modProcessor` aliases; `sxModxCompat` (mail/parser/registry) and `sxUserProfile` (user/profile placeholders); ExtJS mgr icon/menu polish on MODX 3.
+- [#42] Multi-widget AJAX: authenticated subscribe no longer breaks request scoping (`$id` shadowing); confirm link keeps `newsletter_id`; unsubscribe widget keeps `widget_key`; email links without `sendex_widget_key` route to the default snippet instance (empty `widgetKey`).
 - [#60] Mgr grids: empty checkbox selection no longer sends `ids:''`; alert via `Sendex.utils.requireSelectedIds`, row action falls back to `menu.record`.
 - [#59] Deleting a newsletter removes its `sxQueue` rows via xPDO composite `Queues`; upgrade migration purges queue rows left orphaned by earlier deletes.
 - [#57] `addQueues` returns an error when 0 queue rows were created (all subscribers skipped); mgr `queue/add` reports the created count on success.
@@ -36,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#47] Adding a user group to a newsletter subscribes only active and unblocked users.
 - `add_group`: cast `group_id` and `newsletter_id` to int; require user Profile (`innerJoin`).
 - `confirmEmail` returns the `subscribe()` result when confirming a hash for another newsletter.
+- Mgr `newsletter/update` no longer clears `active` when the field is omitted from the request (partial saves, QA/API).
 - PHP 7.4–8.4: dynamic properties, null Profile in `addQueues`, PHPMailer `ErrorInfo`.
 - [#28] `sxProcessorInput::parseIds` accepts `ids` as array or CSV; queue send from snippet/code matches ExtJS `runProcessor` input.
 

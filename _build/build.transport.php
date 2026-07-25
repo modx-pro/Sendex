@@ -7,9 +7,17 @@ $tstart = $mtime;
 set_time_limit(0);
 
 require_once 'build.config.php';
-// Refresh model
+// Refresh model (MODX 2 only — MODX 3 generator rewrites sx* maps to sendex\\sx*)
 if (file_exists('build.model.php')) {
-    require_once 'build.model.php';
+    require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
+    require_once __DIR__ . '/includes/functions.php';
+    $sendexBuildModx = new modX();
+    $sendexBuildModx->initialize('mgr');
+    $sendexModelDir = dirname(dirname(__FILE__)) . '/core/components/' . PKG_NAME_LOWER . '/model/' . PKG_NAME_LOWER;
+    if (sendexPrepareModelForBuild($sendexBuildModx, $sendexModelDir)) {
+        require_once 'build.model.php';
+    }
+    unset($sendexBuildModx);
 }
 
 /* define sources */
@@ -41,10 +49,11 @@ $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO');
 $modx->getService('error', 'error.modError');
 $modx->loadClass('transport.modPackageBuilder', '', false, true);
+sendexEnsureBuildClassAliases($modx);
 
 $builder = new modPackageBuilder($modx);
 $builder->createPackage(PKG_NAME_LOWER, PKG_VERSION, PKG_RELEASE);
-$builder->registerNamespace(PKG_NAME_LOWER, false, true, PKG_NAMESPACE_PATH);
+$builder->registerNamespace(PKG_NAME_LOWER, false, true, PKG_NAMESPACE_PATH, PKG_ASSETS_PATH);
 
 $modx->log(modX::LOG_LEVEL_INFO, 'Created Transport Package and Namespace.');
 

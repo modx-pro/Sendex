@@ -18,12 +18,12 @@ class NewsletterQueueUsersTest extends TestCase
     {
         $active = new modUser($this->modx);
         $active->set('id', 1);
-        $active->active = true;
+        $active->set('active', 1);
         $this->modx->users[1] = $active;
 
         $blocked = new modUser($this->modx);
         $blocked->set('id', 2);
-        $blocked->active = true;
+        $blocked->set('active', 1);
         $this->modx->users[2] = $blocked;
 
         $profile1 = new modUserProfile($this->modx);
@@ -51,7 +51,7 @@ class NewsletterQueueUsersTest extends TestCase
         for ($i = 1; $i <= 50; $i++) {
             $user = new modUser($this->modx);
             $user->set('id', $i);
-            $user->active = true;
+            $user->set('active', 1);
             $this->modx->users[$i] = $user;
 
             $profile = new modUserProfile($this->modx);

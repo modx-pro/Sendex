@@ -60,7 +60,7 @@ class sxNewsletterGetListProcessor extends modObjectGetListProcessor
                 'class'  => '',
                 'button' => true,
                 'menu'   => true,
-                'icon'   => 'check',
+                'icon'   => 'check-circle-o',
                 'type'   => 'enableNewsletter',
             );
         } else {

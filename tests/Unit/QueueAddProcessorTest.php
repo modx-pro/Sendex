@@ -33,7 +33,7 @@ class QueueAddProcessorTest extends TestCase
 
         $user = new modUser($this->modx);
         $user->set('id', 5);
-        $user->active = true;
+        $user->set('active', 1);
         $this->modx->users[5] = $user;
 
         $processor = new sxQueueAddProcessor($this->modx, array('newsletter_id' => 10));

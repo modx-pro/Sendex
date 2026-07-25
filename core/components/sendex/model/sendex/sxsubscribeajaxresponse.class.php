@@ -58,6 +58,46 @@ class sxSubscribeAjaxResponse
     }
 
     /**
+     * Whether the POST/AJAX action targets this snippet instance (multi-widget pages).
+     *
+     * @param int|string $snippetNewsletterId
+     * @param array      $request
+     * @return bool
+     */
+    public static function matchesNewsletter($snippetNewsletterId, array $request)
+    {
+        if (!isset($request['newsletter_id']) || $request['newsletter_id'] === '') {
+            return true;
+        }
+
+        return (int) $request['newsletter_id'] === (int) $snippetNewsletterId;
+    }
+
+    /**
+     * @param int|string $snippetNewsletterId
+     * @param string     $widgetKey
+     * @param array      $request
+     * @return bool
+     */
+    public static function matchesRequest($snippetNewsletterId, $widgetKey, array $request)
+    {
+        if (!self::matchesNewsletter($snippetNewsletterId, $request)) {
+            return false;
+        }
+
+        $requestWidgetKey = isset($request['sendex_widget_key'])
+            ? trim((string) $request['sendex_widget_key'])
+            : '';
+
+        if ($requestWidgetKey !== '') {
+            return $widgetKey !== '' && $requestWidgetKey === (string) $widgetKey;
+        }
+
+        // Email confirm/unsubscribe links and legacy forms omit sendex_widget_key.
+        return $widgetKey === '';
+    }
+
+    /**
      * @param mixed $value
      * @param bool $default
      * @return bool

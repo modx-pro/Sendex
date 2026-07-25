@@ -2,7 +2,20 @@
 
 Sendex runs email newsletters in MODX Revolution: subscribers, a send queue, and a front-end form.
 
-**Requirements:** PHP 7.4–8.4, MODX Revolution 2.x.
+**Requirements:** PHP 7.4–8.4, MODX Revolution 2.8+ or 3.x (ExtJS manager).
+
+## MODX 3 compatibility
+
+Sendex keeps global `sx*` xPDO models (not `MODX\Revolution\sx*`). Verified on MODX **3.2.0-pl** (2026-07-25): transport install, namespace `assets_path`, mgr menu (`namespace` + `action`), Phinx migrations, `sx*` class map, connector bootstrap, mgr processors, ExtJS UI.
+
+Build/package notes:
+
+- `_build/build.transport.php` registers `PKG_ASSETS_PATH` and skips `build.model.php` on MODX 3 (xPDO 3 schema generator would rewrite maps to `sendex\sx*`).
+- Mgr menu uses legacy `modAction` on MODX 2 and `modMenu.action` + `namespace` on MODX 3.
+- `core/components/sendex/bootstrap.php` — shared init for connector, mgr, and cron (autoload + processor base aliases).
+- `sxModxCompat` / `sxUserProfile` — MODX 2/3 boundary for mail, parser, registry, and user/profile placeholders.
+
+Not covered yet (see [#74](https://github.com/modx-pro/Sendex/issues/74)): new non-ExtJS admin UI, CI matrix MODX 2.8 + 3.x.
 
 ## Features
 
@@ -62,8 +75,11 @@ Root `composer.json` remains for PHPUnit/phpcs only.
 | `tplActivate` | `tpl.Sendex.activate` | Confirmation email chunk |
 | `confirmEmail` | system `sendex_confirm_email` (default `1`) | Guest flow: `1` = confirm link by email; `0` = subscribe immediately |
 | `loadJs` | `1` | Register `assets/components/sendex/js/web/sendex.js` for AJAX forms |
+| `widgetKey` | *(empty)* | Optional key when several `[[!Sendex]]` widgets share one page; must match hidden `sendex_widget_key` in the form |
 
 When `confirmEmail` is off, guest addresses are saved without a confirmation message. Typos and spam signups are harder to catch; use only when you accept that tradeoff.
+
+Several widgets on one page need distinct `&widgetKey=` values (for example `instant` vs `confirm`) so AJAX POST is handled only by the matching snippet instance. Email confirm/unsubscribe links omit `sendex_widget_key`; keep one snippet on the landing page without `widgetKey` to handle those URLs.
 
 ### AJAX subscribe / unsubscribe (#42)
 

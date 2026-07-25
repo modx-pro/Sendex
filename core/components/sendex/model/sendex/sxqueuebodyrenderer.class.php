@@ -83,11 +83,7 @@ class sxQueueBodyRenderer
         $body = $template->process($scriptProperties);
 
         /** @var modParser|null $parser */
-        $parser = $xpdo->getService(
-            'parser',
-            $xpdo->getOption('parser_class', null, 'modParser'),
-            $xpdo->getOption('parser_class_path', null, '')
-        );
+        $parser = sxModxCompat::getParser($xpdo);
         if ($parser && $parser instanceof modParser) {
             $maxIterations = (int) $xpdo->getOption('parser_max_iterations', null, 10);
             $parser->processElementTags('', $body, true, true, '[[', ']]', array(), $maxIterations);
