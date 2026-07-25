@@ -30,20 +30,47 @@ function sendexShouldRegenerateModel($modx)
 }
 
 /**
+ * MODX 2 uses modAction + modMenu composite; MODX 3 uses namespace + action on modMenu.
+ *
+ * @param modX|null $modx
+ * @return bool
+ */
+function sendexUsesLegacyModAction($modx = null)
+{
+    return class_exists('modAction');
+}
+
+/**
+ * MODX 3: remove generator artifacts and skip regen. MODX 2: allow regen.
+ *
+ * @param modX   $modx
+ * @param string $packageModelDir e.g. core/components/sendex/model/sendex
+ * @return bool true when caller should run xPDO schema regeneration
+ */
+function sendexPrepareModelForBuild($modx, $packageModelDir)
+{
+    if (sendexShouldRegenerateModel($modx)) {
+        return true;
+    }
+
+    sendexRemoveModx3ModelArtifacts($packageModelDir);
+
+    return false;
+}
+
+/**
  * Remove MODX 3 xPDO generator artifacts (PascalCase sx*.php with wrong namespaces).
  *
  * @param string $packageModelDir e.g. core/components/sendex/model/sendex
  */
 function sendexRemoveModx3ModelArtifacts($packageModelDir)
 {
-    $artifacts = array(
-        'sxNewsletter.php',
-        'sxQueue.php',
-        'sxSubscriber.php',
+    $patterns = array(
+        $packageModelDir . '/mysql/sx[A-Z]*.php',
+        $packageModelDir . '/sx[A-Z]*.php',
     );
-
-    foreach ($artifacts as $name) {
-        foreach (array($packageModelDir . '/mysql/' . $name, $packageModelDir . '/' . $name) as $path) {
+    foreach ($patterns as $pattern) {
+        foreach (glob($pattern) ?: array() as $path) {
             if (is_file($path)) {
                 unlink($path);
             }
@@ -100,28 +127,6 @@ function sendexNormalizeGeneratedPhpFiles($directory)
             file_put_contents($path, $normalized);
         }
     }
-}
-
-/**
- * Strip trailing whitespace from generated PHP files (xPDO generator leaves spaces after =>).
- *
- * @param string $directory
- * @deprecated Use sendexNormalizeGeneratedPhpFiles()
- */
-function sendexTrimTrailingWhitespaceInPhpFiles($directory)
-{
-    sendexNormalizeGeneratedPhpFiles($directory);
-}
-
-/**
- * Ensure every PHP file under model ends with exactly one newline (PSR-12).
- *
- * @param string $directory
- * @deprecated Use sendexNormalizeGeneratedPhpFiles()
- */
-function sendexNormalizePhpFileEndings($directory)
-{
-    sendexNormalizeGeneratedPhpFiles($directory);
 }
 
 /**

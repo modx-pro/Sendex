@@ -40,5 +40,32 @@ class SnippetNewsletterScopeTest extends TestCase
             'newsletter_id' => '1',
             'sendex_widget_key' => 'confirm',
         )));
+        $this->assertFalse(sxSubscribeAjaxResponse::matchesRequest(1, 'instant', array(
+            'newsletter_id' => '1',
+            'sx_action' => 'subscribe',
+        )));
+    }
+
+    public function testEmailLinkWithoutWidgetKeyHandledByDefaultInstanceOnly()
+    {
+        $request = array(
+            'newsletter_id' => '1',
+            'sx_action' => 'unsubscribe',
+            'code' => 'abc',
+        );
+
+        $this->assertTrue(sxSubscribeAjaxResponse::matchesRequest(1, '', $request));
+        $this->assertFalse(sxSubscribeAjaxResponse::matchesRequest(1, 'unsubscribe', $request));
+    }
+
+    public function testMatchesRequestUsesNewsletterIdNotSubscriberId()
+    {
+        $request = array(
+            'newsletter_id' => '5',
+            'sx_action' => 'subscribe',
+        );
+
+        $this->assertTrue(sxSubscribeAjaxResponse::matchesRequest(5, '', $request));
+        $this->assertFalse(sxSubscribeAjaxResponse::matchesRequest(42, '', $request));
     }
 }

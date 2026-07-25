@@ -29,15 +29,15 @@ class BuildTransportModx3ContractTest extends TestCase
             'registerNamespace(PKG_NAME_LOWER, false, true, PKG_NAMESPACE_PATH, PKG_ASSETS_PATH)',
             $source
         );
-        $this->assertStringContainsString('sendexShouldRegenerateModel', $source);
+        $this->assertStringContainsString('sendexPrepareModelForBuild', $source);
     }
 
     public function testBuildTransportCleansModx3ModelArtifactsWhenSkippingRegeneration()
     {
         $source = file_get_contents($this->root . '/_build/build.transport.php');
 
-        $this->assertStringContainsString('sendexRemoveModx3ModelArtifacts($sendexModelDir)', $source);
-        $this->assertStringContainsString('sendexNormalizeGeneratedPhpFiles($sendexModelDir)', $source);
+        $this->assertStringContainsString('sendexPrepareModelForBuild($sendexBuildModx, $sendexModelDir)', $source);
+        $this->assertStringNotContainsString('sendexNormalizeGeneratedPhpFiles($sendexModelDir)', $source);
     }
 
     public function testBuildModelSkipsRegenerationOnModx3AndNormalizesGeneratedPhp()
@@ -45,10 +45,13 @@ class BuildTransportModx3ContractTest extends TestCase
         $source = file_get_contents($this->root . '/_build/build.model.php');
         $functions = file_get_contents($this->root . '/_build/includes/functions.php');
 
-        $this->assertStringContainsString('sendexShouldRegenerateModel($modx)', $source);
-        $this->assertStringContainsString('sendexRemoveModx3ModelArtifacts', $source);
-        $this->assertStringContainsString('sendexNormalizeGeneratedPhpFiles', $source);
+        $this->assertStringContainsString(
+            'sendexPrepareModelForBuild($modx, $sources[\'model\'] . PKG_NAME_LOWER)',
+            $source
+        );
+        $this->assertStringContainsString('function sendexPrepareModelForBuild', $functions);
         $this->assertStringContainsString('function sendexRemoveModx3ModelArtifacts', $functions);
+        $this->assertStringContainsString('function sendexUsesLegacyModAction', $functions);
         $this->assertStringContainsString('function sendexNormalizeGeneratedPhpFiles', $functions);
         $this->assertStringContainsString("preg_match('/^\\{\\s*$/',", $functions);
     }
@@ -57,9 +60,10 @@ class BuildTransportModx3ContractTest extends TestCase
     {
         $source = file_get_contents($this->root . '/_build/data/transport.menu.php');
 
-        $this->assertStringContainsString("class_exists('modAction')", $source);
+        $this->assertStringContainsString('sendexUsesLegacyModAction($modx)', $source);
         $this->assertStringContainsString("\$menuFields['namespace'] = PKG_NAME_LOWER", $source);
-        $this->assertStringContainsString("\$controller = 'home'", $source);
+        $this->assertStringContainsString("'controller' => 'index'", $source);
+        $this->assertStringNotContainsString("\$controller = 'home'", $source);
         $this->assertStringNotContainsString('instanceof modAction', $source);
     }
 

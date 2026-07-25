@@ -84,12 +84,17 @@ class sxSubscribeAjaxResponse
         if (!self::matchesNewsletter($snippetNewsletterId, $request)) {
             return false;
         }
-        if ($widgetKey === '') {
-            return true;
+
+        $requestWidgetKey = isset($request['sendex_widget_key'])
+            ? trim((string) $request['sendex_widget_key'])
+            : '';
+
+        if ($requestWidgetKey !== '') {
+            return $widgetKey !== '' && $requestWidgetKey === (string) $widgetKey;
         }
 
-        return isset($request['sendex_widget_key'])
-            && (string) $request['sendex_widget_key'] === (string) $widgetKey;
+        // Email confirm/unsubscribe links and legacy forms omit sendex_widget_key.
+        return $widgetKey === '';
     }
 
     /**

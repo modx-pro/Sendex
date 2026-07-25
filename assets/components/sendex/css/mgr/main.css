@@ -8,6 +8,18 @@
 ul.sendex-row-actions {margin:0; padding: 0; list-style: none;}
 ul.sendex-row-actions li {float:left;}
 ul.sendex-row-actions .btn {padding: 5px; margin-right:2px; min-width:26px; font-size: inherit;}
+ul.sendex-row-actions .btn > .icon,
+ul.sendex-row-actions .btn > .fa {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    line-height: 16px;
+}
+ul.sendex-row-actions .btn > .icon.icon-check-circle-o,
+ul.sendex-row-actions .btn > .icon.icon-trash-o,
+ul.sendex-row-actions .btn > .icon.icon-send-o,
+ul.sendex-row-actions .btn > .icon.icon-paper-plane-o {
+    font-weight: 400;
+}
 
 .red {color: darkred;}
 .green {color: darkgreen;}

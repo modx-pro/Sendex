@@ -4,13 +4,13 @@ Sendex.utils.renderActions = function(value, props, row) {
         if (!row.data.actions.hasOwnProperty(i)) {continue;}
         var a = row.data.actions[i];
         if (a['button']) {
-            var cls = typeof(a['class']) == 'object' && a['class']['button']
+            var btnCls = typeof(a['class']) == 'object' && a['class']['button']
                 ? a['class']['button']
                 : '';
-            cls += ' ' + (MODx.modx23 ? 'icon icon-' : 'fa fa-') + a['icon'];
+            var iconCls = (MODx.modx23 ? 'icon icon-' : 'fa fa-') + a['icon'];
             res.push(
                 '<li>\
-                    <button class="btn btn-default '+ cls +'" type="'+a['type']+'" title="'+_('sendex_action_'+a['type'])+'"></button>\
+                    <button class="btn btn-default '+ btnCls +'" type="'+a['type']+'" title="'+_('sendex_action_'+a['type'])+'"><i class="'+iconCls+'"></i></button>\
                 </li>'
             );
         }

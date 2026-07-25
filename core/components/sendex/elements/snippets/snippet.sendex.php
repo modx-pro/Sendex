@@ -48,6 +48,9 @@ $placeholders['message'] = '';
 $placeholders['class'] = '';
 $placeholders['error'] = 0;
 $placeholders['widget_key'] = $widgetKey;
+$newsletterId = (int) $id;
+$handlesRequest = !empty($_REQUEST['sx_action'])
+    && sxSubscribeAjaxResponse::matchesRequest($newsletterId, $widgetKey, $_REQUEST);
 $isAuthenticated = $modx->user->isAuthenticated($modx->context->key);
 if ($isAuthenticated) {
     $profile = $modx->user->getOne('Profile');
@@ -58,7 +61,7 @@ if ($isAuthenticated) {
     );
 }
 
-if (!empty($_REQUEST['sx_action']) && sxSubscribeAjaxResponse::matchesRequest($id, $widgetKey, $_REQUEST)) {
+if ($handlesRequest) {
     $params = $_GET;
     unset($params[$modx->getOption('request_param_alias')]);
     unset($params[$modx->getOption('request_param_id')]);
@@ -95,6 +98,7 @@ if (!empty($_REQUEST['sx_action']) && sxSubscribeAjaxResponse::matchesRequest($i
                 } elseif ($guestResult['status'] === 'confirm') {
                     $params['hash'] = $guestResult['hash'];
                     $params['sx_action'] = 'confirm';
+                    $params['newsletter_id'] = $newsletterId;
                     $placeholders['link'] = $modx->makeUrl($modx->resource->id, $modx->context->key, $params, 'full');
                     $placeholders['email_body'] = $modx->getChunk($tplActivate, $placeholders);
                     $response = $Sendex->sendEmail($email, $placeholders);
@@ -139,6 +143,7 @@ if (!empty($_REQUEST['sx_action']) && sxSubscribeAjaxResponse::matchesRequest($i
                             'message' => '',
                             'class'   => '',
                             'error'   => 0,
+                            'widget_key' => $widgetKey,
                         )
                     );
                     if ($isAuthenticated) {
@@ -177,8 +182,8 @@ if (!empty($placeholders['message'])) {
         : $modx->getOption('msgClass', $scriptProperties, 'active');
 }
 
-if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {
-    if ($subscriber = $modx->getObject('sxSubscriber', $id)) {
+if ($isAuthenticated && ($subscriberId = $newsletter->isSubscribed($modx->user->id))) {
+    if ($subscriber = $modx->getObject('sxSubscriber', $subscriberId)) {
         $placeholders = array_merge($subscriber->toArray(), $placeholders);
     }
     $output = $modx->getChunk($tplUnsubscribe, $placeholders);
@@ -188,7 +193,7 @@ if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {
         : $modx->getChunk($tplSubscribeGuest, $placeholders);
 }
 
-if ($isAjax && !empty($_REQUEST['sx_action']) && sxSubscribeAjaxResponse::matchesRequest($id, $widgetKey, $_REQUEST)) {
+if ($isAjax && $handlesRequest) {
     sxSubscribeAjaxResponse::send($placeholders, $output);
 }
 

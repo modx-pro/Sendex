@@ -73,8 +73,11 @@ Root `composer.json` remains for PHPUnit/phpcs only.
 | `tplActivate` | `tpl.Sendex.activate` | Confirmation email chunk |
 | `confirmEmail` | system `sendex_confirm_email` (default `1`) | Guest flow: `1` = confirm link by email; `0` = subscribe immediately |
 | `loadJs` | `1` | Register `assets/components/sendex/js/web/sendex.js` for AJAX forms |
+| `widgetKey` | *(empty)* | Optional key when several `[[!Sendex]]` widgets share one page; must match hidden `sendex_widget_key` in the form |
 
 When `confirmEmail` is off, guest addresses are saved without a confirmation message. Typos and spam signups are harder to catch; use only when you accept that tradeoff.
+
+Several widgets on one page need distinct `&widgetKey=` values (for example `instant` vs `confirm`) so AJAX POST is handled only by the matching snippet instance. Email confirm/unsubscribe links omit `sendex_widget_key`; keep one snippet on the landing page without `widgetKey` to handle those URLs.
 
 ### AJAX subscribe / unsubscribe (#42)
 
