@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#28] `sxProcessorInput::parseIds` accepts `ids` as array or CSV; queue send from snippet/code matches ExtJS `runProcessor` input.
 
 ### Changed
+- [#73] Newsletter mgr `getlist`: COUNT runs on filters only; JOIN/COUNT(`Subscribers`)/GROUP BY moved to `prepareQueryAfterCount` via `sxNewsletterListQuery`.
 - [#71] Confirm/subscribe reuses one `sxSubscriber` lookup (`findSubscriber`) instead of SELECT in `isSubscribed` plus a second SELECT in `attachUserToSubscriber`.
 - [#70] `add_group` bulk-subscribes group members via one query + chunked multi-row INSERT; mgr sync path skips per-row subscribe events (#44).
 - [#64] New queue rows store empty `email_body` (compact mode); body is rendered at send from newsletter template; legacy rows with stored HTML still send as-is.

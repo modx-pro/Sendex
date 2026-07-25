@@ -23,6 +23,7 @@ class NewsletterSplitContractTest extends TestCase
             'sxnewsletterqueuebuilder.class.php',
             'sxnewsletterqueueusers.class.php',
             'sxnewslettergroupsubscribe.class.php',
+            'sxnewsletterlistquery.class.php',
             'sxqueuebodyrenderer.class.php',
             'sxnewslettermailer.class.php',
             'sxsendexevent.class.php',
