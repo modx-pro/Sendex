@@ -17,6 +17,7 @@ if (!($Sendex instanceof Sendex)) {
 require_once $corePath . 'model/sendex/sxuserplaceholders.class.php';
 require_once $corePath . 'model/sendex/sxunsubscriberesolve.class.php';
 require_once $corePath . 'model/sendex/sxsubscribeconfirm.class.php';
+require_once $corePath . 'model/sendex/sxsubscribeajaxresponse.class.php';
 
 $tplSubscribeAuth = $modx->getOption('tplSubscribeAuth', $scriptProperties, 'tpl.Sendex.subscribe.auth');
 $tplSubscribeGuest = $modx->getOption('tplSubscribeGuest', $scriptProperties, 'tpl.Sendex.subscribe.guest');
@@ -26,6 +27,11 @@ if (empty($linkTTL)) {
     $linkTTL = 1800;
 }
 $requireConfirm = sxSubscribeConfirm::isRequired($modx, $scriptProperties);
+$loadJs = sxSubscribeAjaxResponse::parseEnabled(
+    $modx->getOption('loadJs', $scriptProperties, true),
+    true
+);
+$isAjax = sxSubscribeAjaxResponse::isRequest($scriptProperties);
 
 if (empty($id) || !$newsletter = $modx->getObject('sxNewsletter', $id)) {
     return $modx->lexicon('sendex_newsletter_err_ns');
@@ -51,8 +57,6 @@ if ($isAuthenticated) {
 }
 
 if (!empty($_REQUEST['sx_action'])) {
-    $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
-
     $params = $_GET;
     unset($params[$modx->getOption('request_param_alias')]);
     unset($params[$modx->getOption('request_param_id')]);
@@ -166,7 +170,9 @@ if (!empty($_REQUEST['sx_action'])) {
 }
 
 if (!empty($placeholders['message'])) {
-    $placeholders['class'] = $modx->getOption('msgClass', $scriptProperties, 'active');
+    $placeholders['class'] = !empty($placeholders['error'])
+        ? 'sendex-error'
+        : $modx->getOption('msgClass', $scriptProperties, 'active');
 }
 
 if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {
@@ -180,9 +186,15 @@ if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {
         : $modx->getChunk($tplSubscribeGuest, $placeholders);
 }
 
-if (!empty($isAjax)) {
-    @session_write_close();
-    exit($output);
-} else {
-    return $output;
+if ($isAjax && !empty($_REQUEST['sx_action'])) {
+    sxSubscribeAjaxResponse::send($placeholders, $output);
 }
+
+if ($loadJs && !defined('SENDEX_FRONTEND_JS')) {
+    define('SENDEX_FRONTEND_JS', true);
+    $modx->regClientScript(
+        $modx->getOption('assets_url') . 'components/sendex/js/web/sendex.js'
+    );
+}
+
+return $output;
