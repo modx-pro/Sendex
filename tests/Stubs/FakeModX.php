@@ -530,6 +530,27 @@ class FakeModX extends modX
 
     /**
      * @param string $class
+     * @param string $alias
+     * @param string $prefix
+     * @param array $fields
+     * @return string
+     */
+    public function getSelectColumns($class, $alias, $prefix = '', array $fields = array())
+    {
+        if ($fields !== array()) {
+            $out = array();
+            foreach ($fields as $field) {
+                $out[] = $alias . '.' . $field;
+            }
+
+            return implode(', ', $out);
+        }
+
+        return $alias . '.*';
+    }
+
+    /**
+     * @param string $class
      * @return string
      */
     public function getTableName($class)
