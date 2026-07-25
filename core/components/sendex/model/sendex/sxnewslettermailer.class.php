@@ -21,17 +21,17 @@ class sxNewsletterMailer
      */
     public static function resolveHeaders($source, $xpdo)
     {
-        $from = trim((string) self::readField($source, 'email_from'));
+        $from = self::sanitizeHeader(self::readField($source, 'email_from'));
         if ($from === '') {
-            $from = (string) $xpdo->getOption('emailsender');
+            $from = self::sanitizeHeader($xpdo->getOption('emailsender'));
         }
 
-        $fromName = trim((string) self::readField($source, 'email_from_name'));
+        $fromName = self::sanitizeHeader(self::readField($source, 'email_from_name'));
         if ($fromName === '') {
-            $fromName = (string) $xpdo->getOption('site_name');
+            $fromName = self::sanitizeHeader($xpdo->getOption('site_name'));
         }
 
-        $reply = trim((string) self::readField($source, 'email_reply'));
+        $reply = self::sanitizeHeader(self::readField($source, 'email_reply'));
         if ($reply === '') {
             $reply = $from;
         }
@@ -58,7 +58,7 @@ class sxNewsletterMailer
         return array_merge(
             self::resolveHeaders($newsletter, $xpdo),
             array(
-                'email_to'      => $subscriber->get('email'),
+                'email_to'      => self::sanitizeHeader($subscriber->get('email')),
                 'email_subject' => $subject,
                 'email_body'    => $body,
             )
@@ -78,7 +78,7 @@ class sxNewsletterMailer
         $headers = self::resolveHeaders($options, $xpdo);
 
         return array(
-            'email_to'        => $to,
+            'email_to'        => self::sanitizeHeader($to),
             'email_body'      => $xpdo->getOption('email_body', $options, ''),
             'email_subject'   => $xpdo->getOption(
                 'email_subject',
@@ -108,12 +108,12 @@ class sxNewsletterMailer
         }
 
         return array(
-            'email_to'        => self::readField($queue, 'email_to'),
+            'email_to'        => self::sanitizeHeader(self::readField($queue, 'email_to')),
             'email_body'      => $body,
-            'email_from'      => self::readField($queue, 'email_from'),
-            'email_from_name' => self::readField($queue, 'email_from_name'),
+            'email_from'      => self::sanitizeHeader(self::readField($queue, 'email_from')),
+            'email_from_name' => self::sanitizeHeader(self::readField($queue, 'email_from_name')),
             'email_subject'   => self::readField($queue, 'email_subject'),
-            'email_reply'     => self::readField($queue, 'email_reply'),
+            'email_reply'     => self::sanitizeHeader(self::readField($queue, 'email_reply')),
         );
     }
 
@@ -148,5 +148,26 @@ class sxNewsletterMailer
         }
 
         return '';
+    }
+
+    /**
+     * Remove CR/LF and control chars from email header fields (#103 P3).
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public static function sanitizeHeader($value)
+    {
+        $value = (string) $value;
+        $value = preg_replace('/[\r\n]+/', ' ', $value);
+        if ($value === null) {
+            return '';
+        }
+        $value = preg_replace('/[\x00-\x1F\x7F]/', '', $value);
+        if ($value === null) {
+            return '';
+        }
+
+        return trim($value);
     }
 }
