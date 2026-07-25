@@ -26,6 +26,10 @@ jobs:
           tools: composer
           coverage: none
 
+      - name: Install MODX dependencies
+        run: composer install --no-interaction --no-dev --prefer-dist
+        working-directory: modx
+
       - name: Install root dependencies
         run: composer install --no-interaction --prefer-dist
 
@@ -44,7 +48,9 @@ jobs:
       - name: Collect transport package
         run: |
           mkdir -p _packages
-          cp modx/core/packages/sendex-*.transport.zip _packages/
+          find . -name 'sendex-*.transport.zip' -not -path './.git/*' -exec cp -t _packages {} +
+          ls -la _packages/
+          test -f _packages/sendex-*.transport.zip
 
       - name: Prepare release notes
         run: |
