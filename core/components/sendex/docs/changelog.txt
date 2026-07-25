@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#104] Subscribe/unsubscribe events pass `source` (`snippet`\|`ajax`\|`confirm`\|`mgr`\|`guest`).
 
 ### Fixed
+- [#110] Mgr queue newsletter combo keeps the selected newsletter after click; MODX 3 tab/grid spacing aligned; manager menu uses envelope icon on MODX 3.
 - [#104] Guest merge no longer runs on `OnBeforeUserActivate` (only `OnUserActivate` / `OnUserSave`), so a cancelled activation cannot attach guests to an inactive user.
 - [#40] MODX 3 package install: `registerNamespace` sets `assets_path`; build script aliases `modPackageBuilder`, skips model regen on MODX 3 (preserves global `sx*` maps); mgr menu without `modAction`; Phinx migration property no longer conflicts with `AbstractMigration::$tables` on PHP 8.4.
 - [#74] MODX 3 mgr: `SendexIndexManagerController` aliases menu action `index` (no duplicate menu remap).

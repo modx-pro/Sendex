@@ -12,6 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Checkout MODX Revolution
+        uses: actions/checkout@v5
+        with:
+          repository: modxcms/revolution
+          ref: 3.0.2-pl
+          path: modx
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -26,10 +33,30 @@ jobs:
         run: composer install --no-interaction --no-dev --prefer-dist
         working-directory: core/components/sendex
 
+      - name: Disable local auto-install for release build
+        run: sed -i 's/define('\''PKG_AUTO_INSTALL'\'', true);/define('\''PKG_AUTO_INSTALL'\'', false);/' _build/build.config.php
+
       - name: Build transport package
+        env:
+          MODX_BASE_PATH: ${{ github.workspace }}/modx/
         run: php _build/build.transport.php
+
+      - name: Collect transport package
+        run: |
+          mkdir -p _packages
+          cp modx/core/packages/sendex-*.transport.zip _packages/
+
+      - name: Prepare release notes
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "\\]" {print; show=1; next}
+            show && /^## \[/ {exit}
+            show {print}
+          ' core/components/sendex/docs/changelog.txt > release-notes.md
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
         with:
           files: _packages/*.transport.zip
+          body_path: release-notes.md
