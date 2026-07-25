@@ -47,10 +47,10 @@ class sxSubscriberGetListProcessor extends modObjectGetListProcessor
         $array = $object->toArray();
 
         if (empty($array['username'])) {
-            $array['username'] = 'Guest';
+            $array['username'] = $this->modx->lexicon('sendex_subscriber_guest');
         }
         if (empty($array['fullname'])) {
-            $array['fullname'] = 'Anonymous';
+            $array['fullname'] = $this->modx->lexicon('sendex_subscriber_anonymous');
         }
 
         $array['actions'] = array();

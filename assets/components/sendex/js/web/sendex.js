@@ -54,10 +54,18 @@
                 .catch(function () {
                     SendexForm.applyResponse(widget, {
                         success: false,
-                        message: 'Request failed',
+                        message: SendexForm.requestFailedMessage(),
                         html: ''
                     });
                 });
+        },
+
+        requestFailedMessage: function () {
+            if (window.SendexFormMessages && window.SendexFormMessages.requestFailed) {
+                return window.SendexFormMessages.requestFailed;
+            }
+
+            return 'Request failed';
         },
 
         applyResponse: function (widget, data) {

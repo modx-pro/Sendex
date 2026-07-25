@@ -18,6 +18,7 @@ foreach ($tmp as $k => $v) {
         'text'      => $k,
         'parent'    => 'components',
         'icon'      => 'images/icons/plugin.gif',
+        'permissions' => 'view_document',
         'menuindex' => $i,
         'params'    => '',
         'handler'   => '',

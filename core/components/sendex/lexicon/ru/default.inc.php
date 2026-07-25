@@ -119,6 +119,12 @@ $_lang['sendex_subscribe_err_already'] = 'Этот email уже подписан
 $_lang['sendex_subscribe_err_email_wrong'] = 'Неверный email.';
 $_lang['sendex_subscribe_err_email_ns'] = 'Нужно указать email.';
 $_lang['sendex_subscribe_err_email_send'] = 'Не могу отправить email.';
+$_lang['sendex_subscribe_err_csrf'] = 'Проверка запроса не пройдена. Обновите страницу и повторите.';
+$_lang['sendex_subscribe_err_rate_limited'] = 'Слишком много запросов подтверждения для этого email. Попробуйте позже.';
+$_lang['sendex_request_failed'] = 'Запрос завершился ошибкой';
+$_lang['sendex_email_placeholder'] = 'Email';
+$_lang['sendex_subscriber_guest'] = 'Гость';
+$_lang['sendex_subscriber_anonymous'] = 'Аноним';
 
 $_lang['sendex_action_sendNewsletter'] = 'Отправить подписчикам';
 $_lang['sendex_action_updateNewsletter'] = 'Изменить рассылку';

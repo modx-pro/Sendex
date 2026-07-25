@@ -59,6 +59,21 @@ class SubscriberMergeTest extends TestCase
         $this->assertSame(8, (int) $this->modx->subscribers[0]->get('user_id'));
     }
 
+    public function testAttachGuestsByEmailWithLargeGuestPoolUpdatesOnlyMatchingRows()
+    {
+        for ($i = 1; $i <= 1000; $i++) {
+            $this->modx->subscribers[] = $this->guest($i, 10, 'bulk' . $i . '@example.com');
+        }
+        $target = $this->guest(1001, 10, 'Target@Example.com');
+        $this->modx->subscribers[] = $target;
+
+        $updated = sxSubscriberMerge::attachGuestsByEmail($this->modx, 77, 'target@example.com');
+
+        $this->assertSame(1, $updated);
+        $this->assertSame(77, (int) $target->get('user_id'));
+        $this->assertSame(0, (int) $this->modx->subscribers[0]->get('user_id'));
+    }
+
     public function testEmailFromUserReturnsEmptyWithoutProfile()
     {
         $user = new modUser($this->modx);

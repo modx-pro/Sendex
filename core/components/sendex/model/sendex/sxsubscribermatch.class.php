@@ -117,6 +117,14 @@ class sxSubscriberMatch
                 continue;
             }
 
+            if (substr((string) $key, -3) === ':IN') {
+                $field = substr((string) $key, 0, -3);
+                if (!self::inMatches($field, $subscriber->get($field), $value)) {
+                    return false;
+                }
+                continue;
+            }
+
             if ((string) $subscriber->get($key) !== (string) $value) {
                 return false;
             }
@@ -135,7 +143,24 @@ class sxSubscriberMatch
         foreach ($group as $key => $value) {
             if (strpos($key, 'OR:') === 0) {
                 $field = self::fieldFromOrKey($key);
-                if ($field !== '' && strcasecmp((string) $subscriber->get($field), (string) $value) === 0) {
+                if ($field === '') {
+                    continue;
+                }
+                if (substr($key, -3) === ':IN') {
+                    if (self::inMatches($field, $subscriber->get($field), $value)) {
+                        return true;
+                    }
+                    continue;
+                }
+                if (strcasecmp((string) $subscriber->get($field), (string) $value) === 0) {
+                    return true;
+                }
+                continue;
+            }
+
+            if (substr((string) $key, -3) === ':IN') {
+                $field = substr((string) $key, 0, -3);
+                if (self::inMatches($field, $subscriber->get($field), $value)) {
                     return true;
                 }
                 continue;
@@ -157,6 +182,32 @@ class sxSubscriberMatch
     {
         $parts = explode(':', $key);
         return isset($parts[1]) ? $parts[1] : '';
+    }
+
+    /**
+     * @param string $field
+     * @param mixed $actual
+     * @param mixed $values
+     * @return bool
+     */
+    private static function inMatches($field, $actual, $values)
+    {
+        $actual = (string) $actual;
+        $candidates = is_array($values) ? $values : array($values);
+        foreach ($candidates as $candidate) {
+            $candidate = (string) $candidate;
+            if ($field === 'email') {
+                if (strcasecmp($actual, $candidate) === 0) {
+                    return true;
+                }
+                continue;
+            }
+            if ($actual === $candidate) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

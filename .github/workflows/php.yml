@@ -12,7 +12,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+        include:
+          - php: '7.4'
+            coverage: none
+          - php: '8.0'
+            coverage: none
+          - php: '8.1'
+            coverage: none
+          - php: '8.2'
+            coverage: pcov
+          - php: '8.3'
+            coverage: none
+          - php: '8.4'
+            coverage: none
 
     steps:
       - uses: actions/checkout@v5
@@ -21,7 +33,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          coverage: none
+          coverage: ${{ matrix.coverage }}
           tools: composer
 
       - name: Install dependencies
@@ -33,6 +45,17 @@ jobs:
 
       - name: PHPUnit
         run: composer test
+
+      - name: PHPUnit coverage report
+        if: matrix.coverage == 'pcov'
+        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+      - name: Upload coverage artifact
+        if: matrix.coverage == 'pcov'
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-coverage-clover
+          path: build/logs/clover.xml
 
   phpcs:
     name: PHPCS
@@ -73,3 +96,32 @@ jobs:
           while IFS= read -r -d '' file; do
             php -l "$file"
           done < <(find . -name '*.php' -not -path './.git/*' -not -path './vendor/*' -print0)
+
+  integration:
+    name: Integration smoke (MODX ${{ matrix.modx }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        modx: ['2.8', '3.x']
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Install component Phinx deps
+        run: composer install --no-interaction --no-dev --prefer-dist
+        working-directory: core/components/sendex
+
+      - name: Contract smoke for connector/cron paths
+        run: composer test -- --filter "ModxCompatTest|BuildTransportModx3ContractTest|QueueClaimTest"

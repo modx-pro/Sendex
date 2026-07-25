@@ -146,7 +146,7 @@ composer test
 composer test:coverage   # needs phpdbg
 ```
 
-Unit tests use lightweight MODX/xPDO stubs (no MODX install). Covered: `sxNewsletter` (100%), subscriber create/remove processors. CI runs `php -l`, PHPUnit, and phpcs on PHP 7.4–8.4.
+Unit tests use lightweight MODX/xPDO stubs (no MODX install). Coverage includes subscription/confirm flows, queue lifecycle events, queue claim, group subscribe, ACL contracts, frontend snippet contracts, and mail header sanitization. CI runs `php -l`, PHPUnit, and PHPCS on PHP 7.4–8.4; one PHP 8.2 job publishes Clover coverage as an artifact. Remaining integration gaps are tracked in issue [#103](https://github.com/modx-pro/Sendex/issues/103).
 
 ## Plugin events
 

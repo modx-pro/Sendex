@@ -21,6 +21,18 @@ $tmp = [
         'key'   => 'sendex_confirm_email',
         'area'  => 'sendex_main',
     ),
+    'confirm_rate_limit' => array(
+        'xtype' => 'textfield',
+        'value' => 0,
+        'key'   => 'sendex_confirm_rate_limit',
+        'area'  => 'sendex_main',
+    ),
+    'csrf_protect'       => array(
+        'xtype' => 'combo-boolean',
+        'value' => false,
+        'key'   => 'sendex_csrf_protect',
+        'area'  => 'sendex_main',
+    ),
 ];
 
 foreach ($tmp as $k => $v) {

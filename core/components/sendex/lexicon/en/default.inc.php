@@ -117,6 +117,12 @@ $_lang['sendex_subscribe_err_already'] = 'This email is already subscribed to ne
 $_lang['sendex_subscribe_err_email_wrong'] = 'Wrong email.';
 $_lang['sendex_subscribe_err_email_ns'] = 'You need to specify email.';
 $_lang['sendex_subscribe_err_email_send'] = 'Could not send email.';
+$_lang['sendex_subscribe_err_csrf'] = 'Request verification failed. Refresh the page and try again.';
+$_lang['sendex_subscribe_err_rate_limited'] = 'Too many confirmation requests for this email. Try later.';
+$_lang['sendex_request_failed'] = 'Request failed';
+$_lang['sendex_email_placeholder'] = 'Email';
+$_lang['sendex_subscriber_guest'] = 'Guest';
+$_lang['sendex_subscriber_anonymous'] = 'Anonymous';
 
 $_lang['sendex_action_sendNewsletter'] = 'Send to subscribers';
 $_lang['sendex_action_updateNewsletter'] = 'Update newsletter';

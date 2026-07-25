@@ -72,4 +72,23 @@ class SendexProcessorAclTest extends TestCase
             $this->assertStringContainsString("'view_document'", $source, $file);
         }
     }
+
+    public function testManagerControllerChecksViewPermission()
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/core/components/sendex/sendexmaincontroller.class.php'
+        );
+
+        $this->assertStringContainsString("hasPermission('view_sendex')", $source);
+        $this->assertStringContainsString("hasPermission('view_document')", $source);
+    }
+
+    public function testTransportMenuDeclaresPermission()
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/_build/data/transport.menu.php'
+        );
+
+        $this->assertStringContainsString("'permissions' => 'view_document'", $source);
+    }
 }

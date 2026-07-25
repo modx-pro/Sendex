@@ -14,6 +14,9 @@ class FakePdoStatement
     /** @var string */
     private $sql;
 
+    /** @var int */
+    private $affectedRows = 0;
+
     /**
      * @param FakeModX $modx
      * @param FakePdoConnection $connection
@@ -39,10 +42,18 @@ class FakePdoStatement
         );
 
         if (!$this->connection->executeResult) {
+            $this->affectedRows = 0;
             return false;
         }
 
+        if (stripos($this->sql, 'DELETE FROM') === 0) {
+            $this->affectedRows = $this->deleteQueueRow($values);
+
+            return true;
+        }
+
         $rowCount = (int) (count($values) / 4);
+        $this->affectedRows = $rowCount;
         for ($i = 0; $i < $rowCount; $i++) {
             $offset = $i * 4;
             $subscriber = new sxSubscriber($this->modx);
@@ -57,5 +68,38 @@ class FakePdoStatement
         }
 
         return true;
+    }
+
+    /**
+     * @return int
+     */
+    public function rowCount()
+    {
+        return $this->affectedRows;
+    }
+
+    /**
+     * @param array $values
+     * @return int
+     */
+    private function deleteQueueRow(array $values)
+    {
+        $id = isset($values[0]) ? (int) $values[0] : 0;
+        if ($id <= 0) {
+            return 0;
+        }
+
+        foreach ($this->modx->queues as $index => $queue) {
+            if ((int) $queue->get('id') !== $id) {
+                continue;
+            }
+
+            unset($this->modx->queues[$index]);
+            $this->modx->queues = array_values($this->modx->queues);
+
+            return 1;
+        }
+
+        return 0;
     }
 }

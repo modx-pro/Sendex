@@ -24,6 +24,22 @@ class sxSubscribeConfirm
     }
 
     /**
+     * Snippet &confirmRateLimit= overrides system setting sendex_confirm_rate_limit.
+     *
+     * @param object $modx modX
+     * @param array $scriptProperties
+     * @return int
+     */
+    public static function rateLimitSeconds($modx, array $scriptProperties = array())
+    {
+        if (array_key_exists('confirmRateLimit', $scriptProperties)) {
+            return max(0, (int) $scriptProperties['confirmRateLimit']);
+        }
+
+        return max(0, (int) $modx->getOption('sendex_confirm_rate_limit', null, 0));
+    }
+
+    /**
      * @param mixed $value
      * @param bool $default
      * @return bool
@@ -56,6 +72,7 @@ class sxSubscribeConfirm
      * @param int $userId
      * @param int $linkTTL
      * @param bool $requireConfirm
+     * @param int $rateLimit
      * @return array{status:string,hash?:string,message?:string}
      */
     public static function guestSubscribe(
@@ -63,8 +80,11 @@ class sxSubscribeConfirm
         $email = '',
         $userId = 0,
         $linkTTL = 1800,
-        $requireConfirm = true
+        $requireConfirm = true,
+        $rateLimit = 0
     ) {
+        $xpdo = $subscription->newsletter()->xpdo;
+
         if (!$requireConfirm) {
             $result = $subscription->subscribe($userId, $email, 'guest');
             if ($result === true) {
@@ -78,6 +98,10 @@ class sxSubscribeConfirm
                 'status'  => 'error',
                 'message' => (string) $result,
             );
+        }
+
+        if (sxSubscribeRegistry::isConfirmRateLimited($xpdo, $email, $rateLimit)) {
+            return array('status' => 'rate_limited');
         }
 
         $response = $subscription->checkEmail($email, $userId, $linkTTL);
