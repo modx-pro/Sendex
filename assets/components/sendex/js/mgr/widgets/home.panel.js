@@ -3,6 +3,7 @@ Sendex.panel.Home = function(config) {
     Ext.apply(config,{
         border: false
         ,baseCls: 'modx-formpanel'
+        ,cls: 'sendex-manager-home'
         ,layout: 'anchor'
         ,items: [{
             html: '<h2>'+_('sendex')+'</h2>'
@@ -10,6 +11,7 @@ Sendex.panel.Home = function(config) {
             ,cls: 'modx-page-header container'
         },{
             xtype: 'modx-tabs'
+            ,cls: 'sendex-manager-tabs'
             ,defaults: { border: false ,autoHeight: true }
             ,border: true
             ,stateful: true

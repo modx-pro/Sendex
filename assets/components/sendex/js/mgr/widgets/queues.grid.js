@@ -89,8 +89,6 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, Ext.apply({
     }
 
     ,createQueues: function(combo, newsletter, e) {
-        combo.reset();
-
         MODx.Ajax.request({
             url: Sendex.config.connector_url
             ,params: {
