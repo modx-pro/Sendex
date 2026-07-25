@@ -7,8 +7,11 @@ require_once dirname(__FILE__) . '/sxnewsletterqueueusers.class.php';
 /**
  * Build queue rows from newsletter subscribers.
  *
- * Post-#62 home of `sxNewsletter::addQueues` (#63 batch user load lives here via
- * `sxNewsletterQueueUsers`; facade delegates from `sxnewsletter.class.php`).
+ * Post-#62 home of `sxNewsletter::addQueues` (issue #64 also named this path).
+ * Send path: `sxQueue::send()` → `sxQueueSender` → compact body via `sxQueueBodyRenderer`.
+ *
+ * Compact mode (#64): new rows store empty `email_body` (no extra DB column); headers
+ * and recipient are snapshotted; HTML is rendered at send time.
  */
 class sxNewsletterQueueBuilder
 {
@@ -31,13 +34,6 @@ class sxNewsletterQueueBuilder
         $newsletter = $this->newsletter;
         $xpdo = $newsletter->xpdo;
         $template = null;
-        $params = $newsletter->toArray();
-        /** @var modParser $parser */
-        $parser = $xpdo->getService(
-            'parser',
-            $xpdo->getOption('parser_class', null, 'modParser'),
-            $xpdo->getOption('parser_class_path', null, '')
-        );
 
         if (!$subscribers = $newsletter->getMany('Subscribers')) {
             return $xpdo->lexicon('sendex_newsletter_err_no_subscribers');
@@ -54,6 +50,8 @@ class sxNewsletterQueueBuilder
 
         $newsletterId = (int) $newsletter->id;
         $before = (int) $xpdo->getCount('sxQueue', array('newsletter_id' => $newsletterId));
+        $subject = !empty($newsletter->email_subject) ? $newsletter->email_subject : 'No subject';
+        $headers = sxNewsletterMailer::resolveHeaders($newsletter, $xpdo);
 
         $userIds = array();
         foreach ($subscribers as $subscriber) {
@@ -66,47 +64,26 @@ class sxNewsletterQueueBuilder
 
         /** @var sxSubscriber $subscriber */
         foreach ($subscribers as $subscriber) {
-            $scriptProperties = array(
-                'newsletter' => $params,
-                'subscriber' => $subscriber->toArray(),
-            );
-
             $userId = (int) $subscriber->get('user_id');
-            if ($userId > 0) {
-                if (isset($userContexts['eligible'][$userId])) {
-                    $scriptProperties['user'] = $userContexts['eligible'][$userId]['user'];
-                    $scriptProperties['profile'] = $userContexts['eligible'][$userId]['profile'];
-                } elseif (in_array($userId, $userContexts['loadedIds'], true)) {
-                    continue;
-                }
+            if (
+                $userId > 0
+                && in_array($userId, $userContexts['loadedIds'], true)
+                && !isset($userContexts['eligible'][$userId])
+            ) {
+                continue;
             }
-
-            $email = $subscriber->email;
-            $subject = !empty($newsletter->email_subject) ? $newsletter->email_subject : 'No subject';
-
-            $template->_cacheable = false;
-            $template->_processed = false;
-            $template->_output = '';
-            $body = $template->process($scriptProperties);
-
-            if ($parser && $parser instanceof modParser) {
-                $maxIterations = (int) $xpdo->getOption('parser_max_iterations', null, 10);
-                $parser->processElementTags('', $body, true, true, '[[', ']]', array(), $maxIterations);
-            }
-
-            $message = sxNewsletterMailer::buildMessage($newsletter, $subscriber, $subject, $body, $xpdo);
 
             /** @var sxQueue $queue */
             $queue = $xpdo->newObject('sxQueue');
             $queue->fromArray(array(
                 'subscriber_id'   => sxQueueLink::subscriberIdFromSubscriber($subscriber),
                 'newsletter_id'   => $newsletterId,
-                'email_to'        => $message['email_to'],
-                'email_subject'   => $message['email_subject'],
-                'email_body'      => $message['email_body'],
-                'email_from'      => $message['email_from'],
-                'email_from_name' => $message['email_from_name'],
-                'email_reply'     => $message['email_reply'],
+                'email_to'        => $subscriber->get('email'),
+                'email_subject'   => $subject,
+                'email_body'      => '',
+                'email_from'      => $headers['email_from'],
+                'email_from_name' => $headers['email_from_name'],
+                'email_reply'     => $headers['email_reply'],
             ));
             $queue->save();
         }

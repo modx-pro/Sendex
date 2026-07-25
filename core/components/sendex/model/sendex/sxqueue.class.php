@@ -32,9 +32,9 @@ class sxQueue extends xPDOSimpleObject
 
 
     /**
-     * Sends an email to subscriber
+     * Send queue email (delegates to sxQueueSender; compact body rendered at send #64).
      *
-     * @return bool|string
+     * @return true|false|string
      */
     public function send()
     {

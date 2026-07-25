@@ -96,9 +96,14 @@ class sxQueueSender
      */
     public static function deliverMail($queue)
     {
+        $message = sxNewsletterMailer::messageFromQueue($queue);
+        if ($message === false) {
+            return $queue->xpdo->lexicon('sendex_newsletter_err_no_template');
+        }
+
         /** @var modPHPMailer $mail */
         $mail = $queue->xpdo->getService('mail', 'mail.modPHPMailer');
-        sxNewsletterMailer::configureMailer($mail, sxNewsletterMailer::messageFromQueue($queue));
+        sxNewsletterMailer::configureMailer($mail, $message);
         if (!$mail->send()) {
             $error = $mail->mailer->ErrorInfo;
             $queue->xpdo->log(

@@ -1,12 +1,14 @@
 <?php
 
+require_once dirname(__FILE__) . '/sxqueuebodyrenderer.class.php';
+
 /**
  * Shared newsletter mail headers + PHPMailer setup (#66).
  *
  * Post-#62 mail paths (issue originally named sxNewsletter::send/checkEmail):
  * - activation: snippet → Sendex::sendEmail → buildActivationMessage
- * - queue build: sxNewsletterQueueBuilder::addQueues → buildMessage
- * - queue send: sxQueueSender::deliverMail → messageFromQueue
+ * - queue build: sxNewsletterQueueBuilder::addQueues → compact row (headers only)
+ * - queue send: sxQueueSender::deliverMail → messageFromQueue (+ sxQueueBodyRenderer when body empty)
  */
 class sxNewsletterMailer
 {
@@ -92,17 +94,26 @@ class sxNewsletterMailer
 
     /**
      * @param object $queue sxQueue
-     * @return array
+     * @return array|false
      */
     public static function messageFromQueue($queue)
     {
+        $body = (string) self::readField($queue, 'email_body');
+        if (!sxQueueBodyRenderer::usesStoredBody($queue)) {
+            $rendered = sxQueueBodyRenderer::renderForQueue($queue->xpdo, $queue);
+            if ($rendered === false) {
+                return false;
+            }
+            $body = $rendered;
+        }
+
         return array(
-            'email_to'        => $queue->email_to,
-            'email_body'      => $queue->email_body,
-            'email_from'      => $queue->email_from,
-            'email_from_name' => $queue->email_from_name,
-            'email_subject'   => $queue->email_subject,
-            'email_reply'     => $queue->email_reply,
+            'email_to'        => self::readField($queue, 'email_to'),
+            'email_body'      => $body,
+            'email_from'      => self::readField($queue, 'email_from'),
+            'email_from_name' => self::readField($queue, 'email_from_name'),
+            'email_subject'   => self::readField($queue, 'email_subject'),
+            'email_reply'     => self::readField($queue, 'email_reply'),
         );
     }
 

@@ -115,6 +115,8 @@ class NewsletterMailerTest extends TestCase
 
         $this->assertStringContainsString('sxNewsletterMailer::configureMailer', $sendex);
         $this->assertStringContainsString('sxNewsletterMailer::configureMailer', $sender);
-        $this->assertStringContainsString('sxNewsletterMailer::buildMessage', $builder);
+        $mailer = file_get_contents($base . 'sxnewslettermailer.class.php');
+        $this->assertStringContainsString('sxNewsletterMailer::resolveHeaders', $builder);
+        $this->assertStringContainsString('sxQueueBodyRenderer::renderForQueue', $mailer);
     }
 }
