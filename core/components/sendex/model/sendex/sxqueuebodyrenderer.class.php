@@ -3,13 +3,19 @@
 require_once dirname(__FILE__) . '/sxnewsletterqueueusers.class.php';
 
 /**
- * Render queue email body at send time when row has no stored HTML (#64).
+ * Render queue email body at send time for compact rows (#64).
  *
- * Legacy rows with non-empty `email_body` are sent as-is via sxNewsletterMailer.
+ * Call chain from issue #64: `sxQueue::send()` → `sxQueueSender::deliverMail`
+ * → `sxNewsletterMailer::messageFromQueue` → this class when body is empty.
+ *
+ * Compact mode: empty `email_body` (no separate column). Legacy rows with non-empty
+ * `email_body` skip rendering and are sent as-is via sxNewsletterMailer.
  */
 class sxQueueBodyRenderer
 {
     /**
+     * True when queue row stores pre-rendered HTML (legacy). False = compact (#64).
+     *
      * @param object $queue sxQueue-like
      * @return bool
      */

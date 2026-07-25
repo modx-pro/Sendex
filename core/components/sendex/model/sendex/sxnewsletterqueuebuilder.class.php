@@ -7,7 +7,11 @@ require_once dirname(__FILE__) . '/sxnewsletterqueueusers.class.php';
 /**
  * Build queue rows from newsletter subscribers.
  *
- * Post-#62 home of `sxNewsletter::addQueues` (#63 batch user load; #64 compact body at send).
+ * Post-#62 home of `sxNewsletter::addQueues` (issue #64 also named this path).
+ * Send path: `sxQueue::send()` → `sxQueueSender` → compact body via `sxQueueBodyRenderer`.
+ *
+ * Compact mode (#64): new rows store empty `email_body` (no extra DB column); headers
+ * and recipient are snapshotted; HTML is rendered at send time.
  */
 class sxNewsletterQueueBuilder
 {
