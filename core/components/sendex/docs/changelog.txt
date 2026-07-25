@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - [#42] Frontend AJAX subscribe/unsubscribe: JSON `{success, message, html}` from snippet, default chunks + `assets/components/sendex/js/web/sendex.js`. Multi-widget pages scope POST via `newsletter_id` and optional `widgetKey`.
-- [#38] Guest subscribe can skip email confirmation: snippet `&confirmEmail=`0`` or system setting `sendex_confirm_email`; domain helper `subscribeGuest()` keeps one subscribe path.
+- [#38] Guest subscribe can skip email confirmation: snippet `&confirmEmail=0` or system setting `sendex_confirm_email`; domain helper `subscribeGuest()` keeps one subscribe path.
 - [#29] Mgr newsletter «Send to subscribers»: one action runs `addQueues` + `sxQueueSender::flush` for the newsletter (`mgr/newsletter/send`); button in grid row actions and update window.
 - [#46] Search subscribers and queue by email or username.
 - [#44] Plugin events for subscribe/unsubscribe (`sxOnBeforeSubscribe`, `sxOnSubscribe`, `sxOnBeforeUnsubscribe`, `sxOnUnsubscribe`).
@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#57] `addQueues` returns an error when 0 queue rows were created (all subscribers skipped); mgr `queue/add` reports the created count on success.
 - [#55] Queue send claims the row (remove-before-send) so parallel cron/mgr workers do not double-deliver; mail failure requeues and logs; cron logs non-true `send()` results.
 - [#103] Queue claim uses atomic `DELETE ... WHERE id = ?` with `rowCount()` fallback-safe behavior for single-owner delivery.
+- [#105] Queue claim switches to `UPDATE ... SET claimed_at, attempts = attempts + 1 ... WHERE claimed_at IS NULL` with legacy delete fallback.
 - [#56] Unsubscribe from email: snippet resolves newsletter by subscriber `code` when snippet `&id` differs; default letter link includes `newsletter_id` (not MODX resource `id`).
 - [#67] / [#52] Schema and upgrade: Sendex tables use InnoDB; queue index renamed `user_id` → `subscriber_id`; `addQueues` stores `sxSubscriber.id` (not `user_id`); Phinx backfill remaps legacy queue rows (by user_id, guests by email).
 - [#54] `isSubscribed` matches by `user_id` OR `email` within a newsletter; unique key is `(newsletter_id, email)`; guest rows attach `user_id` when the same email confirms as a user.
@@ -58,6 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#73] Newsletter mgr `getlist`: COUNT runs on filters only; JOIN/COUNT(`Subscribers`)/GROUP BY moved to `prepareQueryAfterCount` via `sxNewsletterListQuery`.
 - [#103] Group subscribe loads only relevant existing rows (`user_id/email` subset) instead of all newsletter subscribers.
 - [#103] Subscriber schema adds `user_id` index via Phinx migration `20260725170000_subscriber_user_id_index.php`.
+- [#105] Queue schema adds claim/retry fields (`claimed_at`, `attempts`, `expires_at`) and normalizes `subscriber_id` to `NOT NULL DEFAULT 0`.
+- [#105] Sendex tables are converted to `utf8mb4_unicode_ci`; subscriber email is backfilled to lowercase and uses case-insensitive `utf8mb4` collation.
 - [#103] Mgr controller ACL now checks `view_sendex` or `view_document`; transport menu declares explicit `view_document` permission.
 - [#103] Frontend i18n cleanup: lexicon-based request failure text, guest/anonymous labels, and email placeholder.
 - [#103] CI adds integration smoke matrix (MODX 2.8/3.x, allow-failure), Clover coverage artifact, and tag-driven release workflow.

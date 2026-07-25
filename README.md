@@ -15,8 +15,6 @@ Build/package notes:
 - `core/components/sendex/bootstrap.php` — shared init for connector, mgr, and cron (autoload + processor base aliases).
 - `sxModxCompat` / `sxUserProfile` — MODX 2/3 boundary for mail, parser, registry, and user/profile placeholders.
 
-Not covered yet (see [#74](https://github.com/modx-pro/Sendex/issues/74)): new non-ExtJS admin UI, CI matrix MODX 2.8 + 3.x.
-
 ## Features
 
 - Newsletters and subscribers in the manager
@@ -38,6 +36,17 @@ Schema changes ship as Phinx migrations (same pattern as MiniShop3):
 - Config: `core/components/sendex/phinx.php`
 - Migrations: `core/components/sendex/migrations/`
 - Metadata table: `{table_prefix}sendex_migrations`
+
+Current upgrade chain:
+
+1. `20260724120000_initial_schema.php`
+2. `20260724120100_subscriber_unique_email.php`
+3. `20260724130000_innodb_queue_subscriber_link.php`
+4. `20260725123000_purge_orphan_queue_rows.php`
+5. `20260725170000_subscriber_user_id_index.php`
+6. `20260725190000_add_queue_claim_fields.php`
+7. `20260725191000_convert_sendex_tables_to_utf8mb4.php`
+8. `20260725192000_normalize_subscriber_email_collation.php`
 
 Before building the transport package, install runtime deps into the component:
 
