@@ -186,7 +186,27 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,Ext.apply({
             }
         });
     }
-}, Sendex.grid.SelectionMixin);
+
+    ,sendNewsletter: function(grid, e) {
+        var ids = this.requireSelectedIds('sendex_newsletters_err_ns');
+        if (!ids) {
+            return;
+        }
+        Sendex.utils.onAjax(this.getEl());
+        MODx.msg.confirm({
+            title: _('sendex_newsletter_send'),
+            text: _('sendex_newsletter_send_confirm'),
+            url: Sendex.config.connector_url,
+            params: {
+                action: 'mgr/newsletter/send',
+                id: ids[0]
+            },
+            listeners: {
+                success: {fn:function() { this.refresh(); },scope:this}
+            }
+        });
+    }
+}, Sendex.grid.SelectionMixin));
 Ext.reg('sendex-grid-newsletters',Sendex.grid.Newsletters);
 
 
@@ -311,10 +331,45 @@ Sendex.window.UpdateNewsletter = function(config) {
             }]
         }
         ,keys: [{key: Ext.EventObject.ENTER,shift: true,fn: function() {this.submit() },scope: this}]
+        ,buttons: [{
+            text: '<i class="' + (MODx.modx23 ? 'icon icon-send' : 'fa fa-send') + '"></i> ' + _('sendex_btn_send_subscribers')
+            ,cls: 'primary-button'
+            ,handler: this.sendToSubscribers
+            ,scope: this
+        },{
+            text: config.cancelBtnText || _('cancel')
+            ,scope: this
+            ,handler: function() { this.hide(); }
+        },{
+            text: config.saveBtnText || _('save')
+            ,scope: this
+            ,handler: function() { this.submit(false); }
+        }]
     });
     Sendex.window.UpdateNewsletter.superclass.constructor.call(this,config);
 };
-Ext.extend(Sendex.window.UpdateNewsletter,MODx.Window);
+Ext.extend(Sendex.window.UpdateNewsletter,MODx.Window,{
+    sendToSubscribers: function() {
+        var field = this.fp.getForm().findField('id');
+        var id = field ? field.getValue() : 0;
+        if (!id) {
+            return;
+        }
+        Sendex.utils.onAjax(this.getEl());
+        MODx.msg.confirm({
+            title: _('sendex_newsletter_send'),
+            text: _('sendex_newsletter_send_confirm'),
+            url: Sendex.config.connector_url,
+            params: {
+                action: 'mgr/newsletter/send',
+                id: id
+            },
+            listeners: {
+                success: {fn:function() { this.hide(); },scope:this}
+            }
+        });
+    }
+});
 Ext.reg('sendex-window-newsletter-update',Sendex.window.UpdateNewsletter);
 
 

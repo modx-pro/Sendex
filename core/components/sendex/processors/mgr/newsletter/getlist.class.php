@@ -73,6 +73,14 @@ class sxNewsletterGetListProcessor extends modObjectGetListProcessor
                 'type'   => 'disableNewsletter',
             );
         }
+        // Send to all subscribers (#29)
+        $array['actions'][] = array(
+            'class'  => '',
+            'button' => true,
+            'menu'   => true,
+            'icon'   => 'send',
+            'type'   => 'sendNewsletter',
+        );
         // Remove
         $array['actions'][] = array(
             'class'  => '',

@@ -2,6 +2,7 @@
 
 require_once dirname(__FILE__) . '/sxnewslettersubscription.class.php';
 require_once dirname(__FILE__) . '/sxnewsletterqueuebuilder.class.php';
+require_once dirname(__FILE__) . '/sxnewsletterdispatch.class.php';
 require_once dirname(__FILE__) . '/sxnewslettergroupsubscribe.class.php';
 require_once dirname(__FILE__) . '/sxsendexevent.class.php';
 
@@ -19,6 +20,17 @@ class sxNewsletter extends xPDOSimpleObject
         $builder = new sxNewsletterQueueBuilder($this);
 
         return $builder->addQueues();
+    }
+
+    /**
+     * Queue subscribers and send pending rows for this newsletter (#29).
+     *
+     * @param array $options Optional sxQueueSender::flush options
+     * @return array{success:bool,message:string,queued:int,sent:int,skipped:int,failed:int}
+     */
+    public function sendToSubscribers(array $options = array())
+    {
+        return sxNewsletterDispatch::queueAndSend($this, $options);
     }
 
     /**
