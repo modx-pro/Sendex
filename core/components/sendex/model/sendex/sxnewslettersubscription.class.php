@@ -27,6 +27,18 @@ class sxNewsletterSubscription
      */
     public function isSubscribed($userId = 0, $email = '')
     {
+        $subscriber = $this->findSubscriber($userId, $email);
+
+        return $subscriber ? (int) $subscriber->id : 0;
+    }
+
+    /**
+     * @param int $userId
+     * @param string $email
+     * @return sxSubscriber|null
+     */
+    protected function findSubscriber($userId = 0, $email = '')
+    {
         $xpdo = $this->newsletter->xpdo;
         $userId = (int) $userId;
         $email = sxSubscriberMatch::normalizeEmail($email);
@@ -41,19 +53,16 @@ class sxNewsletterSubscription
 
         $where = sxSubscriberMatch::whereClause($this->newsletter->get('id'), $userId, $email);
         if ($where === null) {
-            return 0;
+            return null;
         }
 
         $q = $xpdo->newQuery('sxSubscriber');
         $q->where($where);
 
-        /** @var sxSubscriber $subscriber */
+        /** @var sxSubscriber|false $subscriber */
         $subscriber = $xpdo->getObject('sxSubscriber', $q);
-        if ($subscriber) {
-            return (int) $subscriber->id;
-        }
 
-        return 0;
+        return $subscriber ?: null;
     }
 
     /**
@@ -150,8 +159,8 @@ class sxNewsletterSubscription
 
         $userId = sxSubscriberMatch::resolveUserId($xpdo, $userId, $email);
 
-        if ($subscriberId = $this->isSubscribed($userId, $email)) {
-            $this->attachUserToSubscriber($subscriberId, $userId, $email);
+        if ($subscriber = $this->findSubscriber($userId, $email)) {
+            $this->attachUserToSubscriber($subscriber, $userId, $email);
 
             return true;
         }
@@ -228,19 +237,17 @@ class sxNewsletterSubscription
     }
 
     /**
-     * @param int $subscriberId
+     * @param sxSubscriber $subscriber
      * @param int $userId
      * @param string $email
      */
-    protected function attachUserToSubscriber($subscriberId, $userId, $email)
+    protected function attachUserToSubscriber($subscriber, $userId, $email)
     {
         $userId = (int) $userId;
         if ($userId <= 0 && $email === '') {
             return;
         }
 
-        /** @var sxSubscriber $subscriber */
-        $subscriber = $this->newsletter->xpdo->getObject('sxSubscriber', (int) $subscriberId);
         if (!$subscriber) {
             return;
         }
