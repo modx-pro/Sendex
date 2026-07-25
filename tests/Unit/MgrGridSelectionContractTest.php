@@ -33,6 +33,16 @@ class MgrGridSelectionContractTest extends TestCase
             $this->assertStringContainsString('Sendex.grid.SelectionMixin', $source, $file);
             $this->assertStringNotContainsString('_getSelectedIds', $source, $file);
             $this->assertStringContainsString('confirmWithSelection', $source, $file);
+            $this->assertStringNotContainsString(
+                '}, Sendex.grid.SelectionMixin);',
+                $source,
+                $file . ' must close Ext.extend(Ext.apply(...)) with ));'
+            );
+            $this->assertGreaterThan(
+                0,
+                preg_match_all('/}, Sendex\.grid\.SelectionMixin\)\);/', $source),
+                $file
+            );
         }
     }
 

@@ -206,7 +206,7 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,Ext.apply({
             }
         });
     }
-}, Sendex.grid.SelectionMixin);
+}, Sendex.grid.SelectionMixin));
 Ext.reg('sendex-grid-newsletters',Sendex.grid.Newsletters);
 
 
