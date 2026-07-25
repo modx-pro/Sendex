@@ -61,8 +61,34 @@ Root `composer.json` remains for PHPUnit/phpcs only.
 | `tplUnsubscribe` | `tpl.Sendex.unsubscribe` | Unsubscribe chunk |
 | `tplActivate` | `tpl.Sendex.activate` | Confirmation email chunk |
 | `confirmEmail` | system `sendex_confirm_email` (default `1`) | Guest flow: `1` = confirm link by email; `0` = subscribe immediately |
+| `loadJs` | `1` | Register `assets/components/sendex/js/web/sendex.js` for AJAX forms |
 
 When `confirmEmail` is off, guest addresses are saved without a confirmation message. Typos and spam signups are harder to catch; use only when you accept that tradeoff.
+
+### AJAX subscribe / unsubscribe (#42)
+
+Default chunks include `data-sendex-*` hooks; the snippet registers `sendex.js`, which submits forms via `fetch` and swaps the widget without a full page reload. The server answers with JSON `{success, message, html}`.
+
+Minimal page markup:
+
+```html
+[[!Sendex? &id=`1`]]
+```
+
+Guest chunk structure (for custom templates):
+
+```html
+<div class="sendex-widget" data-sendex-widget>
+  <p class="sendex-message [[+class]]" data-sendex-message><b>[[+message]]</b></p>
+  <form action="" method="post" data-sendex-form>
+    <input type="hidden" name="sx_action" value="subscribe">
+    <input type="email" name="email" required>
+    <button type="submit">Subscribe</button>
+  </form>
+</div>
+```
+
+Set `&loadJs=`0`` if you ship your own JS but keep the same JSON contract (`X-Requested-With: XMLHttpRequest` or `ajax=1`).
 
 ### Guest email vs existing User (#39)
 
