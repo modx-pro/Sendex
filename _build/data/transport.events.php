@@ -7,6 +7,12 @@ $tmp = array(
     'sxOnSubscribe',
     'sxOnBeforeUnsubscribe',
     'sxOnUnsubscribe',
+    'sxOnBeforeAddQueues',
+    'sxOnAddQueues',
+    'sxOnBeforeQueueSend',
+    'sxOnQueueSend',
+    'sxOnQueueSendFailed',
+    'sxOnQueueFlushComplete',
 );
 
 foreach ($tmp as $v) {

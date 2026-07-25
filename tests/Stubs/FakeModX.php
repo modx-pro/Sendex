@@ -50,6 +50,9 @@ class FakeModX extends modX
     /** @var array<int,array{0:string,1:array}> */
     public $invoked = array();
 
+    /** @var array<string,callable> name => function (array &$params): void */
+    public $invokeMutators = array();
+
     /** @var array<string,int> */
     public $getObjectCalls = array();
 
@@ -580,8 +583,12 @@ class FakeModX extends modX
      *
      * @return mixed
      */
-    public function invokeEvent($name, array $params = array())
+    public function invokeEvent($name, array &$params = array())
     {
+        if (isset($this->invokeMutators[$name]) && is_callable($this->invokeMutators[$name])) {
+            call_user_func_array($this->invokeMutators[$name], array(&$params));
+        }
+
         $this->invoked[] = array($name, $params);
 
         if (array_key_exists($name, $this->invokeResponses)) {

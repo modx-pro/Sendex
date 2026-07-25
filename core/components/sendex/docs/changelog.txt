@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHPUnit coverage for subscribe/unsubscribe events (stubs, no MODX install).
 - [#72] Focused PHPUnit coverage for queue claim (#55), plus regression contracts for #52 / #58 / #61.
 - Phinx migrations: `core/components/sendex/phinx.php`, `migrations/`, install/upgrade resolver; metadata table `{prefix}sendex_migrations`.
+- [#104] Queue lifecycle plugin events: `sxOnBeforeAddQueues`, `sxOnAddQueues`, `sxOnBeforeQueueSend`, `sxOnQueueSend`, `sxOnQueueSendFailed`, `sxOnQueueFlushComplete`.
+- [#104] Subscribe/unsubscribe events pass `source` (`snippet`\|`ajax`\|`confirm`\|`mgr`\|`guest`).
 
 ### Fixed
 - [#104] Guest merge no longer runs on `OnBeforeUserActivate` (only `OnUserActivate` / `OnUserSave`), so a cancelled activation cannot attach guests to an inactive user.

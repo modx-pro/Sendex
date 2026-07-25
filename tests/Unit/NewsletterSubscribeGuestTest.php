@@ -24,6 +24,8 @@ class NewsletterSubscribeGuestTest extends TestCase
         $this->assertSame('subscribed', $result['status']);
         $this->assertCount(1, $this->modx->subscribers);
         $this->assertSame(array(), $this->modx->registryEntries);
+        $this->assertSame('guest', $this->modx->invoked[0][1]['source']);
+        $this->assertSame('guest', $this->modx->invoked[1][1]['source']);
     }
 
     public function testConfirmFlowStoresHashWhenRequired()

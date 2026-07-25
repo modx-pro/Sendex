@@ -126,10 +126,10 @@ class sxNewsletterSubscription
                 'active' => 1,
             ));
             if ($newsletter) {
-                $result = $newsletter->subscribe($entry['user_id'], $entry['email']);
+                $result = $newsletter->subscribe($entry['user_id'], $entry['email'], 'confirm');
             }
         } else {
-            $result = $this->subscribe($entry['user_id'], $entry['email']);
+            $result = $this->subscribe($entry['user_id'], $entry['email'], 'confirm');
         }
 
         if ($result !== true) {
@@ -142,11 +142,13 @@ class sxNewsletterSubscription
     /**
      * @param int $userId
      * @param string $email
+     * @param string $source snippet|ajax|confirm|group|mgr|guest
      * @return true|false|string
      */
-    public function subscribe($userId = 0, $email = '')
+    public function subscribe($userId = 0, $email = '', $source = 'snippet')
     {
         $xpdo = $this->newsletter->xpdo;
+        $source = self::normalizeSource($source);
 
         if (empty($email) && $profile = $xpdo->getObject('modUserProfile', array('internalKey' => $userId))) {
             $email = $profile->get('email');
@@ -171,6 +173,7 @@ class sxNewsletterSubscription
             'user_id'       => $userId,
             'email'         => $email,
             'subscriber'    => null,
+            'source'        => $source,
         );
 
         $before = sxSendexEvent::invoke($xpdo, 'sxOnBeforeSubscribe', $params);
@@ -198,11 +201,13 @@ class sxNewsletterSubscription
 
     /**
      * @param string $code
+     * @param string $source snippet|ajax|mgr
      * @return true|false|string
      */
-    public function unSubscribe($code)
+    public function unSubscribe($code, $source = 'snippet')
     {
         $xpdo = $this->newsletter->xpdo;
+        $source = self::normalizeSource($source);
 
         /** @var sxSubscriber $subscriber */
         if (!$subscriber = $xpdo->getObject('sxSubscriber', array('code' => $code))) {
@@ -220,6 +225,7 @@ class sxNewsletterSubscription
             'email'         => $subscriber->get('email'),
             'code'          => $code,
             'subscriber'    => $subscriber,
+            'source'        => $source,
         );
 
         $before = sxSendexEvent::invoke($xpdo, 'sxOnBeforeUnsubscribe', $params);
@@ -234,6 +240,21 @@ class sxNewsletterSubscription
         sxSendexEvent::invoke($xpdo, 'sxOnUnsubscribe', $params);
 
         return true;
+    }
+
+    /**
+     * @param string $source
+     * @return string
+     */
+    public static function normalizeSource($source)
+    {
+        $source = strtolower(trim((string) $source));
+        $allowed = array('snippet', 'ajax', 'confirm', 'group', 'mgr', 'guest');
+        if (!in_array($source, $allowed, true)) {
+            return 'snippet';
+        }
+
+        return $source;
     }
 
     /**

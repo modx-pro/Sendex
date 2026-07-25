@@ -66,7 +66,7 @@ class sxSubscribeConfirm
         $requireConfirm = true
     ) {
         if (!$requireConfirm) {
-            $result = $subscription->subscribe($userId, $email);
+            $result = $subscription->subscribe($userId, $email, 'guest');
             if ($result === true) {
                 return array('status' => 'subscribed');
             }

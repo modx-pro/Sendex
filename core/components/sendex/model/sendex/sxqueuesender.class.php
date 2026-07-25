@@ -2,6 +2,8 @@
 
 require_once dirname(__FILE__) . '/sxqueuedeliver.class.php';
 require_once dirname(__FILE__) . '/sxnewslettermailer.class.php';
+require_once dirname(__FILE__) . '/sxsendexevent.class.php';
+require_once dirname(__FILE__) . '/sxmodxcompat.class.php';
 
 /**
  * Single entry point for queue delivery (#65): cron and mgr processors call flush/sendOne.
@@ -82,31 +84,56 @@ class sxQueueSender
                 );
             }
 
-            if ($stopOnError) {
+            // Plugin skip (false) must not abort the batch; only mail errors do.
+            if ($stopOnError && is_string($result)) {
                 break;
             }
         }
+
+        $newsletterId = 0;
+        if (!empty($options['criteria']['newsletter_id'])) {
+            $newsletterId = (int) $options['criteria']['newsletter_id'];
+        }
+
+        $flushParams = array(
+            'newsletter_id' => $newsletterId,
+            'stats'         => $stats,
+        );
+        sxSendexEvent::invoke($xpdo, 'sxOnQueueFlushComplete', $flushParams);
 
         return $stats;
     }
 
     /**
      * @param object $queue sxQueue
-     * @return true|string
+     * @return true|false|string true sent, false plugin skip, string mail error
      */
     public static function deliverMail($queue)
     {
+        $xpdo = $queue->xpdo;
         $message = sxNewsletterMailer::messageFromQueue($queue);
         if ($message === false) {
-            return $queue->xpdo->lexicon('sendex_newsletter_err_no_template');
+            return $xpdo->lexicon('sendex_newsletter_err_no_template');
+        }
+
+        $params = array(
+            'queue'   => $queue,
+            'message' => $message,
+        );
+        $before = sxSendexEvent::invoke($xpdo, 'sxOnBeforeQueueSend', $params);
+        if ($before !== true) {
+            return false;
+        }
+        if (isset($params['message']) && is_array($params['message'])) {
+            $message = $params['message'];
         }
 
         /** @var modPHPMailer $mail */
-        $mail = sxModxCompat::getMail($queue->xpdo);
+        $mail = sxModxCompat::getMail($xpdo);
         sxNewsletterMailer::configureMailer($mail, $message);
         if (!$mail->send()) {
             $error = $mail->mailer->ErrorInfo;
-            $queue->xpdo->log(
+            $xpdo->log(
                 xPDO::LOG_LEVEL_ERROR,
                 'An error occurred while trying to send the email: ' . $error
             );
@@ -116,6 +143,12 @@ class sxQueueSender
         }
 
         $mail->reset();
+
+        $afterParams = array(
+            'queue'   => $queue,
+            'message' => $message,
+        );
+        sxSendexEvent::invoke($xpdo, 'sxOnQueueSend', $afterParams);
 
         return true;
     }

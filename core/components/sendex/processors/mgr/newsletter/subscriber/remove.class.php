@@ -28,7 +28,7 @@ class sxSubscriberRemoveProcessor extends sxSendexProcessor
             /** @var sxNewsletter $newsletter */
             $newsletter = $this->modx->getObject('sxNewsletter', $subscriber->get('newsletter_id'));
             if ($newsletter) {
-                $result = $newsletter->unSubscribe($subscriber->get('code'));
+                $result = $newsletter->unSubscribe($subscriber->get('code'), 'mgr');
                 if ($result !== true) {
                     $errors[] = is_string($result)
                         ? $result

@@ -67,11 +67,12 @@ class sxNewsletter extends xPDOSimpleObject
     /**
      * @param int $user_id
      * @param string $email
+     * @param string $source snippet|ajax|confirm|group|mgr|guest
      * @return true|false|string
      */
-    public function subscribe($user_id = 0, $email = '')
+    public function subscribe($user_id = 0, $email = '', $source = 'snippet')
     {
-        return $this->subscription()->subscribe($user_id, $email);
+        return $this->subscription()->subscribe($user_id, $email, $source);
     }
 
     /**
@@ -105,11 +106,12 @@ class sxNewsletter extends xPDOSimpleObject
 
     /**
      * @param string $code
+     * @param string $source snippet|ajax|mgr
      * @return true|false|string
      */
-    public function unSubscribe($code)
+    public function unSubscribe($code, $source = 'snippet')
     {
-        return $this->subscription()->unSubscribe($code);
+        return $this->subscription()->unSubscribe($code, $source);
     }
 
     /**
@@ -117,7 +119,7 @@ class sxNewsletter extends xPDOSimpleObject
      * @param array $params
      * @return true|string
      */
-    protected function invokeSendexEvent($name, array $params)
+    protected function invokeSendexEvent($name, array &$params)
     {
         return sxSendexEvent::invoke($this->xpdo, $name, $params);
     }

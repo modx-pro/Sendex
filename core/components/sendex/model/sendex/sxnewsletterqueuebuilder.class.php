@@ -3,6 +3,7 @@
 require_once dirname(__FILE__) . '/sxqueuelink.class.php';
 require_once dirname(__FILE__) . '/sxnewslettermailer.class.php';
 require_once dirname(__FILE__) . '/sxnewsletterqueueusers.class.php';
+require_once dirname(__FILE__) . '/sxsendexevent.class.php';
 
 /**
  * Build queue rows from newsletter subscribers.
@@ -46,6 +47,18 @@ class sxNewsletterQueueBuilder
 
         if (!$template || !($template instanceof modTemplate)) {
             return $xpdo->lexicon('sendex_newsletter_err_no_template');
+        }
+
+        $eventParams = array(
+            'newsletter'  => $newsletter,
+            'subscribers' => $subscribers,
+        );
+        $beforeEvent = sxSendexEvent::invoke($xpdo, 'sxOnBeforeAddQueues', $eventParams);
+        if ($beforeEvent !== true) {
+            return $beforeEvent;
+        }
+        if (isset($eventParams['subscribers']) && is_array($eventParams['subscribers'])) {
+            $subscribers = $eventParams['subscribers'];
         }
 
         $newsletterId = (int) $newsletter->id;
@@ -92,6 +105,12 @@ class sxNewsletterQueueBuilder
         if ($created <= 0) {
             return $xpdo->lexicon('sendex_newsletter_err_no_queues');
         }
+
+        $afterParams = array(
+            'newsletter' => $newsletter,
+            'created'    => $created,
+        );
+        sxSendexEvent::invoke($xpdo, 'sxOnAddQueues', $afterParams);
 
         return $created;
     }
