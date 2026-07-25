@@ -27,6 +27,7 @@ if (empty($linkTTL)) {
     $linkTTL = 1800;
 }
 $requireConfirm = sxSubscribeConfirm::isRequired($modx, $scriptProperties);
+$widgetKey = trim((string) $modx->getOption('widgetKey', $scriptProperties, ''));
 $loadJs = sxSubscribeAjaxResponse::parseEnabled(
     $modx->getOption('loadJs', $scriptProperties, true),
     true
@@ -46,6 +47,7 @@ $placeholders = $newsletter->toArray();
 $placeholders['message'] = '';
 $placeholders['class'] = '';
 $placeholders['error'] = 0;
+$placeholders['widget_key'] = $widgetKey;
 $isAuthenticated = $modx->user->isAuthenticated($modx->context->key);
 if ($isAuthenticated) {
     $profile = $modx->user->getOne('Profile');
@@ -56,7 +58,7 @@ if ($isAuthenticated) {
     );
 }
 
-if (!empty($_REQUEST['sx_action'])) {
+if (!empty($_REQUEST['sx_action']) && sxSubscribeAjaxResponse::matchesRequest($id, $widgetKey, $_REQUEST)) {
     $params = $_GET;
     unset($params[$modx->getOption('request_param_alias')]);
     unset($params[$modx->getOption('request_param_id')]);
@@ -186,7 +188,7 @@ if ($isAuthenticated && $id = $newsletter->isSubscribed($modx->user->id)) {
         : $modx->getChunk($tplSubscribeGuest, $placeholders);
 }
 
-if ($isAjax && !empty($_REQUEST['sx_action'])) {
+if ($isAjax && !empty($_REQUEST['sx_action']) && sxSubscribeAjaxResponse::matchesRequest($id, $widgetKey, $_REQUEST)) {
     sxSubscribeAjaxResponse::send($placeholders, $output);
 }
 
