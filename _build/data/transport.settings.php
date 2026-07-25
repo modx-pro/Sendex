@@ -15,6 +15,12 @@ $tmp = [
         'key'   => 'sendex_hide_export_button',
         'area'  => 'sendex_main',
     ),
+    'confirm_email'      => array(
+        'xtype' => 'combo-boolean',
+        'value' => true,
+        'key'   => 'sendex_confirm_email',
+        'area'  => 'sendex_main',
+    ),
 ];
 
 foreach ($tmp as $k => $v) {

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CSV cells that look like spreadsheet formulas are prefixed so Excel/LibreOffice do not execute them.
 
 ### Added
+- [#38] Guest subscribe can skip email confirmation: snippet `&confirmEmail=`0`` or system setting `sendex_confirm_email`; domain helper `subscribeGuest()` keeps one subscribe path.
 - [#29] Mgr newsletter «Send to subscribers»: one action runs `addQueues` + `sxQueueSender::flush` for the newsletter (`mgr/newsletter/send`); button in grid row actions and update window.
 - [#46] Search subscribers and queue by email or username.
 - [#44] Plugin events for subscribe/unsubscribe (`sxOnBeforeSubscribe`, `sxOnSubscribe`, `sxOnBeforeUnsubscribe`, `sxOnUnsubscribe`).
