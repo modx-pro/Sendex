@@ -112,7 +112,7 @@ Policy: **merge**, not block.
 
 1. Anonymous confirm / `subscribe()` resolves `modUser` by profile email and stores `user_id` (see `#54`).
 2. Unique key `(newsletter_id, email)` prevents a guest+user duplicate row.
-3. If a guest subscribed first and the account is created later, the Sendex plugin merges on `OnUserActivate`, `OnBeforeUserActivate`, and `OnUserSave`: guest rows with that email get `user_id` set. Reinstall/upgrade the package so the plugin events are registered.
+3. If a guest subscribed first and the account is created later, the Sendex plugin merges on `OnUserActivate` and `OnUserSave`: guest rows with that email get `user_id` set. Merge does not run on `OnBeforeUserActivate` (cancelled activation must not attach guests). Reinstall/upgrade the package so the plugin events are registered.
 
 Logged-in `isSubscribed($userId)` also matches a still-guest row by profile email, so the form shows unsubscribe without waiting for merge.
 

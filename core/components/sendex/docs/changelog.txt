@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Phinx migrations: `core/components/sendex/phinx.php`, `migrations/`, install/upgrade resolver; metadata table `{prefix}sendex_migrations`.
 
 ### Fixed
+- [#104] Guest merge no longer runs on `OnBeforeUserActivate` (only `OnUserActivate` / `OnUserSave`), so a cancelled activation cannot attach guests to an inactive user.
 - [#40] MODX 3 package install: `registerNamespace` sets `assets_path`; build script aliases `modPackageBuilder`, skips model regen on MODX 3 (preserves global `sx*` maps); mgr menu without `modAction`; Phinx migration property no longer conflicts with `AbstractMigration::$tables` on PHP 8.4.
 - [#74] MODX 3 mgr: `SendexIndexManagerController` aliases menu action `index` (no duplicate menu remap).
 - [#74] MODX 3 bootstrap: `bootstrap.php` for connector/mgr/cron; processor autoload + `modProcessor` aliases; `sxModxCompat` (mail/parser/registry) and `sxUserProfile` (user/profile placeholders); ExtJS mgr icon/menu polish on MODX 3.
@@ -33,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#56] Unsubscribe from email: snippet resolves newsletter by subscriber `code` when snippet `&id` differs; default letter link includes `newsletter_id` (not MODX resource `id`).
 - [#67] / [#52] Schema and upgrade: Sendex tables use InnoDB; queue index renamed `user_id` → `subscriber_id`; `addQueues` stores `sxSubscriber.id` (not `user_id`); Phinx backfill remaps legacy queue rows (by user_id, guests by email).
 - [#54] `isSubscribed` matches by `user_id` OR `email` within a newsletter; unique key is `(newsletter_id, email)`; guest rows attach `user_id` when the same email confirms as a user.
-- [#39] Guest rows merge onto `modUser` on `OnUserActivate` / `OnBeforeUserActivate` / `OnUserSave` (`sxSubscriberMerge`); registration does not create a second subscriber row for the same email.
+- [#39] Guest rows merge onto `modUser` on `OnUserActivate` / `OnUserSave` (`sxSubscriberMerge`); registration does not create a second subscriber row for the same email.
 - [#58] `confirmEmail` restores registry hash when `subscribe()` fails so the confirm link stays usable; remaining TTL kept via `_expires`; `checkEmail` shares `sxSubscribeRegistry::store`.
 - [#61] `sxSubscriber::save` keeps existing `code` (generate only when empty) so unsubscribe links stay valid.
 - [#53] Snippet: authenticated user without Profile no longer triggers TypeError on PHP 8; merge via `sxUserPlaceholders`.

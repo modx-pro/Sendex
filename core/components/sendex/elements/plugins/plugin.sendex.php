@@ -6,15 +6,18 @@ switch ($modx->event->name) {
         $modx->regClientCSS($cssFile);
         break;
 
-    case 'OnUserActivate':
-    case 'OnBeforeUserActivate':
-    case 'OnUserSave':
+    default:
         $corePath = $modx->getOption(
             'sendex_core_path',
             null,
             $modx->getOption('core_path') . 'components/sendex/'
         );
         require_once $corePath . 'model/sendex/sxsubscribermerge.class.php';
+
+        // Merge only after activation succeeds (#104 C1); skip before-activate.
+        if (!sxSubscriberMerge::handlesUserEvent($modx->event->name)) {
+            break;
+        }
 
         if (empty($user) && !empty($modx->event->params['user'])) {
             $user = $modx->event->params['user'];
