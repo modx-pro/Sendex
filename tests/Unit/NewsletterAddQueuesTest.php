@@ -65,6 +65,7 @@ class NewsletterAddQueuesTest extends TestCase
         $this->assertSame('guest@example.com', $this->modx->queues[0]->get('email_to'));
         $this->assertSame('Hello', $this->modx->queues[0]->get('email_subject'));
         $this->assertSame(1, $this->modx->queues[0]->get('subscriber_id'));
+        $this->assertSame('', $this->modx->queues[0]->get('email_body'));
     }
 
     public function testSkipsUserWithoutProfile()
@@ -137,7 +138,7 @@ class NewsletterAddQueuesTest extends TestCase
 
         $this->assertSame(1, $this->newsletter->addQueues());
         $this->assertCount(1, $this->modx->queues);
-        $this->assertSame('Body for user@example.com', $this->modx->queues[0]->get('email_body'));
+        $this->assertSame('', $this->modx->queues[0]->get('email_body'));
         // Must be sxSubscriber.id (1), not modUser.id (5)
         $this->assertSame(1, $this->modx->queues[0]->get('subscriber_id'));
     }
@@ -192,6 +193,15 @@ class NewsletterAddQueuesTest extends TestCase
         $this->assertSame(1, isset($this->modx->getCollectionCalls['modUser']) ? $this->modx->getCollectionCalls['modUser'] : 0);
         $this->assertSame(1, isset($this->modx->getCollectionCalls['modUserProfile']) ? $this->modx->getCollectionCalls['modUserProfile'] : 0);
         $this->assertSame(0, isset($this->modx->getObjectCalls['modUser']) ? $this->modx->getObjectCalls['modUser'] : 0);
+    }
+
+    public function testAddQueuesStoresCompactBody()
+    {
+        $builder = file_get_contents(
+            dirname(__DIR__, 2) . '/core/components/sendex/model/sendex/sxnewsletterqueuebuilder.class.php'
+        );
+
+        $this->assertStringContainsString("'email_body'      => ''", $builder);
     }
 
     public function testSchemaQueueIndexNameMatchesSubscriberIdColumn()
