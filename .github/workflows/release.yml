@@ -124,11 +124,16 @@ jobs:
       - name: Prepare release notes
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
+          # Changelog headings are like [2.0.1-pl]; tag may be v2.0.1 or v2.0.1-pl
           awk -v ver="$VERSION" '
-            $0 ~ "^## \\[" ver "\\]" {print; show=1; next}
+            $0 ~ "^## \[" ver "(-pl)?\]" {print; show=1; next}
             show && /^## \[/ {exit}
             show {print}
           ' core/components/sendex/docs/changelog.txt > release-notes.md
+          if ! grep -q . release-notes.md; then
+            echo "WARN: no changelog section for ${VERSION}; using compare link fallback" >&2
+            echo "**Full Changelog**: https://github.com/${GITHUB_REPOSITORY}/compare/v${VERSION}" > release-notes.md
+          fi
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
