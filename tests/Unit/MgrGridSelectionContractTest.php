@@ -84,11 +84,15 @@ class MgrGridSelectionContractTest extends TestCase
         );
 
         $this->assertStringContainsString("'</span>'", $source);
-        $this->assertStringContainsString('_escapeHtmlAttr: function(value)', $source);
-        $this->assertStringContainsString(".replace(/\"/g, '&quot;')", $source);
         $this->assertStringContainsString(
-            "return '<img src=\"' + this._escapeHtmlAttr(val) + '\" alt=\"\" height=\"50\" />';",
+            "return '<img src=\"' + Sendex.utils.escapeHtmlAttr(val) + '\" alt=\"\" height=\"50\" />';",
             $source
         );
+
+        $utils = file_get_contents(
+            dirname(__DIR__, 2) . '/assets/components/sendex/js/mgr/misc/utils.js'
+        );
+        $this->assertStringContainsString('Sendex.utils.escapeHtmlAttr = function(value)', $utils);
+        $this->assertStringContainsString(".replace(/\"/g, '&quot;')", $utils);
     }
 }

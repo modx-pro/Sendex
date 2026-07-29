@@ -1,3 +1,11 @@
+Sendex.utils.escapeHtmlAttr = function(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+};
+
 Sendex.utils.renderActions = function(value, props, row) {
     var res = [];
     for (var i in row.data.actions) {
