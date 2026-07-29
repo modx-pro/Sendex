@@ -30,7 +30,9 @@ class sxNewsletterListQuery
     }
 
     /**
-     * List SELECT/JOIN/GROUP BY — run from prepareQueryAfterCount only.
+     * List SELECT/JOIN — run from prepareQueryAfterCount only.
+     * Subscriber totals use a correlated subquery (no GROUP BY) so MySQL
+     * ONLY_FULL_GROUP_BY does not break the grid after the first create (#114).
      *
      * @param object $modx
      * @param object $query
@@ -40,11 +42,15 @@ class sxNewsletterListQuery
     public static function applyListSelects($modx, $query, $classKey = 'sxNewsletter')
     {
         $query->leftJoin('modTemplate', 'Template');
-        $query->leftJoin('sxSubscriber', 'Subscribers');
         $query->select($modx->getSelectColumns($classKey, $classKey));
         $query->select($modx->getSelectColumns('modTemplate', 'Template', '', array('templatename')));
-        $query->select('COUNT(`Subscribers`.`id`) as `subscribers`');
-        $query->groupby($classKey . '.id');
+
+        $subscriberTable = $modx->getTableName('sxSubscriber');
+        $query->select(sprintf(
+            '(SELECT COUNT(*) FROM %s AS `sxSubCnt` WHERE `sxSubCnt`.`newsletter_id` = %s.id) AS `subscribers`',
+            $subscriberTable,
+            $classKey
+        ));
 
         return $query;
     }
