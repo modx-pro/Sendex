@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.2-pl] - 2026-07-29
+
+### Fixed
+- [#114] Mgr newsletter create still showed endless «Загружается…» after 2.0.1: `getlist` no longer uses JOIN/subquery SQL (subscriber count and template name are added in `prepareRow`); grid refresh after save is deferred so the create window can close first; `getlist`/`get` accept `view_sendex` as well as `view_document`; create `beforeSet()` returns strict `true` for MODX 3.
+
 ## [2.0.1-pl] - 2026-07-29
 
 ### Fixed

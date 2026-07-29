@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Newsletter mgr grid query: cheap COUNT in prepareQueryBeforeCount, aggregates after (#73).
+ * Newsletter mgr grid query: cheap COUNT in prepareQueryBeforeCount (#73).
+ * Row extras (subscriber total, template name) are added in prepareRow — no JOIN/GROUP BY/subquery (#114).
  */
 class sxNewsletterListQuery
 {
@@ -30,28 +31,28 @@ class sxNewsletterListQuery
     }
 
     /**
-     * List SELECT/JOIN — run from prepareQueryAfterCount only.
-     * Subscriber totals use a correlated subquery (no GROUP BY) so MySQL
-     * ONLY_FULL_GROUP_BY does not break the grid after the first create (#114).
+     * Enrich a newsletter row for the mgr grid (subscriber count + template label).
      *
-     * @param object $modx
-     * @param object $query
-     * @param string $classKey
-     * @return object
+     * @param modX $modx
+     * @param array $array newsletter row from sxNewsletter::toArray()
+     * @return array
      */
-    public static function applyListSelects($modx, $query, $classKey = 'sxNewsletter')
+    public static function enrichRow($modx, array $array)
     {
-        $query->leftJoin('modTemplate', 'Template');
-        $query->select($modx->getSelectColumns($classKey, $classKey));
-        $query->select($modx->getSelectColumns('modTemplate', 'Template', '', array('templatename')));
+        $newsletterId = isset($array['id']) ? (int) $array['id'] : 0;
+        $array['subscribers'] = $newsletterId > 0
+            ? (int) $modx->getCount('sxSubscriber', array('newsletter_id' => $newsletterId))
+            : 0;
 
-        $subscriberTable = $modx->getTableName('sxSubscriber');
-        $query->select(sprintf(
-            '(SELECT COUNT(*) FROM %s AS `sxSubCnt` WHERE `sxSubCnt`.`newsletter_id` = %s.id) AS `subscribers`',
-            $subscriberTable,
-            $classKey
-        ));
+        $array['templatename'] = '';
+        $templateId = isset($array['template']) ? (int) $array['template'] : 0;
+        if ($templateId > 0) {
+            $template = $modx->getObject('modTemplate', $templateId);
+            if ($template) {
+                $array['templatename'] = (string) $template->get('templatename');
+            }
+        }
 
-        return $query;
+        return $array;
     }
 }
