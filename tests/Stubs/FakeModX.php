@@ -566,6 +566,29 @@ class FakeModX extends modX
     }
 
     /**
+     * @param int|string $id
+     * @param string $context
+     * @param array|string $args
+     * @param mixed $scheme
+     * @return string
+     */
+    public function makeUrl($id, $context = '', $args = array(), $scheme = -1)
+    {
+        if (is_array($args)) {
+            $query = http_build_query($args);
+        } else {
+            $query = (string) $args;
+        }
+
+        $url = 'https://example.com/index.php?id=' . (int) $id;
+        if ($query !== '') {
+            $url .= '&' . $query;
+        }
+
+        return $url;
+    }
+
+    /**
      * @return FakePdoConnection
      */
     public function getConnection()

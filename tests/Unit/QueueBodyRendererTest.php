@@ -113,4 +113,63 @@ class QueueBodyRendererTest extends TestCase
         $this->assertTrue(sxQueueSender::deliverMail($queue));
         $this->assertSame('Body for send@example.com', $mail->sets[modMail::MAIL_BODY]);
     }
+
+    public function testFlattenNestedResourceLinksRewritesSiteStartAndNumericNesting()
+    {
+        $nested = '<a href="[[~[[++site_start]]?scheme=`full`&sx_action=`unsubscribe`]]">x</a>';
+        $this->assertSame(
+            '<a href="[[~57?scheme=`full`&sx_action=`unsubscribe`]]">x</a>',
+            sxQueueBodyRenderer::flattenNestedResourceLinks($nested, 57)
+        );
+
+        $residual = '[[~[[57]]?code=`abc`]]';
+        $this->assertSame(
+            '[[~57?code=`abc`]]',
+            sxQueueBodyRenderer::flattenNestedResourceLinks($residual, 57)
+        );
+    }
+
+    public function testBuildUnsubscribeUrlUsesSiteStartAndParams()
+    {
+        $this->modx->options['site_start'] = 57;
+
+        $newsletter = new TestableNewsletter($this->modx);
+        $newsletter->set('id', 1);
+
+        $subscriber = new sxSubscriber($this->modx);
+        $subscriber->fromArray(array(
+            'id'            => 2,
+            'newsletter_id' => 1,
+            'code'          => 'deadbeef',
+            'email'         => 'a@example.com',
+        ));
+
+        $url = sxQueueBodyRenderer::buildUnsubscribeUrl($this->modx, $newsletter, $subscriber);
+
+        $this->assertStringContainsString('id=57', $url);
+        $this->assertStringContainsString('sx_action=unsubscribe', $url);
+        $this->assertStringContainsString('newsletter_id=1', $url);
+        $this->assertStringContainsString('code=deadbeef', $url);
+    }
+
+    public function testBuildUnsubscribeUrlPrefersSendexUnsubscribePage()
+    {
+        $this->modx->options['site_start'] = 57;
+        $this->modx->options['sendex_unsubscribe_page'] = 12;
+
+        $newsletter = new TestableNewsletter($this->modx);
+        $newsletter->set('id', 3);
+
+        $subscriber = new sxSubscriber($this->modx);
+        $subscriber->fromArray(array(
+            'id'            => 4,
+            'newsletter_id' => 3,
+            'code'          => 'c0de',
+            'email'         => 'b@example.com',
+        ));
+
+        $url = sxQueueBodyRenderer::buildUnsubscribeUrl($this->modx, $newsletter, $subscriber);
+        $this->assertStringContainsString('id=12', $url);
+        $this->assertStringNotContainsString('id=57', $url);
+    }
 }

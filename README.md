@@ -135,7 +135,7 @@ The page must call `[[!Sendex? &id=...]]` (any newsletter id is fine). Query par
 | `code` | yes | `sxSubscriber.code` |
 | `newsletter_id` | no | Same as newsletter id; avoids confusion with MODX resource `id`. Snippet resolves the owner newsletter from `code` if the snippet `&id` differs. |
 
-Default letter template links to `site_start` with `sx_action`, `newsletter_id`, and `code`.
+Default letter template uses `[[+unsubscribe_url]]` (built at send time via `makeUrl` on `sendex_unsubscribe_page` or `site_start`). Do **not** nest `[[++site_start]]` inside `[[~…]]` — that becomes `[[~[[57]]]]` and logs "Bad link tag".
 
 ## Cron
 
