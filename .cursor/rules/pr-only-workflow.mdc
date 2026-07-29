@@ -1,0 +1,20 @@
+---
+description: All code changes ship through pull requests, never direct to master
+alwaysApply: true
+---
+
+# PR-only workflow
+
+Все правки в этом репозитории идут **только через Pull Request**.
+
+## Обязательно
+
+1. Не коммитить и не пушить напрямую в `master` / `main`.
+2. Создать ветку от актуального `master` (`fix/…`, `feat/…`, `chore/…`).
+3. Коммиты в ветку → `gh pr create` → дождаться CI → merge PR.
+4. Релизы/теги — после merge в `master` (или отдельным PR на bump версии + тег по согласованию).
+5. Hotfix на прод-пакет: ветка → PR → merge → тег/release workflow; не править zip в обход git.
+
+## Исключения
+
+Только если пользователь **явно** сказал коммитить/пушить в `master` в этом сообщении.
