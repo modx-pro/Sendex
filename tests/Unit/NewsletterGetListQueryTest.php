@@ -29,17 +29,20 @@ class NewsletterGetListQueryTest extends TestCase
         $this->assertSame(1, $query->where['active']);
     }
 
-    public function testApplyListSelectsAddsJoinsAndGroupBy()
+    public function testApplyListSelectsAddsTemplateJoinAndSubscriberSubquery()
     {
         $query = new FakeQuery('sxNewsletter');
 
         sxNewsletterListQuery::applyListSelects($this->modx, $query, 'sxNewsletter');
 
-        $this->assertCount(2, $query->joins);
+        $this->assertCount(1, $query->joins);
         $this->assertSame('modTemplate', $query->joins[0][0]);
-        $this->assertSame('sxSubscriber', $query->joins[1][0]);
-        $this->assertSame('sxNewsletter.id', $query->groupby);
+        $this->assertNull($query->groupby);
         $this->assertGreaterThanOrEqual(3, count($query->selects));
+        $subscriberSelect = end($query->selects);
+        $this->assertStringContainsString('SELECT COUNT(*)', $subscriberSelect);
+        $this->assertStringContainsString('newsletter_id', $subscriberSelect);
+        $this->assertStringNotContainsString('GROUP BY', strtoupper(implode(' ', $query->selects)));
     }
 
     public function testGetListProcessorUsesAfterCountForAggregates()
