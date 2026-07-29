@@ -118,7 +118,10 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,Ext.apply({
             this.windows.createNewsletter = MODx.load({
                 xtype: 'sendex-window-newsletter-create'
                 ,listeners: {
-                    'success': {fn:function() { this.refresh(); },scope:this}
+                    'success': {fn:function() {
+                        var grid = this;
+                        window.setTimeout(function() { grid.refresh(); }, 50);
+                    },scope:this}
                 }
             });
         }

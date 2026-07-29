@@ -39,20 +39,14 @@ class sxNewsletterCreateProcessor extends modObjectCreateProcessor
             }
         }
 
+        if ($this->hasErrors()) {
+            return false;
+        }
+
         $active = $this->getProperty('active');
         $this->setProperty('active', !empty($active) && $active != 'false');
 
-        return !$this->hasErrors();
-    }
-
-    /**
-     * Return a plain array so ExtJS always gets JSON it can parse (MODX 3).
-     *
-     * @return array
-     */
-    public function cleanup()
-    {
-        return $this->success('', $this->object->toArray());
+        return true;
     }
 }
 

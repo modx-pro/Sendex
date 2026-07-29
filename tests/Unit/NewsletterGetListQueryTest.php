@@ -29,32 +29,67 @@ class NewsletterGetListQueryTest extends TestCase
         $this->assertSame(1, $query->where['active']);
     }
 
-    public function testApplyListSelectsAddsTemplateJoinAndSubscriberSubquery()
+    public function testEnrichRowAddsSubscriberCountAndTemplateName()
     {
-        $query = new FakeQuery('sxNewsletter');
+        $this->modx->newsletters[] = new sxNewsletter($this->modx);
+        $this->modx->newsletters[0]->fromArray(array(
+            'id'       => 5,
+            'name'     => 'Weekly',
+            'template' => 2,
+        ));
 
-        sxNewsletterListQuery::applyListSelects($this->modx, $query, 'sxNewsletter');
+        $subscriber = new sxSubscriber($this->modx);
+        $subscriber->fromArray(array('id' => 1, 'newsletter_id' => 5));
+        $this->modx->subscribers[] = $subscriber;
 
-        $this->assertCount(1, $query->joins);
-        $this->assertSame('modTemplate', $query->joins[0][0]);
-        $this->assertNull($query->groupby);
-        $this->assertGreaterThanOrEqual(3, count($query->selects));
-        $subscriberSelect = end($query->selects);
-        $this->assertStringContainsString('SELECT COUNT(*)', $subscriberSelect);
-        $this->assertStringContainsString('newsletter_id', $subscriberSelect);
-        $this->assertStringNotContainsString('GROUP BY', strtoupper(implode(' ', $query->selects)));
+        $subscriber = new sxSubscriber($this->modx);
+        $subscriber->fromArray(array('id' => 2, 'newsletter_id' => 5));
+        $this->modx->subscribers[] = $subscriber;
+
+        $template = new class {
+            /** @var array<string,string> */
+            private $data = array('templatename' => 'Mail layout');
+
+            /**
+             * @param string $key
+             * @return string|null
+             */
+            public function get($key)
+            {
+                return isset($this->data[$key]) ? $this->data[$key] : null;
+            }
+        };
+        $this->modx->templates[2] = $template;
+
+        $row = sxNewsletterListQuery::enrichRow($this->modx, array(
+            'id'       => 5,
+            'template' => 2,
+        ));
+
+        $this->assertSame(2, $row['subscribers']);
+        $this->assertSame('Mail layout', $row['templatename']);
     }
 
-    public function testGetListProcessorUsesAfterCountForAggregates()
+    public function testGetListProcessorUsesFiltersOnlyBeforeCount()
     {
         $source = file_get_contents(
             dirname(__DIR__, 2) . '/core/components/sendex/processors/mgr/newsletter/getlist.class.php'
         );
 
-        $this->assertStringContainsString('prepareQueryAfterCount', $source);
-        $this->assertStringContainsString('sxNewsletterListQuery::applyListSelects', $source);
         $this->assertStringContainsString('sxNewsletterListQuery::applyFilters', $source);
+        $this->assertStringContainsString('sxNewsletterListQuery::enrichRow', $source);
+        $this->assertStringNotContainsString('prepareQueryAfterCount', $source);
         $this->assertStringNotContainsString('groupby', $this->beforeCountBody($source));
+    }
+
+    public function testGetListProcessorAllowsViewSendexPermission()
+    {
+        $source = file_get_contents(
+            dirname(__DIR__, 2) . '/core/components/sendex/processors/mgr/newsletter/getlist.class.php'
+        );
+
+        $this->assertStringContainsString("hasPermission('view_sendex')", $source);
+        $this->assertStringContainsString("hasPermission('view_document')", $source);
     }
 
     /**

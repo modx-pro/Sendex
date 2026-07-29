@@ -14,6 +14,17 @@ class sxNewsletterGetListProcessor extends modObjectGetListProcessor
     public $permission = 'view_document';
 
     /**
+     * Match mgr controller ACL: Sendex menu may grant view_sendex without view_document.
+     *
+     * @return bool
+     */
+    public function checkPermissions()
+    {
+        return $this->modx->hasPermission('view_sendex')
+            || $this->modx->hasPermission('view_document');
+    }
+
+    /**
      * @param xPDOQuery $c
      *
      * @return xPDOQuery
@@ -27,23 +38,13 @@ class sxNewsletterGetListProcessor extends modObjectGetListProcessor
     }
 
     /**
-     * @param xPDOQuery $c
-     *
-     * @return xPDOQuery
-     */
-    public function prepareQueryAfterCount(xPDOQuery $c)
-    {
-        return sxNewsletterListQuery::applyListSelects($this->modx, $c, $this->classKey);
-    }
-
-    /**
      * @param xPDOObject $object
      *
      * @return array
      */
     public function prepareRow(xPDOObject $object)
     {
-        $array = $object->toArray();
+        $array = sxNewsletterListQuery::enrichRow($this->modx, $object->toArray());
         $array['actions'] = array();
 
         // Update
