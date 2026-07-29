@@ -10,15 +10,7 @@ ul.sendex-row-actions li {float:left;}
 ul.sendex-row-actions .btn {padding: 0.3125rem; margin-right:0.125rem; min-width:1.625rem; font-size: inherit;}
 ul.sendex-row-actions .btn > .icon,
 ul.sendex-row-actions .btn > .fa {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
     line-height: 1rem;
-}
-ul.sendex-row-actions .btn > .icon.icon-check-circle-o,
-ul.sendex-row-actions .btn > .icon.icon-trash-o,
-ul.sendex-row-actions .btn > .icon.icon-send-o,
-ul.sendex-row-actions .btn > .icon.icon-paper-plane-o {
-    font-weight: 400;
 }
 
 .red {color: darkred;}
@@ -32,14 +24,6 @@ a.x-menu-item .x-menu-item-text .fa,
 a.x-menu-item .x-menu-item-text .icon {
     line-height:1rem;
     top:auto;
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-}
-a.x-menu-item .x-menu-item-text .icon.icon-check-circle-o,
-a.x-menu-item .x-menu-item-text .icon.icon-trash-o,
-a.x-menu-item .x-menu-item-text .icon.icon-send-o,
-a.x-menu-item .x-menu-item-text .icon.icon-paper-plane-o {
-    font-weight: 400;
 }
 .x-menu-list .fa,
 .x-menu-list .icon {min-width: 1em; text-align:center;}
