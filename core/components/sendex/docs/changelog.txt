@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1-pl] - 2026-07-29
+
+### Fixed
+- [#25666] Transport package built on MODX 3.x stored vehicle class as `xPDO\Transport\xPDOObjectVehicle`, which MODX 2.8.8/2.8.9 cannot load (install fails with ~30 "Could not load class" errors). Release build now runs on MODX 2.x so the manifest uses the legacy vehicle format that installs on both MODX 2.8+ and 3.x.
+
 ## [2.0.0-pl] - 2026-07-25
 
 ### Security
