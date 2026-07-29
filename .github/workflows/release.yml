@@ -105,11 +105,20 @@ jobs:
           zpath = glob.glob('_packages/sendex-*.transport.zip')[0]
           needle = b'xPDO\\Transport\\xPDOObjectVehicle'
           with zipfile.ZipFile(zpath) as zf:
-              for name in zf.namelist():
-                  if needle in zf.read(name):
+              manifests = [
+                  n for n in zf.namelist()
+                  if n.endswith('manifest.php') or n.endswith('/manifest') or n == 'manifest'
+              ]
+              if not manifests:
+                  print('ERROR: no manifest in transport zip', file=sys.stderr)
+                  sys.exit(1)
+              for name in manifests:
+                  data = zf.read(name)
+                  if needle in data:
                       print(f'ERROR: namespaced vehicle class in {name}', file=sys.stderr)
                       sys.exit(1)
-          print('OK: no namespaced xPDOObjectVehicle in', zpath)
+                  print(f'OK: {name} has no namespaced xPDOObjectVehicle')
+          print('package ready:', zpath)
           PY
 
       - name: Prepare release notes
