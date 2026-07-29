@@ -16,9 +16,10 @@ Sendex.utils.renderActions = function(value, props, row) {
                 ? a['class']['button']
                 : '';
             var iconCls = (MODx.modx23 ? 'icon icon-' : 'fa fa-') + a['icon'];
+            var action = Sendex.utils.escapeHtmlAttr(a['type'] || '');
             res.push(
                 '<li>\
-                    <button class="btn btn-default '+ btnCls +'" type="'+a['type']+'" title="'+_('sendex_action_'+a['type'])+'"><i class="'+iconCls+'"></i></button>\
+                    <button class="btn btn-default '+ btnCls +'" type="button" data-action="'+action+'" title="'+_('sendex_action_'+a['type'])+'"><i class="'+iconCls+'"></i></button>\
                 </li>'
             );
         }
@@ -156,6 +157,50 @@ Sendex.grid.SelectionMixin = {
 
     requireSelectedIds: function(emptyLex) {
         return Sendex.utils.requireSelectedIds(this, emptyLex);
+    },
+
+    /**
+     * Row-action buttons wrap an <i> icon; clicks often hit the icon, not BUTTON (#119).
+     * Resolve the button via getTarget and the row via GridView.findRowIndex.
+     * Action name lives in data-action (HTML button type is only submit/button/reset).
+     */
+    onClick: function(e) {
+        var btn = e.getTarget('button');
+        if (!btn) {
+            return this.processEvent('click', e);
+        }
+
+        var type = btn.getAttribute('data-action') || btn.getAttribute('type');
+        if (!type || type === 'button' || type === 'submit' || type === 'reset') {
+            return this.processEvent('click', e);
+        }
+
+        var record = null;
+        var view = this.getView();
+        var rowIndex = view && view.findRowIndex ? view.findRowIndex(btn) : false;
+        if (rowIndex !== false && rowIndex !== null && rowIndex >= 0) {
+            record = this.getStore().getAt(rowIndex);
+        }
+        if (!record) {
+            record = this.getSelectionModel().getSelected();
+        }
+        if (!record) {
+            return this.processEvent('click', e);
+        }
+
+        if (!this.menu) {
+            this.menu = {};
+        }
+        this.menu.record = record.data;
+
+        if (type === 'menu') {
+            var storeIndex = this.getStore().find('id', record.id);
+            return this._showMenu(this, storeIndex, e);
+        }
+        if (typeof this[type] === 'function') {
+            return this[type](this, e);
+        }
+        return this.processEvent('click', e);
     },
 
     confirmWithSelection: function(config) {

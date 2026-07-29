@@ -18,6 +18,10 @@ class MgrGridSelectionContractTest extends TestCase
         $this->assertStringContainsString('Sendex.grid.SelectionMixin', $source);
         $this->assertStringContainsString('return ids.length > 0 ? ids : null', $source);
         $this->assertStringContainsString('grid.menu.record', $source);
+        $this->assertStringContainsString("e.getTarget('button')", $source);
+        $this->assertStringContainsString("getAttribute('data-action')", $source);
+        $this->assertStringContainsString('findRowIndex', $source);
+        $this->assertStringContainsString('data-action="', $source);
     }
 
     public function testGridsUseSelectionMixinAndDropLocalCopyPaste()
@@ -33,6 +37,7 @@ class MgrGridSelectionContractTest extends TestCase
             $this->assertStringContainsString('Sendex.grid.SelectionMixin', $source, $file);
             $this->assertStringNotContainsString('_getSelectedIds', $source, $file);
             $this->assertStringContainsString('confirmWithSelection', $source, $file);
+            $this->assertStringNotContainsString('elem.nodeName == \'BUTTON\'', $source, $file);
             $this->assertStringNotContainsString(
                 '}, Sendex.grid.SelectionMixin);',
                 $source,

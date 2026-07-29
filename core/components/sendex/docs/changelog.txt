@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.0.1-pl] - 2026-07-29
 
 ### Fixed
+- [#119] Mgr row-action icon buttons (edit/disable/send/remove) did nothing when the click hit the inner `<i>`: shared `SelectionMixin.onClick` now finds the button via `getTarget('button')`, resolves the row via `findRowIndex`, and reads the action from `data-action`.
 - [#114] Mgr newsletter create appeared to hang on «Загружается…» and the grid stayed empty after reload (row was saved; duplicate-name error on retry). Newsletter `getlist` no longer uses JOIN/subquery SQL (subscriber count and template name are added in `prepareRow`); grid refresh after save is deferred so the create window can close first; `getlist`/`get` accept `view_sendex` as well as `view_document`; create `beforeSet()` returns strict `true` for MODX 3. Image column renderer uses `Sendex.utils.escapeHtmlAttr` (ExtJS does not keep grid scope for column renderers).
 - [#111] Mgr row-action and menu icons no longer force `font-family: "Font Awesome 5 Free"` (Sendex does not load FA5); icons inherit the mgr icon font on MODX 2.3+/3.x or bundled FA4 on older MODX.
 - [#25666] Transport package built on MODX 3.x stored vehicle class as `xPDO\Transport\xPDOObjectVehicle`, which MODX 2.8.8/2.8.9 cannot load (install fails with ~30 "Could not load class" errors). Release build now runs on MODX 2.x so the manifest uses the legacy vehicle format that installs on both MODX 2.8+ and 3.x.

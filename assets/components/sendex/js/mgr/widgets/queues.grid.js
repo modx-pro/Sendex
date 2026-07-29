@@ -69,25 +69,6 @@ Ext.extend(Sendex.grid.Queues,MODx.grid.Grid, Ext.apply({
         this.addContextMenuItem(menu);
     }
 
-    ,onClick: function(e) {
-        var elem = e.getTarget();
-        if (elem.nodeName == 'BUTTON') {
-            var row = this.getSelectionModel().getSelected();
-            if (typeof(row) != 'undefined') {
-                var type = elem.getAttribute('type');
-                if (type == 'menu') {
-                    var ri = this.getStore().find('id', row.id);
-                    return this._showMenu(this, ri, e);
-                }
-                else {
-                    this.menu.record = row.data;
-                    return this[type](this, e);
-                }
-            }
-        }
-        return this.processEvent('click', e);
-    }
-
     ,createQueues: function(combo, newsletter, e) {
         MODx.Ajax.request({
             url: Sendex.config.connector_url

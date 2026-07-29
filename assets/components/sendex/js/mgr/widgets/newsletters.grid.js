@@ -63,25 +63,6 @@ Ext.extend(Sendex.grid.Newsletters,MODx.grid.Grid,Ext.apply({
         this.addContextMenuItem(menu);
     }
 
-    ,onClick: function(e) {
-        var elem = e.getTarget();
-        if (elem.nodeName == 'BUTTON') {
-            var row = this.getSelectionModel().getSelected();
-            if (typeof(row) != 'undefined') {
-                var type = elem.getAttribute('type');
-                if (type == 'menu') {
-                    var ri = this.getStore().find('id', row.id);
-                    return this._showMenu(this, ri, e);
-                }
-                else {
-                    this.menu.record = row.data;
-                    return this[type](this, e);
-                }
-            }
-        }
-        return this.processEvent('click', e);
-    }
-
     ,_renderBoolean: function(val,cell,row) {
         return val == '' || val == 0
             ? '<span style="color:red">' + _('no') + '</span>'
@@ -438,25 +419,6 @@ Ext.extend(Sendex.grid.NewsletterSubscribers,MODx.grid.Grid, Ext.apply({
         var row = grid.getStore().getAt(rowIndex);
         var menu = Sendex.utils.getMenu(row.data.actions, this);
         this.addContextMenuItem(menu);
-    }
-
-    ,onClick: function(e) {
-        var elem = e.getTarget();
-        if (elem.nodeName == 'BUTTON') {
-            var row = this.getSelectionModel().getSelected();
-            if (typeof(row) != 'undefined') {
-                var type = elem.getAttribute('type');
-                if (type == 'menu') {
-                    var ri = this.getStore().find('id', row.id);
-                    return this._showMenu(this, ri, e);
-                }
-                else {
-                    this.menu.record = row.data;
-                    return this[type](this, e);
-                }
-            }
-        }
-        return this.processEvent('click', e);
     }
 
     ,addSubscriber: function(combo, user, e) {
