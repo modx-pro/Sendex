@@ -78,9 +78,11 @@ class UnsubscribeResolveTest extends TestCase
             dirname(__DIR__, 2) . '/core/components/sendex/elements/templates/template.sendex.tpl'
         );
 
+        $this->assertStringContainsString('[[+unsubscribe_url]]', $template);
         $this->assertStringContainsString('sx_action=`unsubscribe`', $template);
-        $this->assertStringContainsString('newsletter_id=`[[+newsletter.id]]`', $template);
-        $this->assertStringContainsString('code=`[[+subscriber.code]]`', $template);
+        $this->assertStringContainsString('newsletter_id=`&#91;&#91;+newsletter.id&#93;&#93;`', $template);
+        $this->assertStringContainsString('code=`&#91;&#91;+subscriber.code&#93;&#93;`', $template);
+        $this->assertStringNotContainsString('[[~[[++site_start]]', $template);
     }
 
     public function testSnippetResolvesByCodeBeforeUnsubscribe()

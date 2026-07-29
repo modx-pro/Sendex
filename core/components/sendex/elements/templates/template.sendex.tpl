@@ -52,12 +52,12 @@
 <hr>
 
 <h1>Link for unsubscribe</h1>
-Link must lead to a page that calls the Sendex snippet. Required query params:
-<code>sx_action=unsubscribe</code>, <code>code</code> (subscriber code). Optional:
-<code>newsletter_id</code> (same as <code>[[+newsletter.id]]</code>; the snippet also resolves the newsletter from <code>code</code> if the snippet <code>&id</code> differs).
-<br/>
-<pre>&#91;&#91;~id_of_resource?scheme=`full`&sx_action=`unsubscribe`&newsletter_id=`&#91;&#91;+newsletter.id&#93;&#93;`&code=`&#91;&#91;+subscriber.code&#93;&#93;`&#93;&#93;</pre>
+<p>Prefer the ready-made placeholder (built in PHP — avoids nested link tags):</p>
+<pre>&#91;&#91;+unsubscribe_url&#93;&#93;</pre>
+<p>Example:</p>
+<a href="[[+unsubscribe_url]]">Unsubscribe from this newsletter</a>
 
-<br/><br/>
-For example (works on site_start even when the snippet &id is another newsletter):<br/>
-<a href="[[~[[++site_start]]?scheme=`full`&sx_action=`unsubscribe`&newsletter_id=`[[+newsletter.id]]`&code=`[[+subscriber.code]]`]]">Unsubscribe from this newsletter</a>
+<p>If you build the URL yourself, use a numeric resource id (not <code>[[++site_start]]</code> inside <code>[[~…]]</code>).
+Required query params: <code>sx_action=unsubscribe</code>, <code>code</code>. Optional: <code>newsletter_id</code>.</p>
+<pre>&#91;&#91;~id_of_resource?scheme=`full`&sx_action=`unsubscribe`&newsletter_id=`&#91;&#91;+newsletter.id&#93;&#93;`&code=`&#91;&#91;+subscriber.code&#93;&#93;`&#93;&#93;</pre>
+<p>Optional system setting <code>sendex_unsubscribe_page</code> overrides <code>site_start</code> for <code>[[+unsubscribe_url]]</code>.</p>

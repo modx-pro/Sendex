@@ -62,8 +62,9 @@ class sxQueueBodyRenderer
         }
 
         $scriptProperties = array(
-            'newsletter' => $newsletter->toArray(),
-            'subscriber' => $subscriber->toArray(),
+            'newsletter'      => $newsletter->toArray(),
+            'subscriber'      => $subscriber->toArray(),
+            'unsubscribe_url' => self::buildUnsubscribeUrl($xpdo, $newsletter, $subscriber),
         );
 
         $userId = (int) $subscriber->get('user_id');
@@ -82,6 +83,9 @@ class sxQueueBodyRenderer
         $template->_output = '';
         $body = $template->process($scriptProperties);
 
+        // Nested [[~[[++site_start]]]] becomes [[~[[57]]]] after ++ expands — invalid link tag.
+        $body = self::flattenNestedResourceLinks($body, (int) $xpdo->getOption('site_start'));
+
         /** @var modParser|null $parser */
         $parser = sxModxCompat::getParser($xpdo);
         if ($parser && $parser instanceof modParser) {
@@ -90,6 +94,62 @@ class sxQueueBodyRenderer
         }
 
         return $body;
+    }
+
+    /**
+     * Absolute unsubscribe URL for email templates (avoids nested [[~[[++site_start]]]]).
+     *
+     * @param object $xpdo
+     * @param object $newsletter
+     * @param object $subscriber
+     * @return string
+     */
+    public static function buildUnsubscribeUrl($xpdo, $newsletter, $subscriber)
+    {
+        $resourceId = (int) $xpdo->getOption('sendex_unsubscribe_page', null, 0);
+        if ($resourceId <= 0) {
+            $resourceId = (int) $xpdo->getOption('site_start');
+        }
+        if ($resourceId <= 0 || !method_exists($xpdo, 'makeUrl')) {
+            return '';
+        }
+
+        $params = array(
+            'sx_action'     => 'unsubscribe',
+            'newsletter_id' => (int) $newsletter->get('id'),
+            'code'          => (string) $subscriber->get('code'),
+        );
+
+        $url = $xpdo->makeUrl($resourceId, '', $params, 'full');
+
+        return is_string($url) ? $url : '';
+    }
+
+    /**
+     * Rewrite [[~[[++site_start]]…]] / residual [[~[[123]]…]] into [[~123…]].
+     *
+     * @param string $body
+     * @param int $siteStart
+     * @return string
+     */
+    public static function flattenNestedResourceLinks($body, $siteStart)
+    {
+        $siteStart = (int) $siteStart;
+        if ($siteStart <= 0 || !is_string($body) || $body === '') {
+            return $body;
+        }
+
+        $body = preg_replace(
+            '/\[\[~\s*\[\[\+\+site_start\]\]/',
+            '[[~' . $siteStart,
+            $body
+        );
+
+        return preg_replace(
+            '/\[\[~\s*\[\[(\d+)\]\]/',
+            '[[~$1',
+            $body
+        );
     }
 
     /**
