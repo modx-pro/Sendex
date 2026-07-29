@@ -5,15 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.2-pl] - 2026-07-29
-
-### Fixed
-- [#114] Mgr newsletter create still showed endless «Загружается…» after 2.0.1: `getlist` no longer uses JOIN/subquery SQL (subscriber count and template name are added in `prepareRow`); grid refresh after save is deferred so the create window can close first; `getlist`/`get` accept `view_sendex` as well as `view_document`; create `beforeSet()` returns strict `true` for MODX 3.
-
 ## [2.0.1-pl] - 2026-07-29
 
 ### Fixed
-- [#114] Mgr newsletter create appeared to hang on «Загружается…» and the grid stayed empty after reload (row was saved; duplicate-name error on retry). Newsletter `getlist` no longer uses JOIN/COUNT/GROUP BY (MySQL `ONLY_FULL_GROUP_BY`); subscriber totals come from a correlated subquery. Create processor returns a plain array so ExtJS always gets parseable JSON.
+- [#114] Mgr newsletter create appeared to hang on «Загружается…» and the grid stayed empty after reload (row was saved; duplicate-name error on retry). Newsletter `getlist` no longer uses JOIN/subquery SQL (subscriber count and template name are added in `prepareRow`); grid refresh after save is deferred so the create window can close first; `getlist`/`get` accept `view_sendex` as well as `view_document`; create `beforeSet()` returns strict `true` for MODX 3.
 - [#111] Mgr row-action and menu icons no longer force `font-family: "Font Awesome 5 Free"` (Sendex does not load FA5); icons inherit the mgr icon font on MODX 2.3+/3.x or bundled FA4 on older MODX.
 - [#25666] Transport package built on MODX 3.x stored vehicle class as `xPDO\Transport\xPDOObjectVehicle`, which MODX 2.8.8/2.8.9 cannot load (install fails with ~30 "Could not load class" errors). Release build now runs on MODX 2.x so the manifest uses the legacy vehicle format that installs on both MODX 2.8+ and 3.x.
 
