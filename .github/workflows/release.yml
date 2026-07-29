@@ -27,8 +27,12 @@ jobs:
           coverage: none
 
       - name: Install MODX dependencies
-        run: composer install --no-interaction --no-dev --prefer-dist
         working-directory: modx
+        run: |
+          # MODX 2.x has no lockfile; require-dev still pins phpunit 5/6 which Packagist blocks.
+          # Runtime install uses --no-dev; advisories only block resolution of unused test deps.
+          composer config policy.advisories.block false
+          composer install --no-interaction --no-dev --prefer-dist
 
       - name: Install root dependencies
         run: composer install --no-interaction --prefer-dist
