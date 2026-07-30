@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#111] Mgr row-action and menu icons no longer force `font-family: "Font Awesome 5 Free"` (Sendex does not load FA5); icons inherit the mgr icon font on MODX 2.3+/3.x or bundled FA4 on older MODX.
 - [#25666] Transport package built on MODX 3.x stored vehicle class as `xPDO\Transport\xPDOObjectVehicle`, which MODX 2.8.8/2.8.9 cannot load (install fails with ~30 "Could not load class" errors). Release build now runs on MODX 2.x so the manifest uses the legacy vehicle format that installs on both MODX 2.8+ and 3.x.
 - Queue claim columns (`claimed_at`, `attempts`, `expires_at`) are ensured on Sendex bootstrap when Phinx did not apply `#105` migration, avoiding `Unknown column sxQueue.claimed_at` on live upgrades.
+- [#123] Queue send resolves From/Reply headers from the linked newsletter at delivery time, so correcting `email_from` in mgr applies to pending queue rows instead of the stale snapshot from `addQueues`.
 
 ## [2.0.0-pl] - 2026-07-25
 
