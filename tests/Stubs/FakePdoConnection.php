@@ -33,6 +33,24 @@ class FakePdoConnection
     public $executions = array();
 
     /**
+     * Column names returned by SHOW COLUMNS for sendex_queue (schema ensure tests).
+     *
+     * @var array<int,string>
+     */
+    public $queueSchemaColumns = array(
+        'id',
+        'newsletter_id',
+        'subscriber_id',
+        'timestamp',
+        'email_to',
+        'email_subject',
+        'email_body',
+        'email_from',
+        'email_from_name',
+        'email_reply',
+    );
+
+    /**
      * @param FakeModX $modx
      */
     public function __construct(FakeModX $modx)

@@ -561,6 +561,9 @@ class FakeModX extends modX
         if ($class === 'sxSubscriber') {
             return 'sendex_subscribers';
         }
+        if ($class === 'sxQueue') {
+            return 'sendex_queue';
+        }
 
         return $class;
     }
