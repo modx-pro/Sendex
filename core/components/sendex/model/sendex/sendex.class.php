@@ -65,6 +65,12 @@ class Sendex
 
         $this->modx->addPackage('sendex', $this->config['modelPath']);
         $this->modx->lexicon->load('sendex:default');
+
+        // Backfill claim columns when package files landed without a successful Phinx run.
+        if (!class_exists('sxQueueSchema', false)) {
+            require_once dirname(__FILE__) . '/sxqueueschema.class.php';
+        }
+        sxQueueSchema::ensureClaimFields($this->modx);
     }
 
 

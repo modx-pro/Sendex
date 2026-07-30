@@ -88,6 +88,19 @@ class FakePdoStatement
             return true;
         }
 
+        if (stripos($this->sql, 'SHOW COLUMNS FROM ') === 0) {
+            $this->affectedRows = count($this->connection->queueSchemaColumns);
+
+            return true;
+        }
+
+        if (stripos($this->sql, 'ALTER TABLE ') === 0) {
+            $this->applyQueueSchemaAlter();
+            $this->affectedRows = 1;
+
+            return true;
+        }
+
         $rowCount = (int) (count($values) / 4);
         $this->affectedRows = $rowCount;
         for ($i = 0; $i < $rowCount; $i++) {
@@ -120,6 +133,39 @@ class FakePdoStatement
     public function errorInfo()
     {
         return $this->lastErrorInfo;
+    }
+
+    /**
+     * @return array
+     */
+    public function fetchAll()
+    {
+        if (stripos($this->sql, 'SHOW COLUMNS FROM ') !== 0) {
+            return array();
+        }
+
+        $rows = array();
+        foreach ($this->connection->queueSchemaColumns as $field) {
+            $rows[] = array('Field' => $field);
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @return void
+     */
+    private function applyQueueSchemaAlter()
+    {
+        if (strpos($this->sql, '`claimed_at`') !== false && !in_array('claimed_at', $this->connection->queueSchemaColumns, true)) {
+            $this->connection->queueSchemaColumns[] = 'claimed_at';
+        }
+        if (strpos($this->sql, '`attempts`') !== false && !in_array('attempts', $this->connection->queueSchemaColumns, true)) {
+            $this->connection->queueSchemaColumns[] = 'attempts';
+        }
+        if (strpos($this->sql, '`expires_at`') !== false && !in_array('expires_at', $this->connection->queueSchemaColumns, true)) {
+            $this->connection->queueSchemaColumns[] = 'expires_at';
+        }
     }
 
     /**
