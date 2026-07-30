@@ -178,6 +178,36 @@ class NewsletterMailerTest extends TestCase
         $this->assertSame('reply@example.com Bcc:bad@example.com', $message['email_reply']);
     }
 
+    public function testMessageFromQueueUsesNewsletterHeadersWhenLinked()
+    {
+        $newsletter = new TestableNewsletter($this->modx);
+        $newsletter->set('id', 10);
+        $newsletter->set('email_from', 'fixed@example.com');
+        $newsletter->set('email_from_name', 'Fixed Sender');
+        $newsletter->set('email_reply', 'reply-fixed@example.com');
+        $this->modx->newsletters[10] = $newsletter;
+
+        $queue = new sxQueue($this->modx);
+        $queue->fromArray(array(
+            'id'              => 1,
+            'newsletter_id'   => 10,
+            'subscriber_id'   => 1,
+            'email_to'        => 'to@example.com',
+            'email_subject'   => 'Subject',
+            'email_body'      => 'Body',
+            'email_from'      => 'bad-address',
+            'email_from_name' => 'Old Name',
+            'email_reply'     => 'bad-reply',
+        ));
+
+        $message = sxNewsletterMailer::messageFromQueue($queue);
+
+        $this->assertSame('fixed@example.com', $message['email_from']);
+        $this->assertSame('Fixed Sender', $message['email_from_name']);
+        $this->assertSame('reply-fixed@example.com', $message['email_reply']);
+        $this->assertSame('Subject', $message['email_subject']);
+    }
+
     public function testSanitizeHeaderStripsControlCharacters()
     {
         $this->assertSame('from@example.comBcc:bad@example.com', sxNewsletterMailer::sanitizeHeader("from@example.com\x00Bcc:bad@example.com"));

@@ -8,7 +8,8 @@ require_once dirname(__FILE__) . '/sxqueuebodyrenderer.class.php';
  * Post-#62 mail paths (issue originally named sxNewsletter::send/checkEmail):
  * - activation: snippet → Sendex::sendEmail → buildActivationMessage
  * - queue build: sxNewsletterQueueBuilder::addQueues → compact row (headers only)
- * - queue send: sxQueueSender::deliverMail → messageFromQueue (+ sxQueueBodyRenderer when body empty)
+ * - queue send: sxQueueSender::deliverMail → messageFromQueue (+ sxQueueBodyRenderer when body empty).
+ *   From/Reply headers come from the linked newsletter at send time (#123), not the queue snapshot.
  */
 class sxNewsletterMailer
 {
@@ -107,13 +108,22 @@ class sxNewsletterMailer
             $body = $rendered;
         }
 
+        $headers = self::resolveHeaders($queue, $queue->xpdo);
+        $newsletterId = (int) self::readField($queue, 'newsletter_id');
+        if ($newsletterId > 0) {
+            $newsletter = $queue->xpdo->getObject('sxNewsletter', $newsletterId);
+            if ($newsletter) {
+                $headers = self::resolveHeaders($newsletter, $queue->xpdo);
+            }
+        }
+
         return array(
             'email_to'        => self::sanitizeHeader(self::readField($queue, 'email_to')),
             'email_body'      => $body,
-            'email_from'      => self::sanitizeHeader(self::readField($queue, 'email_from')),
-            'email_from_name' => self::sanitizeHeader(self::readField($queue, 'email_from_name')),
+            'email_from'      => $headers['email_from'],
+            'email_from_name' => $headers['email_from_name'],
             'email_subject'   => self::readField($queue, 'email_subject'),
-            'email_reply'     => self::sanitizeHeader(self::readField($queue, 'email_reply')),
+            'email_reply'     => $headers['email_reply'],
         );
     }
 
